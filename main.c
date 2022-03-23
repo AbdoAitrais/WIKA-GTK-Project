@@ -4,7 +4,7 @@
 #include <gtk/gtk.h>
 #include <time.h>
 #include "macros.c"
-#define MAXrow 40
+#define MAXrow 70
 #define MAXcol 40
 
 
@@ -457,8 +457,9 @@ int main(int argc, char *argv [])
     scale1 = GTK_WIDGET(gtk_builder_get_object (builder, "scale1"));
     scale2 = GTK_WIDGET(gtk_builder_get_object (builder, "scale2"));
     textView1 = GTK_WIDGET(gtk_builder_get_object (builder, "TextView"));
-    SonBox = GTK_WIDGET(gtk_builder_get_object (builder, "SonBox"));
 
+    //SonBox = GTK_WIDGET(gtk_builder_get_object (builder, "SonBox"));
+    GtkWidget *ViewPort2 = GTK_WIDGET(gtk_builder_get_object (builder, "ViewPort2"));
 
 
     loadCSS(fenetre_principale);
@@ -485,13 +486,13 @@ int main(int argc, char *argv [])
 
     grid = macro_createGrid(gprops);
     create_backgroundBox(GTK_GRID(grid));
-    gtk_box_pack_start(GTK_BOX(SonBox),grid,TRUE,TRUE,0);
-
+    //gtk_box_pack_start(GTK_BOX(SonBox),grid,TRUE,TRUE,0);
+    gtk_container_add(GTK_CONTAINER(ViewPort2),grid);
 
 
     GtkWidget *image = gtk_image_new_from_file ("facebook.png");
     GtkWidget *eBox = gtk_grid_get_child_at(GTK_GRID(grid),2,2);
-    //gtk_container_add(GTK_CONTAINER(eBox),image);
+    gtk_container_add(GTK_CONTAINER(eBox),image);
 
         macro_moveGrid(GTK_EVENT_BOX(eBox));
 
