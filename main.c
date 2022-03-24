@@ -318,14 +318,23 @@ void macro_moveGrid (GtkEventBox *boxSrc)
 
     srand(time(NULL));
     GtkWidget *child = gtk_bin_get_child(GTK_BIN(boxSrc));
+    if (!child)
+        return;
     gint pas  = (gint)(rand()%4);
-    gint left,top;
-    gtk_container_child_get(GTK_CONTAINER(boxSrc), GTK_WIDGET(boxSrc), "left-attach", &left,
-                            "top-attach", &top);
+    GtkWidget *boxDst;
+
+    gint top,left;
+
+
+
+    gtk_container_child_get(GTK_CONTAINER(gtk_widget_get_parent(GTK_WIDGET(boxSrc))), GTK_WIDGET(boxSrc), "left-attach", &left,
+                            "top-attach", &top, NULL);
+
+    //printf("top = %d left = %d",top,left);
     /*
 				    0
 				    ^
-				1<     >3
+               1 <     > 3
 				    v
 				    2
     */
@@ -334,38 +343,39 @@ void macro_moveGrid (GtkEventBox *boxSrc)
     {
     	case 0:
     	{
-    		if(!top-1)
+    		if(!(top-1))
     			return;
     		top--;
     		break;
     	}
     	case 1:
     	{
-    		if(!left-1)
+    		if(!(left-1))
     			return;
     		left--;
     		break;
     	}
     	case 2:
     	{
-    		if(top+1 == MAXrow)
+    		if((top+1) >= MAXrow)
     			return;
     		top++;
     		break;
     	}
     	case 3:
     	{
-    		if(left+1 == MAXcol)
+    		if((left+1) >= MAXcol)
     			return;
     		left++;
             break;
     	}
         default:
-            exit(0);
-      }
-    GtkWidget *boxDst = gtk_grid_get_child_at(
+            return;
+    }
+    printf("top = %d left = %d",top,left);
+    boxDst = gtk_grid_get_child_at(
             GTK_GRID(gtk_widget_get_parent(GTK_WIDGET(boxSrc))),left,top);
-    if(!boxDst && gtk_bin_get_child(GTK_BIN(boxDst)))// si la case ne contient pas bnadem on ajoute
+    if(boxDst && !(gtk_bin_get_child(GTK_BIN(boxDst))))// si la case ne contient pas bnadem on ajoute
     {
         /*
          * GObject is a reference counted type. Reference counting is a form of garbage collection.
@@ -377,6 +387,7 @@ void macro_moveGrid (GtkEventBox *boxSrc)
          * The API reference will always tell you if you’re dealing with something you own, or just a pointer to something that
          * is owned by something else.
          */
+        printf("\ntop = %d left = %d",top,left);
 	    g_object_ref(child);
 	    gtk_container_remove(GTK_CONTAINER(boxSrc), child);
 	    ///child->pos.x = top;
@@ -385,6 +396,18 @@ void macro_moveGrid (GtkEventBox *boxSrc)
 	    g_object_unref(child);
     }
 }
+
+
+
+gboolean doruzidDor(gpointer eBox)
+{
+
+    macro_moveGrid(GTK_EVENT_BOX(gtk_widget_get_parent(eBox)));
+
+    return TRUE;
+}
+
+
 
 int main(int argc, char *argv [])
 {
@@ -490,11 +513,12 @@ int main(int argc, char *argv [])
     gtk_container_add(GTK_CONTAINER(ViewPort2),grid);
 
 
-    GtkWidget *image = gtk_image_new_from_file ("facebook.png");
-    GtkWidget *eBox = gtk_grid_get_child_at(GTK_GRID(grid),2,2);
+    GtkWidget *image = gtk_image_new_from_file ("person.png");
+    GtkWidget *eBox = gtk_grid_get_child_at(GTK_GRID(grid),0,0);
     gtk_container_add(GTK_CONTAINER(eBox),image);
 
-        macro_moveGrid(GTK_EVENT_BOX(eBox));
+    g_timeout_add(500,doruzidDor,image);
+
 
        // create_background(GTK_GRID(grid),props);
     /* Affectation du signal "destroy" à la fonction gtk_main_quit(); pour la */
