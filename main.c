@@ -206,7 +206,6 @@ void create_backgroundBox(GtkGrid *grid)
     for (int i = 0; i < MAXrow; ++i) {
         for (int j = 0; j < MAXcol; ++j) {
             GtkWidget *box = gtk_event_box_new();
-            gtk_event_box_set_above_child(GTK_EVENT_BOX(box), TRUE);
             gtk_grid_attach(GTK_GRID(grid), GTK_WIDGET(box), i, j, 1, 1);
             gtk_style_context_add_class(gtk_widget_get_style_context(box), "box");
         }
