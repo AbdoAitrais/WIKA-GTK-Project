@@ -396,17 +396,31 @@ void macro_moveGrid (GtkEventBox *boxSrc)
     }
 }
 
+gint i = 1;
+guint t = 1;
 
-
-gboolean doruzidDor(gpointer eBox)
+gboolean doruzidDor(gpointer image)
 {
-
-    macro_moveGrid(GTK_EVENT_BOX(gtk_widget_get_parent(eBox)));
-
+    macro_moveGrid(GTK_EVENT_BOX(gtk_widget_get_parent(image)));
     return TRUE;
 }
 
+void start_pause(GtkWidget *button, gpointer image)
+{
+    printf("\n%d",i);
+    if(i == 1)
+    {
+        i = 0;
+        t = g_timeout_add(300,doruzidDor,image);
+    }
+    else if(i == 0)
+    {
+        i = 1;
+        g_source_remove(t);
+        t = 0;
+    }
 
+}
 
 int main(int argc, char *argv [])
 {
@@ -430,8 +444,10 @@ int main(int argc, char *argv [])
       GtkWidget *scale1 = NULL;
       GtkWidget *scale2 = NULL;
       GtkWidget *button = NULL;
+      GtkWidget *button1 = NULL;
       GtkWidget *SonBox = NULL;
         GtkWidget *grid = NULL;
+
 
       GtkBuilder *builder = NULL;
       GError *error = NULL;
@@ -467,15 +483,16 @@ int main(int argc, char *argv [])
     menu = GTK_WIDGET(gtk_builder_get_object (builder, "MenuBar"));
     //grid = GTK_WIDGET(gtk_builder_get_object (builder, "GameGrid"));
     button = GTK_WIDGET(gtk_builder_get_object (builder, "subutton2"));
+    button1 = GTK_WIDGET(gtk_builder_get_object (builder, "start_button"));
     stack = GTK_WIDGET(gtk_builder_get_object (builder, "stack"));
     switcher = GTK_WIDGET(gtk_builder_get_object (builder, "switch"));
-    comboBox1 = GTK_WIDGET(gtk_builder_get_object (builder, "comboBox7"));
-    comboBox2 = GTK_WIDGET(gtk_builder_get_object (builder, "comboBox8"));
-    comboBox3 = GTK_WIDGET(gtk_builder_get_object (builder, "comboBox9"));
-    comboBox4 = GTK_WIDGET(gtk_builder_get_object (builder, "comboBox10"));
-    comboBox5 = GTK_WIDGET(gtk_builder_get_object (builder, "comboBox11"));
-    comboBox6 = GTK_WIDGET(gtk_builder_get_object (builder, "comboBox12"));
-    comboBox7 = GTK_WIDGET(gtk_builder_get_object (builder, "comboBox13"));
+    comboBox1 = GTK_WIDGET(gtk_builder_get_object (builder, "comboBoxGenitiques"));
+    comboBox2 = GTK_WIDGET(gtk_builder_get_object (builder, "comboBoxTension"));
+    comboBox3 = GTK_WIDGET(gtk_builder_get_object (builder, "comboBoxDiabete"));
+    comboBox4 = GTK_WIDGET(gtk_builder_get_object (builder, "comboBoxCardiaque"));
+    comboBox5 = GTK_WIDGET(gtk_builder_get_object (builder, "comboBoxPoumons"));
+    comboBox6 = GTK_WIDGET(gtk_builder_get_object (builder, "comboBoxVirus"));
+
     scale1 = GTK_WIDGET(gtk_builder_get_object (builder, "scale1"));
     scale2 = GTK_WIDGET(gtk_builder_get_object (builder, "scale2"));
     textView1 = GTK_WIDGET(gtk_builder_get_object (builder, "TextView"));
@@ -492,13 +509,12 @@ int main(int argc, char *argv [])
     gtk_style_context_add_class(gtk_widget_get_style_context(menu), "menu");
     gtk_style_context_add_class(gtk_widget_get_style_context(stack), "stack");
     gtk_style_context_add_class(gtk_widget_get_style_context(switcher), "switch");
-    gtk_style_context_add_class(gtk_widget_get_style_context(comboBox1), "comboBox");
+    (gtk_widget_get_style_context(comboBox1), "comboBox");
     gtk_style_context_add_class(gtk_widget_get_style_context(comboBox2), "comboBox");
     gtk_style_context_add_class(gtk_widget_get_style_context(comboBox3), "comboBox");
     gtk_style_context_add_class(gtk_widget_get_style_context(comboBox4), "comboBox");
     gtk_style_context_add_class(gtk_widget_get_style_context(comboBox5), "comboBox");
     gtk_style_context_add_class(gtk_widget_get_style_context(comboBox6), "comboBox");
-    gtk_style_context_add_class(gtk_widget_get_style_context(comboBox7), "comboBox");
     gtk_style_context_add_class(gtk_widget_get_style_context(scale1), "scale");
     gtk_style_context_add_class(gtk_widget_get_style_context(scale2), "scale");
     gtk_style_context_add_class(gtk_widget_get_style_context(textView1), "textView");
@@ -516,13 +532,14 @@ int main(int argc, char *argv [])
     GtkWidget *eBox = gtk_grid_get_child_at(GTK_GRID(grid),0,0);
     gtk_container_add(GTK_CONTAINER(eBox),image);
 
-    g_timeout_add(500,doruzidDor,image);
+
 
 
        // create_background(GTK_GRID(grid),props);
     /* Affectation du signal "destroy" à la fonction gtk_main_quit(); pour la */
     /* fermeture de la fenêtre. */
     g_signal_connect (G_OBJECT (fenetre_principale), "destroy", (GCallback)gtk_main_quit, NULL);
+    g_signal_connect (G_OBJECT (button), "clicked", (GCallback)start_pause, image);
 
     /* Affichage de la fenêtre principale. */
     gtk_widget_show_all (fenetre_principale);
