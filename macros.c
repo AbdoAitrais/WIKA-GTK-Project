@@ -1,3 +1,6 @@
+#define MAXrow 70
+#define MAXcol 40
+
 //
 // Created by abdo on 3/8/2022.
 //
@@ -704,3 +707,161 @@ void macro_initMenuBarPrp(MenuBarProps *props) {
     props->boolPackDirect = GTK_PACK_DIRECTION_LTR;
     props->boolChdPackDirect = FALSE;
 }
+
+
+/********** structures ************/
+
+
+typedef struct cel{
+    gint Id;//Indentifiant du virus(peut être coleur par exemple rgb Ox......) // it can be gchar* too choose one
+    const gchar *nom;// le nom associé à le virus
+    gfloat prctContam;// le pourcentage de contamination de virus
+    gfloat prctMortel; // le pourcentage de mortalite de virus
+    guint cercleDeContam;// le rayon ou bien la cercle de contamination
+}Virus;
+
+typedef struct
+{
+    gint x;// la position selon les lignes
+    gint y;// la position selon les colonnes
+}Coord;// les cooordonnées d'une entité dans l'interface
+
+typedef enum {
+    GENETIQUEMENT_FAIBLE,
+    GENETIQUEMENT_FRAGILE,
+    GENETIQUEMENT_MOYEN,
+    GENETIQUEMENT_FORT
+}Genitique;
+
+typedef enum {
+    ARTERIELLE_NORMAL,
+    ARTERIELLE_HYPERTENDU,
+    ARTERIELLE_HYPERTENSION_FORTE,
+}Tension;
+
+typedef enum {
+    DIABETE_NORMAL,
+    DIABETE_MODERE,
+    DIABETE_AVANCE
+}Diabete;
+
+typedef enum {
+    CARDIAQUE_NORMAL,
+    CARDIAQUE_MALADE,
+    CARDIAQUE_SEVERE
+}Cardiaque;
+
+typedef enum {
+    POUMONS_SEIN,
+    POUMONS_MALADE,
+    POUMONS_GRAVE
+}Poumons;
+
+typedef struct {
+    Genitique G;
+    Tension TA;
+    Diabete D;
+    Cardiaque C;
+    Poumons P;
+}Sante;
+
+typedef enum{
+    GENRE_MALE,
+    GENRE_FEMALE
+}Genre;
+// si vous voulez faire deux entites (personne,animal) mais je pense c'est pas le peine
+typedef struct{
+    gint Id;// identifiant de Participant
+    Genre S ;// le sexe de participant
+    gint age;//l'âge de participant
+    gint categorie;//la categorie associé à le participant selon son âge
+    Coord pos;//les coordonnées où se présente le participant
+    Sante etat;// l'état sanitaire associé à le participant
+    Virus* V;// liste des virus qui a le participant
+}Participant;// peut être animal,personne...
+
+
+void macro_moveGrid (GtkEventBox *boxSrc)
+{
+
+    srand(time(NULL));
+    GtkWidget *child = gtk_bin_get_child(GTK_BIN(boxSrc));
+    if (!child)
+        return;
+    gint pas  = (gint)(rand()%4);
+    GtkWidget *boxDst;
+
+    gint top,left;
+
+
+
+    gtk_container_child_get(GTK_CONTAINER(gtk_widget_get_parent(GTK_WIDGET(boxSrc))), GTK_WIDGET(boxSrc), "left-attach", &left,
+                            "top-attach", &top, NULL);
+
+    //printf("top = %d left = %d",top,left);
+    /*
+				    0
+				    ^
+               1 <     > 3
+				    v
+				    2
+    */
+
+    switch(pas)
+    {
+        case 0:
+        {
+            if(!(top-1))
+                return;
+            top--;
+            break;
+        }
+        case 1:
+        {
+            if(!(left-1))
+                return;
+            left--;
+            break;
+        }
+        case 2:
+        {
+            if((top+1) >= MAXrow)
+                return;
+            top++;
+            break;
+        }
+        case 3:
+        {
+            if((left+1) >= MAXcol)
+                return;
+            left++;
+            break;
+        }
+        default:
+            return;
+    }
+    printf("top = %d left = %d",top,left);
+    boxDst = gtk_grid_get_child_at(
+            GTK_GRID(gtk_widget_get_parent(GTK_WIDGET(boxSrc))),left,top);
+    if(boxDst && !(gtk_bin_get_child(GTK_BIN(boxDst))))// si la case ne contient pas bnadem on ajoute
+    {
+        /*
+         * GObject is a reference counted type. Reference counting is a form of garbage collection.
+         * Every time you take ownership of an object instance, you must acquire a reference to it—using g_object_ref().
+         * Once you drop the ownership of that instance, you must release the reference you acquired—using g_object_unref().
+
+         * If you get an object back from a function, and the documentation says “transfer full” or “newly allocated” or “a new reference”,
+         * then you need to call g_object_unref() to release the reference you’re given.
+         * The API reference will always tell you if you’re dealing with something you own, or just a pointer to something that
+         * is owned by something else.
+         */
+        printf("\ntop = %d left = %d",top,left);
+        g_object_ref(child);
+        gtk_container_remove(GTK_CONTAINER(boxSrc), child);
+        ///child->pos.x = top;
+        ///child->pos.y=left;
+        gtk_container_add(GTK_CONTAINER(boxDst),child);
+        g_object_unref(child);
+    }
+}
+

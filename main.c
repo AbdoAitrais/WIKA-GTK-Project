@@ -3,7 +3,9 @@
 
 #include <gtk/gtk.h>
 #include <time.h>
+
 #include "macros.c"
+
 #define MAXrow 70
 #define MAXcol 40
 
@@ -312,89 +314,7 @@ void loadCSS(GtkWidget *window)
                                               GTK_STYLE_PROVIDER_PRIORITY_USER);
 }
 
-void macro_moveGrid (GtkEventBox *boxSrc)
-{
 
-    srand(time(NULL));
-    GtkWidget *child = gtk_bin_get_child(GTK_BIN(boxSrc));
-    if (!child)
-        return;
-    gint pas  = (gint)(rand()%4);
-    GtkWidget *boxDst;
-
-    gint top,left;
-
-
-
-    gtk_container_child_get(GTK_CONTAINER(gtk_widget_get_parent(GTK_WIDGET(boxSrc))), GTK_WIDGET(boxSrc), "left-attach", &left,
-                            "top-attach", &top, NULL);
-
-    //printf("top = %d left = %d",top,left);
-    /*
-				    0
-				    ^
-               1 <     > 3
-				    v
-				    2
-    */
-
-    switch(pas)
-    {
-    	case 0:
-    	{
-    		if(!(top-1))
-    			return;
-    		top--;
-    		break;
-    	}
-    	case 1:
-    	{
-    		if(!(left-1))
-    			return;
-    		left--;
-    		break;
-    	}
-    	case 2:
-    	{
-    		if((top+1) >= MAXrow)
-    			return;
-    		top++;
-    		break;
-    	}
-    	case 3:
-    	{
-    		if((left+1) >= MAXcol)
-    			return;
-    		left++;
-            break;
-    	}
-        default:
-            return;
-    }
-    printf("top = %d left = %d",top,left);
-    boxDst = gtk_grid_get_child_at(
-            GTK_GRID(gtk_widget_get_parent(GTK_WIDGET(boxSrc))),left,top);
-    if(boxDst && !(gtk_bin_get_child(GTK_BIN(boxDst))))// si la case ne contient pas bnadem on ajoute
-    {
-        /*
-         * GObject is a reference counted type. Reference counting is a form of garbage collection.
-         * Every time you take ownership of an object instance, you must acquire a reference to it—using g_object_ref().
-         * Once you drop the ownership of that instance, you must release the reference you acquired—using g_object_unref().
-
-         * If you get an object back from a function, and the documentation says “transfer full” or “newly allocated” or “a new reference”,
-         * then you need to call g_object_unref() to release the reference you’re given.
-         * The API reference will always tell you if you’re dealing with something you own, or just a pointer to something that
-         * is owned by something else.
-         */
-        printf("\ntop = %d left = %d",top,left);
-	    g_object_ref(child);
-	    gtk_container_remove(GTK_CONTAINER(boxSrc), child);
-	    ///child->pos.x = top;
-        ///child->pos.y=left;
-	    gtk_container_add(GTK_CONTAINER(boxDst),child);
-	    g_object_unref(child);
-    }
-}
 
 gint i = 1;
 guint t = 1;
@@ -420,6 +340,34 @@ void start_pause(GtkWidget *button, gpointer image)
         t = 0;
     }
 
+}
+int id;
+
+void enregistrer_virus(GtkButton *button, gpointer builder)
+{
+    Virus *v = (Virus*) malloc(sizeof(Virus));
+
+    GtkAdjustment *adjust1 = GTK_ADJUSTMENT(gtk_builder_get_object (builder, "adjust1"));;
+    GtkAdjustment *adjust2 = GTK_ADJUSTMENT(gtk_builder_get_object (builder, "adjust2"));;
+    GtkAdjustment *adjust3 = GTK_ADJUSTMENT(gtk_builder_get_object (builder, "adjust3"));;
+    GtkWidget *entryNomVirus = GTK_WIDGET(gtk_builder_get_object (builder, "entryNomVirus"));;
+
+    v->Id = ++id;
+    v->prctContam = ((gfloat)gtk_adjustment_get_value (GTK_ADJUSTMENT(adjust1)));
+    v->prctMortel = ((gfloat)gtk_adjustment_get_value(GTK_ADJUSTMENT(adjust2)));
+    v->cercleDeContam = ((gint)gtk_adjustment_get_value (GTK_ADJUSTMENT(adjust3)));
+    v->nom = gtk_entry_get_text(GTK_ENTRY(entryNomVirus));
+
+    g_list_append(g_object_get_data(builder,"listVirus"),v);
+    g_object_set_data(builder,"listVirus",v);
+
+    /*Virus *a = ((Virus *)g_object_get_data(builder,"listVirus"));
+
+    printf("%d\n",a->Id);
+    printf("%s\n",a->nom);
+    printf("%f\n",a->prctContam);
+    printf("%f\n",a->prctMortel);
+    printf("%d\n",a->cercleDeContam);*/
 }
 
 int main(int argc, char *argv [])
@@ -447,6 +395,7 @@ int main(int argc, char *argv [])
       GtkWidget *button1 = NULL;
       GtkWidget *SonBox = NULL;
         GtkWidget *grid = NULL;
+    Virus *v = NULL;
 
 
       GtkBuilder *builder = NULL;
@@ -500,10 +449,7 @@ int main(int argc, char *argv [])
     //SonBox = GTK_WIDGET(gtk_builder_get_object (builder, "SonBox"));
     GtkWidget *ViewPort2 = GTK_WIDGET(gtk_builder_get_object (builder, "ViewPort2"));
 
-
     loadCSS(fenetre_principale);
-
-
 
     gtk_style_context_add_class(gtk_widget_get_style_context(fenetre_principale), "class1");
     gtk_style_context_add_class(gtk_widget_get_style_context(menu), "menu");
@@ -532,19 +478,23 @@ int main(int argc, char *argv [])
     GtkWidget *eBox = gtk_grid_get_child_at(GTK_GRID(grid),0,0);
     gtk_container_add(GTK_CONTAINER(eBox),image);
 
-
+    //g_timeout_add(300,doruzidDor,image);
 
 
        // create_background(GTK_GRID(grid),props);
     /* Affectation du signal "destroy" à la fonction gtk_main_quit(); pour la */
     /* fermeture de la fenêtre. */
     g_signal_connect (G_OBJECT (fenetre_principale), "destroy", (GCallback)gtk_main_quit, NULL);
-    g_signal_connect (G_OBJECT (button), "clicked", (GCallback)start_pause, image);
+    g_signal_connect (GTK_BUTTON(button), "clicked", (GCallback)enregistrer_virus, builder);
+
+
 
     /* Affichage de la fenêtre principale. */
     gtk_widget_show_all (fenetre_principale);
 
       gtk_main();
+
+
 
       return 0;
 }
