@@ -1,0 +1,62 @@
+.class1 {
+    /*background: url("Map1.png");
+    background-size: cover;
+    background-repeat: no-repeat;*/
+    background-color:#33373a
+}
+
+.menu {
+    
+    color: #fff;
+    
+    background-color: #222;
+    border-color: black;
+}
+    /*.menu:hover{*/
+    /*    cursor: pointer;*/
+    /*}*/
+.button2 {
+    border-color: black;
+    background: repeating-linear-gradient(10deg, #5d6164, bisque);
+}
+
+.box {
+
+    color: #fff;
+    background-color: #def  ;/*
+    background: url("grass.png");*/
+}
+
+.main-env, #grid {
+    background: url("background1.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.propsBox {
+    background-color: aliceblue;
+}
+.stack{
+    background-color: #5d6164;
+    color: #fff;
+    border-color: black;
+}
+.switch{
+    background-color: #5d6164;
+    color: #fff;
+    border-color: black;
+}
+.textView{
+    background-color: #5d6164;
+    color: #fff;
+    border-color: black;
+}
+.comboBox{
+    color: #fff;
+    background-color: #222;
+}
+.scale{
+    color: #fff;
+    background-color: #222;
+    border-color: black;
+}
