@@ -27,42 +27,39 @@ typedef struct {
     gboolean underline;///si utilisé un sous-ligne dans le texte indiquera que la prochaine lettre est mnemonique
 
     GtkReliefStyle relief; /// le style du bordure de bouton.
-}ButtonProps;
+} ButtonProps;
 
 
-
-
-void macro_ApplyButton(GtkButton *button,ButtonProps *props)
-{
-    if(props->mnemonicLabel && props->underline)
-        gtk_button_set_use_underline(GTK_BUTTON(button),props->underline);
-    if(props->label && !props->mnemonicLabel)
+void macro_ApplyButton(GtkButton *button, ButtonProps *props) {
+    if (props->mnemonicLabel && props->underline)
+        gtk_button_set_use_underline(GTK_BUTTON(button), props->underline);
+    if (props->label && !props->mnemonicLabel)
         gtk_button_set_label(button, props->label);
-    if(props->image)
-        gtk_button_set_image(button,props->image);
-    if(props->alwaysShowImage)
-        gtk_button_set_always_show_image(GTK_BUTTON(button),props->alwaysShowImage);
-    if(props->ImagePos)
-        gtk_button_set_image_position (GTK_BUTTON(button),props->ImagePos);
-    if(props->relief)
-        gtk_button_set_relief(GTK_BUTTON(button),props->relief);
-    if((props->width > 0) && (props->height > 0))
-        gtk_widget_set_size_request(GTK_WIDGET(button),props->width,props->height);
+    if (props->image)
+        gtk_button_set_image(button, props->image);
+    if (props->alwaysShowImage)
+        gtk_button_set_always_show_image(GTK_BUTTON(button), props->alwaysShowImage);
+    if (props->ImagePos)
+        gtk_button_set_image_position(GTK_BUTTON(button), props->ImagePos);
+    if (props->relief)
+        gtk_button_set_relief(GTK_BUTTON(button), props->relief);
+    if ((props->width > 0) && (props->height > 0))
+        gtk_widget_set_size_request(GTK_WIDGET(button), props->width, props->height);
 
 }
-GtkWidget *macro_createButton(ButtonProps *props)
-{
+
+GtkWidget *macro_createButton(ButtonProps *props) {
     GtkWidget *button;
 
     if (props->mnemonicLabel && props->label)
         button = gtk_button_new_with_mnemonic(props->label);
-    else if(props->icon_name)
-        button = gtk_button_new_from_icon_name(props->icon_name,GTK_ICON_SIZE_BUTTON);
+    else if (props->icon_name)
+        button = gtk_button_new_from_icon_name(props->icon_name, GTK_ICON_SIZE_BUTTON);
     else
         button = gtk_button_new();
 
 
-    macro_ApplyButton(GTK_BUTTON(button),props );
+    macro_ApplyButton(GTK_BUTTON(button), props);
     return button;
 }
 
@@ -71,23 +68,21 @@ typedef struct {
 
     gboolean active;
     ButtonProps *ButtonProps;
-}ToggleButtonProps;
+} ToggleButtonProps;
 
-void macro_ApplyToggleButton(GtkWidget *togglebutton,ToggleButtonProps props)
-{
-    if(props.active)
-        gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(togglebutton),props.active);
+void macro_ApplyToggleButton(GtkWidget *togglebutton, ToggleButtonProps props) {
+    if (props.active)
+        gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(togglebutton), props.active);
 
 }
 
-GtkWidget *macro_createToggleButton(ToggleButtonProps props)
-{
+GtkWidget *macro_createToggleButton(ToggleButtonProps props) {
     GtkWidget *togglebutton = gtk_toggle_button_new();
     //TODO::Problem with mnemonic labels bcz we can't set them only can be added in creation (Gotta fix it if needed)
-    if(props.ButtonProps)
-        macro_ApplyButton(GTK_BUTTON(togglebutton),props.ButtonProps);
+    if (props.ButtonProps)
+        macro_ApplyButton(GTK_BUTTON(togglebutton), props.ButtonProps);
 
-    macro_ApplyToggleButton(togglebutton,props);
+    macro_ApplyToggleButton(togglebutton, props);
 
     return togglebutton;
 }
@@ -96,15 +91,13 @@ typedef struct {
 
     ToggleButtonProps props;
 
-}CheckButtonProps;
+} CheckButtonProps;
 
 
-GtkWidget *macro_createCheckButton(CheckButtonProps props)
-{
+GtkWidget *macro_createCheckButton(CheckButtonProps props) {
     GtkWidget *checkbutton = gtk_check_button_new();
-    macro_ApplyButton(GTK_BUTTON(checkbutton),props.props.ButtonProps);
-    macro_ApplyToggleButton(checkbutton,props.props);
-
+    macro_ApplyButton(GTK_BUTTON(checkbutton), props.props.ButtonProps);
+    macro_ApplyToggleButton(checkbutton, props.props);
 
 
     return checkbutton;
@@ -115,51 +108,50 @@ typedef struct {
     GtkWidget *radioGroup;///definit le groupe des bouton radio dont on ajoute la bouton (NULL par defaut)
     ButtonProps *ButtonProps;
 
-}RadioButtonProps;
+} RadioButtonProps;
 
-void macro_ApplyRadioButton(GtkWidget *radiobutton,RadioButtonProps props)
-{
-    if(props.radioGroup)
+void macro_ApplyRadioButton(GtkWidget *radiobutton, RadioButtonProps props) {
+    if (props.radioGroup)
         gtk_radio_button_join_group(GTK_RADIO_BUTTON(radiobutton), GTK_RADIO_BUTTON(props.radioGroup));
 }
 
-GtkWidget *macro_createRadioButton(RadioButtonProps props)
-{
+GtkWidget *macro_createRadioButton(RadioButtonProps props) {
     GtkWidget *radiobutton = gtk_radio_button_new(NULL);
-    if(props.ButtonProps)
-        macro_ApplyButton(GTK_BUTTON(radiobutton),props.ButtonProps);
+    if (props.ButtonProps)
+        macro_ApplyButton(GTK_BUTTON(radiobutton), props.ButtonProps);
 
-    macro_ApplyRadioButton(radiobutton,props);
+    macro_ApplyRadioButton(radiobutton, props);
     return radiobutton;
 }
 
 void create_radio_buttons(void) {
 
     GtkWidget *window, *radio1, *radio2, *box, *entry;
-    window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-    box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 2);
-    gtk_box_set_homogeneous (GTK_BOX (box), TRUE);
+    window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+    box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 2);
+    gtk_box_set_homogeneous(GTK_BOX (box), TRUE);
 
     /// Create a radio button with a label
-    radio1 = gtk_radio_button_new_with_label_from_widget(NULL,"Homme");
+    radio1 = gtk_radio_button_new_with_label_from_widget(NULL, "Homme");
 
     /// Create a radio button with a label
     /// radioGroup : an existing radio button group, or NULL if you are creating a new group.
-    radio2 = gtk_radio_button_new_with_label_from_widget (GTK_RADIO_BUTTON (radio1),"Femme");
+    radio2 = gtk_radio_button_new_with_label_from_widget(GTK_RADIO_BUTTON (radio1), "Femme");
 
     /// Pack them into a box, then show all the widgets
-    gtk_box_pack_start (GTK_BOX (box), radio1,TRUE,TRUE,0);
-    gtk_box_pack_start (GTK_BOX (box), radio2,TRUE,TRUE,0);
-    gtk_container_add (GTK_CONTAINER (window), box);
-    gtk_widget_show_all (window);
-    g_signal_connect(G_OBJECT(window), "destroy",G_CALLBACK(gtk_main_quit), NULL);
+    gtk_box_pack_start(GTK_BOX (box), radio1, TRUE, TRUE, 0);
+    gtk_box_pack_start(GTK_BOX (box), radio2, TRUE, TRUE, 0);
+    gtk_container_add(GTK_CONTAINER (window), box);
+    gtk_widget_show_all(window);
+    g_signal_connect(G_OBJECT(window), "destroy", G_CALLBACK(gtk_main_quit), NULL);
 
 }
 
-ButtonProps *set_button_props(const gchar *label,gboolean underline,gboolean  alwaysshow,GtkPositionType imgpos,gint width,gint height,
-                              GtkWidget *img,GtkReliefStyle relief,const gchar *icon_name,gboolean mnemonic)
-{
-    ButtonProps *props = (ButtonProps*) g_malloc(sizeof (ButtonProps));
+ButtonProps *
+set_button_props(const gchar *label, gboolean underline, gboolean alwaysshow, GtkPositionType imgpos, gint width,
+                 gint height,
+                 GtkWidget *img, GtkReliefStyle relief, const gchar *icon_name, gboolean mnemonic) {
+    ButtonProps *props = (ButtonProps *) g_malloc(sizeof(ButtonProps));
     props->label = label;
     props->underline = underline;
     props->alwaysShowImage = alwaysshow;
@@ -178,25 +170,22 @@ ButtonProps *set_button_props(const gchar *label,gboolean underline,gboolean  al
 // Created by W0L1D on 2/15/2022.
 //
 #include <gtk/gtk.h>
+
 //Cellule contient un string
-typedef struct SCel
-{
+typedef struct SCel {
     gchar *str;         /// string
     struct SCel *next;  /// Cellule suivante
 } StrCel;
 
 //Cellule du provider des classes CSS
-typedef struct PrvCel
-{
-    GtkStyleProvider    *provider;  /// Provider du style
-    guint               priority;   /// Priorite de ce provider.
-    struct PrvCel       *next;      /// Cellule suivante
+typedef struct PrvCel {
+    GtkStyleProvider *provider;  /// Provider du style
+    guint priority;   /// Priorite de ce provider.
+    struct PrvCel *next;      /// Cellule suivante
 } PrvCel;
 
 
-
-typedef struct
-{
+typedef struct {
     gint start;     /// margin gauche
     gint end;       /// margin droit
     gint bottom;    /// margin du bas
@@ -204,130 +193,113 @@ typedef struct
 } MarginProps;
 
 
-typedef struct
-{
+typedef struct {
     /*
      * propiete boolXXX designe que
      * la propriete XXX doit etre initialise
      */
-    gboolean        boolTooltipTxt;
-    gboolean        boolAlign;
-    gboolean        boolOpacity;
+    gboolean boolTooltipTxt;
+    gboolean boolAlign;
+    gboolean boolOpacity;
 
-    MarginProps     *marginPrp;    /// les margin de la fenetre
-    const gchar*    tooltipText;  /// text a afficher en hover
-    const gchar*    name;         /// nom du widget
-    GtkAlign        align;        /// alignement du widget
-    double          opacity;      /// visibilite entre 0 et 1
+    MarginProps *marginPrp;    /// les margin de la fenetre
+    const gchar *tooltipText;  /// text a afficher en hover
+    const gchar *name;         /// nom du widget
+    GtkAlign align;        /// alignement du widget
+    double opacity;      /// visibilite entre 0 et 1
 } WidgetProps;
 
 
-typedef struct
-{
+typedef struct {
     /*
      * propiete boolXXX designe que
      * la propriete XXX doit etre initialise
      */
-    gboolean            boolTitle;
-    gboolean            boolSize;
-    gboolean            boolResizable;
-    gboolean            boolIcon;
-    gboolean            boolPosition;
-    gboolean            boolGravity;
+    gboolean boolTitle;
+    gboolean boolSize;
+    gboolean boolResizable;
+    gboolean boolIcon;
+    gboolean boolPosition;
+    gboolean boolGravity;
 
-    WidgetProps         *widgetProps; ///propietes héritee du widget
-    const gchar         *title;      /// titre de la fenetre
-    gint                width;       /// la largeur de la fenetre
-    gint                height;      /// la hauteur de la fenetre
-    gboolean            resizable;   /// users can resize the window
-    GdkPixbuf           *icon;       /// l'icon de la fenetre
-    GtkWindowPosition   position;    /// position initiale de la fenetre
-    GdkGravity          gravity;     /// gravite de la fenetre
+    WidgetProps *widgetProps; ///propietes héritee du widget
+    const gchar *title;      /// titre de la fenetre
+    gint width;       /// la largeur de la fenetre
+    gint height;      /// la hauteur de la fenetre
+    gboolean resizable;   /// users can resize the window
+    GdkPixbuf *icon;       /// l'icon de la fenetre
+    GtkWindowPosition position;    /// position initiale de la fenetre
+    GdkGravity gravity;     /// gravite de la fenetre
 } WindowProps;
 
-typedef struct
-{
+typedef struct {
     /*
      * propiete boolXXX designe que
      * la propriete XXX doit etre initialise
      */
-    gboolean            boolHomogeneous;
-    gboolean            boolBaselinePos;
+    gboolean boolHomogeneous;
+    gboolean boolBaselinePos;
 
-    gboolean            homogeneous;         /// the number of pixels to place by default between children
-    GtkOrientation      orientation;         /// orientation du Box (obligatoir)
-    gint                spacing;             /// propriete obligatoire
+    gboolean homogeneous;         /// the number of pixels to place by default between children
+    GtkOrientation orientation;         /// orientation du Box (obligatoir)
+    gint spacing;             /// propriete obligatoire
     GtkBaselinePosition baselinePosition;    /// where to put the baseline inside the extra available space.
 } BoxProps;
 
-typedef struct
-{
+typedef struct {
     /*
      * propiete boolXXX designe que
      * la propriete XXX doit etre initialise
      */
-    gboolean            boolBoxPrp;
-    gboolean            boolBBStyle;
+    gboolean boolBoxPrp;
+    gboolean boolBBStyle;
 
-    BoxProps            boxPrp;         /// proprietees herite du Box
-    GtkOrientation      orientation;   /// orientation du box
-    GtkButtonBoxStyle   bbStyle;      /// style du Box button
+    BoxProps boxPrp;         /// proprietees herite du Box
+    GtkOrientation orientation;   /// orientation du box
+    GtkButtonBoxStyle bbStyle;      /// style du Box button
 } BtnBoxProps;
 
 
-
-typedef struct
-{
+typedef struct {
     StrCel *classes;    /// liste des classes attribues
     PrvCel *providers; /// liste des providers du style
 } StyleContextProps;
 
 
-
-typedef struct
-{
+typedef struct {
     /*
      * propiete boolXXX designe que
      * la propriete XXX doit etre initialise
      */
-    gboolean            boolPackDirect;
-    gboolean            boolChdPackDirect;
+    gboolean boolPackDirect;
+    gboolean boolChdPackDirect;
 
     /// proprietees herite du widget
-    WidgetProps         *widgetPrp;
+    WidgetProps *widgetPrp;
 
     /// Determines how widgets should be packed
     /// inside menubars and menuitems contained in menubars.
-    GtkPackDirection    packDirect;
+    GtkPackDirection packDirect;
     /// Determines how children widgets should be packed
-    GtkPackDirection    chdPackDirect;
+    GtkPackDirection chdPackDirect;
 } MenuBarProps;
 
-typedef struct
-{
+typedef struct {
     WidgetProps *widgetPrp;        /// proprietees herite du widge
     const gchar *label;            /// label du menu item
-    gboolean    mnemonicLabel;     /// si le label est mnémonique ou pas
+    gboolean mnemonicLabel;     /// si le label est mnémonique ou pas
     //ADDED ::
 } MenuItemProps;
 
 
-
-
-
-
-
-
-
-
 typedef union {
-    gchar* str; // file | ressource | Stock | Icon name (depricated)
+    gchar *str; // file | ressource | Stock | Icon name (depricated)
     GtkIconSet *iconSet; //(depricated)
     GdkPixbuf *pixbuf;
-    GdkPixbufAnimation * animation;
-    cairo_surface_t * cairoSurface;
+    GdkPixbufAnimation *animation;
+    cairo_surface_t *cairoSurface;
     GIcon *gIcon;
-}ImageContentUN;
+} ImageContentUN;
 
 //starting value 1000
 typedef enum {
@@ -353,10 +325,8 @@ typedef struct {
 } ImageProps;
 
 
-
 //ADDED ::
-typedef struct
-{
+typedef struct {
     MenuItemProps itemProps;
     ImageProps imagePrp;
 } ImageMnItemProps;
@@ -367,8 +337,7 @@ typedef struct
  * @param widget widget utilisee
  * @param props les margin
  */
-void macro_applyMargin (GtkWidget *widget, MarginProps props)
-{
+void macro_applyMargin(GtkWidget *widget, MarginProps props) {
     gtk_widget_set_margin_top(widget, props.top);
     gtk_widget_set_margin_start(widget, props.start);
     gtk_widget_set_margin_top(widget, props.bottom);
@@ -380,8 +349,7 @@ void macro_applyMargin (GtkWidget *widget, MarginProps props)
  * @param widget widget a initialiser
  * @param props prpriete du widget
  */
-void macro_applyWidget (GtkWidget *widget, WidgetProps props)
-{
+void macro_applyWidget(GtkWidget *widget, WidgetProps props) {
     if (props.marginPrp)
         macro_applyMargin(widget, *props.marginPrp);
     if (props.boolTooltipTxt)
@@ -397,8 +365,7 @@ void macro_applyWidget (GtkWidget *widget, WidgetProps props)
  * @param pContext context a initialiser
  * @param props listes des classes et providers
  */
-void macro_applyStyle (GtkStyleContext *pContext, StyleContextProps props)
-{
+void macro_applyStyle(GtkStyleContext *pContext, StyleContextProps props) {
     StrCel *curr = props.classes;
     while (curr) {
         gtk_style_context_add_class(pContext, curr->str);
@@ -418,11 +385,10 @@ void macro_applyStyle (GtkStyleContext *pContext, StyleContextProps props)
  * @param props proprietes du style cre
  * @return StyleContext initialise
  */
-GtkStyleContext *macro_createStyle (StyleContextProps props)
-{
+GtkStyleContext *macro_createStyle(StyleContextProps props) {
     GtkStyleContext *style = gtk_style_context_new();
     macro_applyStyle(style, props);
-    return  style;
+    return style;
 }
 
 
@@ -431,8 +397,7 @@ GtkStyleContext *macro_createStyle (StyleContextProps props)
  * @param img image a initialiser
  * @param props proprietes de l'image (source de l'image...)
  */
-void macro_applyImage(GtkImage *img, ImageProps props)
-{
+void macro_applyImage(GtkImage *img, ImageProps props) {
     if (props.widgetPrp)
         macro_applyWidget(GTK_WIDGET(img), *props.widgetPrp);
     switch (props.storageType.type) {
@@ -468,18 +433,17 @@ void macro_applyImage(GtkImage *img, ImageProps props)
             break;
     }
 }
+
 /**********************************************
  * creer et initialiser l'image
  * @param props proprietes de l'image
  * @return l'image cree
  */
-GtkWidget *macro_createImage (ImageProps props)
-{
+GtkWidget *macro_createImage(ImageProps props) {
     GtkWidget *img = gtk_image_new();
     macro_applyImage(GTK_IMAGE(img), props);
-    return  img;
+    return img;
 }
-
 
 
 void macro_applyMenuBar(GtkMenuBar *bar, MenuBarProps props) {
@@ -505,6 +469,7 @@ void macro_applyMenuItem(GtkMenuItem *pItem, MenuItemProps props) {
         gtk_menu_item_set_label(pItem, props.label);
     gtk_menu_item_set_use_underline(pItem, props.mnemonicLabel);
 }
+
 GtkWidget *macro_createMenuItem(MenuItemProps props) {
     GtkWidget *item = gtk_menu_item_new();
     macro_applyMenuItem(GTK_MENU_ITEM(item), props);
@@ -515,15 +480,15 @@ GtkWidget *macro_createMenuItem(MenuItemProps props) {
 static
 void macro_addImageToMenuItem(GtkMenuItem *pItem, ImageProps imgProps) {
 
-    GtkWidget *box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
-    GtkWidget *label = gtk_label_new (gtk_menu_item_get_label(pItem));
+    GtkWidget *box = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 6);
+    GtkWidget *label = gtk_label_new(gtk_menu_item_get_label(pItem));
 
-    gtk_container_foreach (GTK_CONTAINER (pItem), (void*) gtk_widget_destroy, NULL);
+    gtk_container_foreach(GTK_CONTAINER (pItem), (void *) gtk_widget_destroy, NULL);
 
     gtk_box_pack_start(GTK_BOX (box), macro_createImage(imgProps), FALSE, FALSE, 2);
     gtk_box_pack_end(GTK_BOX (box), label, TRUE, TRUE, 2);
 
-    gtk_container_add (GTK_CONTAINER (pItem), box);
+    gtk_container_add(GTK_CONTAINER (pItem), box);
 }
 
 
@@ -540,15 +505,14 @@ GtkWidget *macro_createMenuitemWithImage(ImageMnItemProps props) {
  * @param window fenetre a initialiser
  * @param props propriete de l'image
  */
-void macro_applyWindow (GtkWindow *window, WindowProps props)
-{
+void macro_applyWindow(GtkWindow *window, WindowProps props) {
     if (props.widgetProps) /// initialisation des propietes heritees du widget
         macro_applyWidget(GTK_WIDGET(window), *props.widgetProps);
     if (props.boolTitle) /// initialisation du Titre
-        gtk_window_set_title (GTK_WINDOW(window), props.title);
+        gtk_window_set_title(GTK_WINDOW(window), props.title);
     if (props.boolSize) /// initialisation du largeur et hauteur
-        gtk_window_set_default_size (GTK_WINDOW(window),
-                                     props.width, props.height);
+        gtk_window_set_default_size(GTK_WINDOW(window),
+                                    props.width, props.height);
     if (props.boolResizable) /// initialisation redimensionnabilite du fenetre
         gtk_window_set_resizable(GTK_WINDOW(window), props.resizable);
     if (props.boolIcon) /// initialisation de l'icon du fenetre
@@ -565,8 +529,7 @@ void macro_applyWindow (GtkWindow *window, WindowProps props)
  * @param props propietes de la fenetre
  * @return fenetre cree
  */
-GtkWidget *macro_createWindow (GtkApplication *app, WindowProps props)
-{
+GtkWidget *macro_createWindow(GtkApplication *app, WindowProps props) {
     GtkWidget *window;
     window = gtk_application_window_new(app);
     macro_applyWindow(GTK_WINDOW(window), props);
@@ -578,8 +541,7 @@ GtkWidget *macro_createWindow (GtkApplication *app, WindowProps props)
  * @param box box a initialiser
  * @param props propietes du box
  */
-void macro_applyBox(GtkBox *box, BoxProps props)
-{
+void macro_applyBox(GtkBox *box, BoxProps props) {
     if (props.boolHomogeneous)
         gtk_box_set_homogeneous(GTK_BOX(box),
                                 props.homogeneous);
@@ -593,8 +555,7 @@ void macro_applyBox(GtkBox *box, BoxProps props)
  * @param props propietes du box
  * @return box cree
  */
-GtkWidget *macro_createBox(BoxProps props)
-{
+GtkWidget *macro_createBox(BoxProps props) {
     GtkWidget *box = gtk_box_new(props.orientation, props.spacing);
     macro_applyBox(GTK_BOX(box), props);
     return box;
@@ -606,8 +567,7 @@ GtkWidget *macro_createBox(BoxProps props)
  * @param bbox ButtonBox a initialiser
  * @param props propietes du ButtonBox
  */
-void macro_applyBtnBox(GtkButtonBox *bbox, BtnBoxProps props)
-{
+void macro_applyBtnBox(GtkButtonBox *bbox, BtnBoxProps props) {
     if (props.boolBoxPrp) /// initialisation des propietes heritees du Box
         macro_applyBox(GTK_BOX(bbox), props.boxPrp);
     if (props.boolBBStyle)
@@ -621,28 +581,20 @@ void macro_applyBtnBox(GtkButtonBox *bbox, BtnBoxProps props)
  * @param props propietes du ButtonBox
  * @return ButtonBox cree
  */
-GtkWidget *macro_createBtnBox(BtnBoxProps props)
-{
+GtkWidget *macro_createBtnBox(BtnBoxProps props) {
     GtkWidget *bbox = gtk_button_box_new(props.orientation);
     macro_applyBtnBox(GTK_BUTTON_BOX(bbox), props);
     return bbox;
 }
 
-typedef struct wdCel
-{
+typedef struct wdCel {
     GtkWidget *widget;
-    gint x,y;
+    gint x, y;
     struct wdCel *next;
-}ChildCel;
+} ChildCel;
 
 
-
-
-
-
-
-typedef struct MenuCel
-{
+typedef struct MenuCel {
     ImageMnItemProps itemProps;// etiquette de cellule
     GCallback gCallback;
 
@@ -653,7 +605,7 @@ typedef struct MenuCel
 
 
 
-GtkWidget *macro_autoCreateSousMenu (MenuCel *menuCel) {
+GtkWidget *macro_autoCreateSousMenu(MenuCel *menuCel) {
     GtkWidget *menu = gtk_menu_new();
     GtkWidget *menuItem;
     MenuCel *curr = menuCel;
@@ -681,7 +633,7 @@ GtkWidget *macro_autoCreateMenuBar(MenuCel *menuCel) {
     GtkWidget *menuBar = macro_createMenuBar(props);
     MenuCel *curr = menuCel;
 
-    GtkWidget   *sMenu = NULL, //Sous menu
+    GtkWidget *sMenu = NULL, //Sous menu
     *mItem = NULL; // menu item
 
     while (curr) {
@@ -712,50 +664,49 @@ void macro_initMenuBarPrp(MenuBarProps *props) {
 /********** structures ************/
 
 
-typedef struct cel{
+typedef struct cel {
     gint Id;//Indentifiant du virus(peut être coleur par exemple rgb Ox......) // it can be gchar* too choose one
     const gchar *nom;// le nom associé à le virus
     gfloat prctContam;// le pourcentage de contamination de virus
     gfloat prctMortel; // le pourcentage de mortalite de virus
     guint cercleDeContam;// le rayon ou bien la cercle de contamination
-}Virus;
+} Virus;
 
-typedef struct
-{
+typedef struct {
     gint x;// la position selon les lignes
     gint y;// la position selon les colonnes
-}Coord;// les cooordonnées d'une entité dans l'interface
+} Coord;// les cooordonnées d'une entité dans l'interface
 
 typedef enum {
     GENETIQUEMENT_FAIBLE,
     GENETIQUEMENT_FRAGILE,
     GENETIQUEMENT_MOYEN,
     GENETIQUEMENT_FORT
-}Genitique;
+} Genitique;
 
 typedef enum {
     ARTERIELLE_NORMAL,
     ARTERIELLE_HYPERTENDU,
     ARTERIELLE_HYPERTENSION_FORTE,
-}Tension;
+} Tension;
 
 typedef enum {
     DIABETE_NORMAL,
     DIABETE_MODERE,
     DIABETE_AVANCE
-}Diabete;
+} Diabete;
 
 typedef enum {
     CARDIAQUE_NORMAL,
     CARDIAQUE_MALADE,
     CARDIAQUE_SEVERE
-}Cardiaque;
+} Cardiaque;
 
 typedef enum {
     POUMONS_SEIN,
     POUMONS_MALADE,
     POUMONS_GRAVE
-}Poumons;
+} Poumons;
 
 typedef struct {
     Genitique G;
@@ -763,40 +714,45 @@ typedef struct {
     Diabete D;
     Cardiaque C;
     Poumons P;
-}Sante;
+} Sante;
 
-typedef enum{
+typedef enum {
     GENRE_MALE,
     GENRE_FEMALE
-}Genre;
+} Genre;
 // si vous voulez faire deux entites (personne,animal) mais je pense c'est pas le peine
-typedef struct{
+typedef struct {
     gint Id;// identifiant de Participant
-    Genre S ;// le sexe de participant
+    Genre S;// le sexe de participant
     gint age;//l'âge de participant
     gint categorie;//la categorie associé à le participant selon son âge
     Coord pos;//les coordonnées où se présente le participant
     Sante etat;// l'état sanitaire associé à le participant
-    Virus* V;// liste des virus qui a le participant
-}Participant;// peut être animal,personne...
+    Virus *V;// liste des virus qui a le participant
+} Participant;// peut être animal,personne...
 
 
-void macro_moveGrid (GtkEventBox *boxSrc)
-{
+void macro_moveGrid(GtkEventBox *boxSrc) {
 
-    srand(time(NULL));
+    gint top, left;
+
+    gtk_container_child_get(GTK_CONTAINER(gtk_widget_get_parent(GTK_WIDGET(boxSrc))),
+                            GTK_WIDGET(boxSrc), "left-attach",
+                            &left, "top-attach", &top, NULL);
+
+    printf("\ninit pos : top = %d left = %d\n", top, left);
+
+    g_assert(GTK_IS_EVENT_BOX(boxSrc));
+
     GtkWidget *child = gtk_bin_get_child(GTK_BIN(boxSrc));
-    if (!child)
+    if (!child) {
+        g_printerr("child does not exist");
         return;
-    gint pas  = (gint)(rand()%4);
+    }
+    gint pas = g_random_int_range(0, 3);
     GtkWidget *boxDst;
 
-    gint top,left;
 
-
-
-    gtk_container_child_get(GTK_CONTAINER(gtk_widget_get_parent(GTK_WIDGET(boxSrc))), GTK_WIDGET(boxSrc), "left-attach", &left,
-                            "top-attach", &top, NULL);
 
     //printf("top = %d left = %d",top,left);
     /*
@@ -807,43 +763,40 @@ void macro_moveGrid (GtkEventBox *boxSrc)
 				    2
     */
 
-    switch(pas)
-    {
-        case 0:
-        {
-            if(!(top-1))
-                return;
-            top--;
-            break;
+    switch (pas) {
+        case 0: {
+            if ((top - 1) >= 0) {
+                top--;
+                break;
+            }
         }
-        case 1:
-        {
-            if(!(left-1))
-                return;
-            left--;
-            break;
+        case 1: {
+            if ((left - 1) >= 0) {
+                left--;
+                break;
+            }
         }
-        case 2:
-        {
-            if((top+1) >= MAXrow)
-                return;
-            top++;
-            break;
+        case 2: {
+            if ((top + 1) < MAXcol) {
+                top++;
+                break;
+            }
         }
-        case 3:
-        {
-            if((left+1) >= MAXcol)
+        case 3: {
+            if ((left + 1) < MAXrow) {
+                left++;
+                break;
+            } else
                 return;
-            left++;
-            break;
         }
         default:
             return;
     }
-    printf("top = %d left = %d",top,left);
+    printf("\nnew pos : top = %d left = %d. ", top, left);
     boxDst = gtk_grid_get_child_at(
-            GTK_GRID(gtk_widget_get_parent(GTK_WIDGET(boxSrc))),left,top);
-    if(boxDst && !(gtk_bin_get_child(GTK_BIN(boxDst))))// si la case ne contient pas bnadem on ajoute
+            GTK_GRID(gtk_widget_get_parent(GTK_WIDGET(boxSrc))), left, top);
+    g_assert(GTK_IS_EVENT_BOX(boxDst));
+    if (boxDst && !(gtk_bin_get_child(GTK_BIN(boxDst))))// si la case ne contient pas bnadem on ajoute
     {
         /*
          * GObject is a reference counted type. Reference counting is a form of garbage collection.
@@ -855,12 +808,12 @@ void macro_moveGrid (GtkEventBox *boxSrc)
          * The API reference will always tell you if you’re dealing with something you own, or just a pointer to something that
          * is owned by something else.
          */
-        printf("\ntop = %d left = %d",top,left);
+        printf("is valid\n\n", top, left);
         g_object_ref(child);
         gtk_container_remove(GTK_CONTAINER(boxSrc), child);
         ///child->pos.x = top;
         ///child->pos.y=left;
-        gtk_container_add(GTK_CONTAINER(boxDst),child);
+        gtk_container_add(GTK_CONTAINER(boxDst), child);
         g_object_unref(child);
     }
 }

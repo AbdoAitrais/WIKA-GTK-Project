@@ -203,16 +203,6 @@ void create_background(GtkGrid *grid,ButtonProps *props)
     }
 }
 
-void create_backgroundBox(GtkGrid *grid)
-{
-    for (int i = 0; i < MAXrow; ++i) {
-        for (int j = 0; j < MAXcol; ++j) {
-            GtkWidget *box = gtk_event_box_new();
-            gtk_grid_attach(GTK_GRID(grid), GTK_WIDGET(box), i, j, 1, 1);
-            gtk_style_context_add_class(gtk_widget_get_style_context(box), "box");
-        }
-    }
-}
 
 
 static void
@@ -316,7 +306,7 @@ void loadCSS(GtkWidget *window)
 
 
 
-gint i = 1;
+gint isOn = 1;
 guint t = 1;
 
 gboolean doruzidDor(gpointer image)
@@ -327,30 +317,53 @@ gboolean doruzidDor(gpointer image)
 
 void start_pause(GtkWidget *button, gpointer image)
 {
-    printf("\n%d",i);
-    if(i == 1)
+    printf("\n%d",isOn);
+    if(isOn == 1)
     {
-        i = 0;
+        isOn = 0;
         t = g_timeout_add(300,doruzidDor,image);
     }
-    else if(i == 0)
+    else if(isOn == 0)
     {
-        i = 1;
+        isOn = 1;
         g_source_remove(t);
         t = 0;
     }
 
 }
-int id;
+
+void afficher_virus_enregistre(GObject *object)
+{
+    Virus *a = ((Virus *)g_object_get_data(object,"listVirus"));
+
+    printf("%d\n",a->Id);
+    printf("%s\n",a->nom);
+    printf("%f\n",a->prctContam);
+    printf("%f\n",a->prctMortel);
+    printf("%d\n",a->cercleDeContam);
+}
+
+GList * inserer_data_GObject(GObject * object,gchar * key,gpointer data)
+{
+    GList * l = g_object_get_data(object,key);
+
+    l = g_list_append(l,data);
+
+    g_object_set_data(object,key,data);
+
+    return ((GList *) l);
+}
+
+int id = 0;
 
 void enregistrer_virus(GtkButton *button, gpointer builder)
 {
     Virus *v = (Virus*) malloc(sizeof(Virus));
 
-    GtkAdjustment *adjust1 = GTK_ADJUSTMENT(gtk_builder_get_object (builder, "adjust1"));;
-    GtkAdjustment *adjust2 = GTK_ADJUSTMENT(gtk_builder_get_object (builder, "adjust2"));;
-    GtkAdjustment *adjust3 = GTK_ADJUSTMENT(gtk_builder_get_object (builder, "adjust3"));;
-    GtkWidget *entryNomVirus = GTK_WIDGET(gtk_builder_get_object (builder, "entryNomVirus"));;
+    GtkAdjustment *adjust1 = GTK_ADJUSTMENT(gtk_builder_get_object (builder, "adjust1"));
+    GtkAdjustment *adjust2 = GTK_ADJUSTMENT(gtk_builder_get_object (builder, "adjust2"));
+    GtkAdjustment *adjust3 = GTK_ADJUSTMENT(gtk_builder_get_object (builder, "adjust3"));
+    GtkWidget *entryNomVirus = GTK_WIDGET(gtk_builder_get_object (builder, "entryNomVirus"));
 
     v->Id = ++id;
     v->prctContam = ((gfloat)gtk_adjustment_get_value (GTK_ADJUSTMENT(adjust1)));
@@ -358,21 +371,60 @@ void enregistrer_virus(GtkButton *button, gpointer builder)
     v->cercleDeContam = ((gint)gtk_adjustment_get_value (GTK_ADJUSTMENT(adjust3)));
     v->nom = gtk_entry_get_text(GTK_ENTRY(entryNomVirus));
 
-    g_list_append(g_object_get_data(builder,"listVirus"),v);
-    g_object_set_data(builder,"listVirus",v);
+    GList * l = inserer_data_GObject(builder,"listVirus",v);
 
-    /*Virus *a = ((Virus *)g_object_get_data(builder,"listVirus"));
+    afficher_virus_enregistre(builder);
 
-    printf("%d\n",a->Id);
-    printf("%s\n",a->nom);
-    printf("%f\n",a->prctContam);
-    printf("%f\n",a->prctMortel);
-    printf("%d\n",a->cercleDeContam);*/
+}
+
+
+
+
+
+gboolean add_individu (GtkWidget *widget,GdkEvent *event,gpointer path)
+{
+
+    GtkWidget *image = gtk_image_new_from_file ("person.png");
+    gtk_container_add(GTK_CONTAINER (widget),image);
+
+    gtk_widget_show(image);
+    gint left, top;
+    gtk_container_child_get(GTK_CONTAINER(gtk_widget_get_parent(GTK_WIDGET(widget))),
+                            GTK_WIDGET(widget), "left-attach",
+                            &left, "top-attach", &top, NULL);
+    g_print("\nadded image  top = %d, left = %d.\n", top, left);
+
+    GtkWindow *window = gtk_widget_get_parent_window(widget);
+
+    g_timeout_add(650,doruzidDor,image);
+    return FALSE;
+}
+
+
+void create_backgroundBox(GtkGrid *grid)
+{
+    for (int i = 0; i < MAXrow; ++i) {
+        for (int j = 0; j < MAXcol; ++j) {
+            GtkWidget *box = gtk_event_box_new();
+            g_signal_connect (box, "button-press-event", (GCallback)add_individu, NULL);
+
+            gtk_grid_attach(GTK_GRID(grid), GTK_WIDGET(box), i, j, 1, 1);
+            gtk_style_context_add_class(gtk_widget_get_style_context(box), "box");
+        }
+    }
+}
+void enregistrer_add_individu(GtkGrid *grid,gchar *path)
+{
+    for (int i = 0; i < MAXrow; ++i) {
+        for (int j = 0; j < MAXcol; ++j) {
+
+            g_signal_connect (gtk_grid_get_child_at(grid, i, j), "button-press-event", (GCallback)add_individu, path);
+        }
+    }
 }
 
 int main(int argc, char *argv [])
 {
-
 
     GtkWidget *fenetre_principale = NULL;
 
@@ -455,7 +507,7 @@ int main(int argc, char *argv [])
     gtk_style_context_add_class(gtk_widget_get_style_context(menu), "menu");
     gtk_style_context_add_class(gtk_widget_get_style_context(stack), "stack");
     gtk_style_context_add_class(gtk_widget_get_style_context(switcher), "switch");
-    (gtk_widget_get_style_context(comboBox1), "comboBox");
+    gtk_style_context_add_class(gtk_widget_get_style_context(comboBox1), "comboBox");
     gtk_style_context_add_class(gtk_widget_get_style_context(comboBox2), "comboBox");
     gtk_style_context_add_class(gtk_widget_get_style_context(comboBox3), "comboBox");
     gtk_style_context_add_class(gtk_widget_get_style_context(comboBox4), "comboBox");
@@ -468,25 +520,27 @@ int main(int argc, char *argv [])
     gtk_style_context_add_class(gtk_widget_get_style_context(button), "button2");
 
 
+    g_printerr("\nReached me\n");
+
     grid = macro_createGrid(gprops);
     create_backgroundBox(GTK_GRID(grid));
     //gtk_box_pack_start(GTK_BOX(SonBox),grid,TRUE,TRUE,0);
     gtk_container_add(GTK_CONTAINER(ViewPort2),grid);
 
-
+/*
     GtkWidget *image = gtk_image_new_from_file ("person.png");
     GtkWidget *eBox = gtk_grid_get_child_at(GTK_GRID(grid),0,0);
     gtk_container_add(GTK_CONTAINER(eBox),image);
 
-    //g_timeout_add(300,doruzidDor,image);
 
+*/
 
        // create_background(GTK_GRID(grid),props);
     /* Affectation du signal "destroy" à la fonction gtk_main_quit(); pour la */
     /* fermeture de la fenêtre. */
     g_signal_connect (G_OBJECT (fenetre_principale), "destroy", (GCallback)gtk_main_quit, NULL);
     g_signal_connect (GTK_BUTTON(button), "clicked", (GCallback)enregistrer_virus, builder);
-
+ //   enregistrer_add_individu(GTK_GRID(grid),"person.png");
 
 
     /* Affichage de la fenêtre principale. */
