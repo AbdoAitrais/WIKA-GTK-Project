@@ -732,11 +732,7 @@ typedef struct {
 } Participant;// peut être animal,personne...
 
 
-gboolean doruzidDor()
-{
-    macro_moveGrid();
-    return TRUE;
-}
+
 
 gboolean macro_moveGrid(gpointer image) {
 

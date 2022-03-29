@@ -393,7 +393,7 @@ gboolean add_individu (GtkWidget *widget,GdkEvent *event,gpointer path)
     GtkWindow *window = gtk_widget_get_parent_window(widget);
 
 
-    g_timeout_add(650,doruzidDor,image);
+    g_timeout_add(650,macro_moveGrid,image);
     return FALSE;
 }
 
