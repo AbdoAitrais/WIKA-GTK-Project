@@ -150,13 +150,9 @@ void enregistrer_virus(GtkButton *button, gpointer builder)
     v->cercleDeContam = ((gint)gtk_adjustment_get_value (GTK_ADJUSTMENT(adjust3)));
     v->nom = gtk_entry_get_text(GTK_ENTRY(entryNomVirus));
 
-    //inserer_data_GObject(builder,"listVirus",v);
+    inserer_data_GObject(builder,"listVirus",v);
 
-    GList * l = g_object_get_data(builder,"listVirus");
 
-    l = g_list_append(l,v);
-
-    g_object_set_data(builder,"listVirus",l);
 
     afficher_virus_enregistre(builder);
 
