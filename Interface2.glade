@@ -3,11 +3,13 @@
 <interface>
   <requires lib="gtk+" version="3.24"/>
   <object class="GtkAdjustment" id="adjust1">
+    <property name="lower">1</property>
     <property name="upper">100</property>
     <property name="step-increment">1</property>
     <property name="page-increment">10</property>
   </object>
   <object class="GtkAdjustment" id="adjust2">
+    <property name="lower">1</property>
     <property name="upper">100</property>
     <property name="step-increment">1</property>
     <property name="page-increment">10</property>
@@ -17,111 +19,6 @@
     <property name="upper">3</property>
     <property name="step-increment">1</property>
     <property name="page-increment">10</property>
-  </object>
-  <object class="GtkListStore" id="list1">
-    <columns>
-      <!-- column-name Text -->
-      <column type="gchararray"/>
-    </columns>
-    <data>
-      <row>
-        <col id="0" translatable="yes">GENETIQUEMENT_FAIBLE</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">GENETIQUEMENT_FRAGILE</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">GENETIQUEMENT_MOYEN</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">GENETIQUEMENT_FORT</col>
-      </row>
-    </data>
-  </object>
-  <object class="GtkListStore" id="list2">
-    <columns>
-      <!-- column-name Text -->
-      <column type="gchararray"/>
-    </columns>
-    <data>
-      <row>
-        <col id="0" translatable="yes">ARTERIELLE_NORMAL</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">ARTERIELLE_HYPERTENDU</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">ARTERIELLE_HYPERTENSION_FORTE</col>
-      </row>
-    </data>
-  </object>
-  <object class="GtkListStore" id="list3">
-    <columns>
-      <!-- column-name Text -->
-      <column type="gchararray"/>
-    </columns>
-    <data>
-      <row>
-        <col id="0" translatable="yes">DIABETE_NORMAL</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">DIABETE_MODERE</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">DIABETE_AVANCE</col>
-      </row>
-    </data>
-  </object>
-  <object class="GtkListStore" id="list4">
-    <columns>
-      <!-- column-name Text -->
-      <column type="gchararray"/>
-    </columns>
-    <data>
-      <row>
-        <col id="0" translatable="yes">CARDIAQUE_NORMAL</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">CARDIAQUE_MALADE</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">CARDIAQUE_SEVERE</col>
-      </row>
-    </data>
-  </object>
-  <object class="GtkListStore" id="list5">
-    <columns>
-      <!-- column-name Text -->
-      <column type="gchararray"/>
-    </columns>
-    <data>
-      <row>
-        <col id="0" translatable="yes">POUMONS_SEIN</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">POUMONS_MALADE</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">POUMONS_GRAVE</col>
-      </row>
-    </data>
-  </object>
-  <object class="GtkListStore" id="list6">
-    <columns>
-      <!-- column-name Text -->
-      <column type="gchararray"/>
-    </columns>
-    <data>
-      <row>
-        <col id="0" translatable="yes">COVID-19</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">EBOLA</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">SARS</col>
-      </row>
-    </data>
   </object>
   <object class="GtkTextBuffer" id="textBuff"/>
   <object class="GtkWindow" id="MainWindow">
@@ -289,24 +186,46 @@
           </packing>
         </child>
         <child>
+          <object class="GtkToolbar" id="toolbar">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="toolbar-style">both</property>
+            <property name="show-arrow">False</property>
+            <property name="icon_size">4</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
+        <child>
           <object class="GtkBox" id="SonBox">
             <property name="width-request">1200</property>
             <property name="height-request">650</property>
             <property name="visible">True</property>
             <property name="can-focus">False</property>
             <child>
-              <!-- n-columns=1 n-rows=1 -->
-              <object class="GtkGrid" id="GameGrid">
+              <object class="GtkScrolledWindow" id="scrolledWind2">
                 <property name="visible">True</property>
-                <property name="can-focus">False</property>
+                <property name="can-focus">True</property>
+                <property name="shadow-type">in</property>
+                <property name="min-content-width">1327</property>
+                <property name="max-content-width">1327</property>
                 <child>
-                  <placeholder/>
+                  <object class="GtkViewport" id="ViewPort2">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <child>
+                      <placeholder/>
+                    </child>
+                  </object>
                 </child>
               </object>
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
-                <property name="position">1</property>
+                <property name="position">0</property>
               </packing>
             </child>
             <child>
@@ -329,7 +248,7 @@
                 <property name="can-focus">True</property>
                 <property name="hscrollbar-policy">never</property>
                 <property name="shadow-type">in</property>
-                <property name="min-content-height">250</property>
+                <property name="min-content-height">200</property>
                 <child>
                   <object class="GtkViewport" id="ViewPort1">
                     <property name="visible">True</property>
@@ -362,367 +281,276 @@
                           </packing>
                         </child>
                         <child>
-                          <!-- n-columns=1 n-rows=5 -->
-                          <object class="GtkGrid" id="stackGrid1">
+                          <object class="GtkBox" id="GrandSonBox1">
                             <property name="visible">True</property>
                             <property name="can-focus">False</property>
-                            <property name="row-homogeneous">True</property>
-                            <property name="column-homogeneous">True</property>
+                            <property name="orientation">vertical</property>
                             <child>
-                              <object class="GtkBox" id="GrandSonBox1">
+                              <object class="GtkLabel" id="label11">
                                 <property name="visible">True</property>
                                 <property name="can-focus">False</property>
-                                <property name="orientation">vertical</property>
-                                <child>
-                                  <object class="GtkLabel" id="label11">
-                                    <property name="visible">True</property>
-                                    <property name="can-focus">False</property>
-                                    <property name="label" translatable="yes">Genre :</property>
-                                    <property name="xalign">0.11999999731779099</property>
-                                  </object>
-                                  <packing>
-                                    <property name="expand">False</property>
-                                    <property name="fill">False</property>
-                                    <property name="padding">6</property>
-                                    <property name="position">0</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkRadioButton" id="genre1">
-                                    <property name="label" translatable="yes">Homme</property>
-                                    <property name="visible">True</property>
-                                    <property name="can-focus">True</property>
-                                    <property name="receives-default">False</property>
-                                    <property name="active">True</property>
-                                    <property name="draw-indicator">True</property>
-                                  </object>
-                                  <packing>
-                                    <property name="expand">False</property>
-                                    <property name="fill">True</property>
-                                    <property name="position">1</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkRadioButton" id="genre3">
-                                    <property name="label" translatable="yes">Femme</property>
-                                    <property name="visible">True</property>
-                                    <property name="can-focus">True</property>
-                                    <property name="receives-default">False</property>
-                                    <property name="draw-indicator">True</property>
-                                    <property name="group">genre1</property>
-                                    <style>
-                                      <class name="&lt;"/>
-                                      <class name="&lt;Type Here"/>
-                                    </style>
-                                  </object>
-                                  <packing>
-                                    <property name="expand">False</property>
-                                    <property name="fill">True</property>
-                                    <property name="position">2</property>
-                                  </packing>
-                                </child>
+                                <property name="label" translatable="yes">Genre :</property>
+                                <property name="xalign">0.11999999731779099</property>
                               </object>
                               <packing>
-                                <property name="left-attach">0</property>
-                                <property name="top-attach">0</property>
+                                <property name="expand">False</property>
+                                <property name="fill">False</property>
+                                <property name="padding">6</property>
+                                <property name="position">0</property>
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkButton" id="subutton3">
-                                <property name="label" translatable="yes">Submit</property>
+                              <object class="GtkRadioButton" id="genre1">
+                                <property name="label" translatable="yes">Homme</property>
                                 <property name="visible">True</property>
                                 <property name="can-focus">True</property>
-                                <property name="receives-default">True</property>
-                                <property name="halign">center</property>
-                                <property name="valign">center</property>
+                                <property name="receives-default">False</property>
+                                <property name="active">True</property>
+                                <property name="draw-indicator">True</property>
                               </object>
                               <packing>
-                                <property name="left-attach">0</property>
-                                <property name="top-attach">4</property>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">1</property>
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkBox" id="GrandSonBox2">
+                              <object class="GtkRadioButton" id="genre3">
+                                <property name="label" translatable="yes">Femme</property>
                                 <property name="visible">True</property>
-                                <property name="can-focus">False</property>
-                                <property name="orientation">vertical</property>
-                                <child>
-                                  <object class="GtkLabel" id="label3">
-                                    <property name="visible">True</property>
-                                    <property name="can-focus">False</property>
-                                    <property name="label" translatable="yes">Santé :</property>
-                                    <property name="width-chars">7</property>
-                                    <property name="xalign">0.11999999731779099</property>
-                                  </object>
-                                  <packing>
-                                    <property name="expand">False</property>
-                                    <property name="fill">True</property>
-                                    <property name="position">0</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkComboBox" id="comboBox8">
-                                    <property name="visible">True</property>
-                                    <property name="can-focus">False</property>
-                                    <property name="model">list1</property>
-                                    <property name="row-span-column">2</property>
-                                    <property name="column-span-column">2</property>
-                                    <property name="has-entry">True</property>
-                                    <child>
-                                      <object class="GtkCellRendererText"/>
-                                      <attributes>
-                                        <attribute name="text">0</attribute>
-                                      </attributes>
-                                    </child>
-                                    <child>
-                                      <object class="GtkCellRendererText"/>
-                                      <attributes>
-                                        <attribute name="text">1</attribute>
-                                      </attributes>
-                                    </child>
-                                    <child internal-child="entry">
-                                      <object class="GtkEntry">
-                                        <property name="can-focus">False</property>
-                                        <property name="placeholder-text" translatable="yes">Genitique</property>
-                                      </object>
-                                    </child>
-                                  </object>
-                                  <packing>
-                                    <property name="expand">False</property>
-                                    <property name="fill">True</property>
-                                    <property name="position">1</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkComboBox" id="comboBox9">
-                                    <property name="visible">True</property>
-                                    <property name="can-focus">False</property>
-                                    <property name="model">list2</property>
-                                    <property name="row-span-column">2</property>
-                                    <property name="column-span-column">2</property>
-                                    <property name="has-entry">True</property>
-                                    <child>
-                                      <object class="GtkCellRendererText"/>
-                                      <attributes>
-                                        <attribute name="text">0</attribute>
-                                      </attributes>
-                                    </child>
-                                    <child internal-child="entry">
-                                      <object class="GtkEntry">
-                                        <property name="can-focus">False</property>
-                                        <property name="placeholder-text" translatable="yes">Tension</property>
-                                      </object>
-                                    </child>
-                                  </object>
-                                  <packing>
-                                    <property name="expand">False</property>
-                                    <property name="fill">True</property>
-                                    <property name="position">2</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkComboBox" id="comboBox10">
-                                    <property name="visible">True</property>
-                                    <property name="can-focus">False</property>
-                                    <property name="model">list3</property>
-                                    <property name="row-span-column">2</property>
-                                    <property name="column-span-column">2</property>
-                                    <property name="active">1</property>
-                                    <property name="has-entry">True</property>
-                                    <child>
-                                      <object class="GtkCellRendererText"/>
-                                      <attributes>
-                                        <attribute name="text">0</attribute>
-                                      </attributes>
-                                    </child>
-                                    <child internal-child="entry">
-                                      <object class="GtkEntry">
-                                        <property name="can-focus">False</property>
-                                        <property name="placeholder-text" translatable="yes">Diabete</property>
-                                      </object>
-                                    </child>
-                                  </object>
-                                  <packing>
-                                    <property name="expand">False</property>
-                                    <property name="fill">True</property>
-                                    <property name="position">3</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkComboBox" id="comboBox11">
-                                    <property name="visible">True</property>
-                                    <property name="can-focus">False</property>
-                                    <property name="model">list4</property>
-                                    <property name="row-span-column">2</property>
-                                    <property name="column-span-column">2</property>
-                                    <property name="has-entry">True</property>
-                                    <child>
-                                      <object class="GtkCellRendererText"/>
-                                      <attributes>
-                                        <attribute name="text">0</attribute>
-                                      </attributes>
-                                    </child>
-                                    <child internal-child="entry">
-                                      <object class="GtkEntry">
-                                        <property name="can-focus">False</property>
-                                        <property name="placeholder-text" translatable="yes">Cardiaque</property>
-                                      </object>
-                                    </child>
-                                  </object>
-                                  <packing>
-                                    <property name="expand">False</property>
-                                    <property name="fill">True</property>
-                                    <property name="position">4</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkComboBox" id="comboBox13">
-                                    <property name="visible">True</property>
-                                    <property name="can-focus">False</property>
-                                    <property name="model">list5</property>
-                                    <property name="row-span-column">2</property>
-                                    <property name="column-span-column">2</property>
-                                    <property name="has-entry">True</property>
-                                    <child>
-                                      <object class="GtkCellRendererText"/>
-                                      <attributes>
-                                        <attribute name="text">0</attribute>
-                                      </attributes>
-                                    </child>
-                                    <child internal-child="entry">
-                                      <object class="GtkEntry">
-                                        <property name="can-focus">False</property>
-                                        <property name="placeholder-text" translatable="yes">Poumons</property>
-                                      </object>
-                                    </child>
-                                  </object>
-                                  <packing>
-                                    <property name="expand">False</property>
-                                    <property name="fill">True</property>
-                                    <property name="position">5</property>
-                                  </packing>
-                                </child>
+                                <property name="can-focus">True</property>
+                                <property name="receives-default">False</property>
+                                <property name="draw-indicator">True</property>
+                                <property name="group">genre1</property>
+                                <style>
+                                  <class name="&lt;"/>
+                                  <class name="&lt;Type Here"/>
+                                </style>
                               </object>
                               <packing>
-                                <property name="left-attach">0</property>
-                                <property name="top-attach">1</property>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">2</property>
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkBox" id="GrandSonBox3">
+                              <object class="GtkLabel" id="label3">
                                 <property name="visible">True</property>
                                 <property name="can-focus">False</property>
-                                <property name="orientation">vertical</property>
-                                <child>
-                                  <object class="GtkLabel" id="label14">
-                                    <property name="visible">True</property>
-                                    <property name="can-focus">False</property>
-                                    <property name="label" translatable="yes">Age :</property>
-                                    <property name="width-chars">7</property>
-                                    <property name="xalign">0.11999999731779099</property>
-                                  </object>
-                                  <packing>
-                                    <property name="expand">False</property>
-                                    <property name="fill">True</property>
-                                    <property name="position">0</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkEntry" id="entryAge1">
-                                    <property name="visible">True</property>
-                                    <property name="can-focus">True</property>
-                                    <property name="placeholder-text" translatable="yes">1 à 130 ans</property>
-                                    <property name="input-purpose">number</property>
-                                  </object>
-                                  <packing>
-                                    <property name="expand">False</property>
-                                    <property name="fill">True</property>
-                                    <property name="position">1</property>
-                                  </packing>
-                                </child>
+                                <property name="label" translatable="yes">Santé :</property>
+                                <property name="width-chars">7</property>
+                                <property name="xalign">0.11999999731779099</property>
                               </object>
                               <packing>
-                                <property name="left-attach">0</property>
-                                <property name="top-attach">3</property>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">3</property>
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkBox" id="GrandSonBox4">
+                              <object class="GtkComboBoxText" id="comboBoxGenitiques">
                                 <property name="visible">True</property>
                                 <property name="can-focus">False</property>
-                                <property name="orientation">vertical</property>
-                                <child>
-                                  <object class="GtkLabel" id="label12">
-                                    <property name="visible">True</property>
+                                <property name="has-entry">True</property>
+                                <items>
+                                  <item id="faible" translatable="yes">GENETIQUEMENT_FAIBLE</item>
+                                  <item id="fragile" translatable="yes">GENETIQUEMENT_FRAGILE</item>
+                                  <item id="moyen" translatable="yes">GENETIQUEMENT_MOYEN</item>
+                                  <item id="fort" translatable="yes">GENETIQUEMENT_FORT</item>
+                                </items>
+                                <child internal-child="entry">
+                                  <object class="GtkEntry">
                                     <property name="can-focus">False</property>
-                                    <property name="label" translatable="yes">ID :</property>
-                                    <property name="width-chars">4</property>
-                                    <property name="xalign">0.11999999731779099</property>
+                                    <property name="placeholder-text" translatable="yes">Genitique</property>
                                   </object>
-                                  <packing>
-                                    <property name="expand">False</property>
-                                    <property name="fill">True</property>
-                                    <property name="position">0</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkEntry" id="entryID1">
-                                    <property name="visible">True</property>
-                                    <property name="can-focus">True</property>
-                                    <property name="placeholder-text" translatable="yes">Entrez l'Id du Personne</property>
-                                    <property name="input-purpose">number</property>
-                                  </object>
-                                  <packing>
-                                    <property name="expand">False</property>
-                                    <property name="fill">True</property>
-                                    <property name="position">1</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkLabel" id="label13">
-                                    <property name="visible">True</property>
-                                    <property name="can-focus">False</property>
-                                    <property name="label" translatable="yes">Virus-ID :</property>
-                                    <property name="width-chars">4</property>
-                                    <property name="xalign">0.11999999731779099</property>
-                                  </object>
-                                  <packing>
-                                    <property name="expand">False</property>
-                                    <property name="fill">True</property>
-                                    <property name="position">2</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkComboBox" id="comboBox7">
-                                    <property name="visible">True</property>
-                                    <property name="can-focus">False</property>
-                                    <property name="model">list6</property>
-                                    <property name="row-span-column">2</property>
-                                    <property name="column-span-column">2</property>
-                                    <property name="has-entry">True</property>
-                                    <child>
-                                      <object class="GtkCellRendererText"/>
-                                      <attributes>
-                                        <attribute name="text">0</attribute>
-                                      </attributes>
-                                    </child>
-                                    <child internal-child="entry">
-                                      <object class="GtkEntry">
-                                        <property name="can-focus">False</property>
-                                        <property name="placeholder-text" translatable="yes">L'Id du Virus</property>
-                                      </object>
-                                    </child>
-                                  </object>
-                                  <packing>
-                                    <property name="expand">False</property>
-                                    <property name="fill">True</property>
-                                    <property name="position">3</property>
-                                  </packing>
                                 </child>
                               </object>
                               <packing>
-                                <property name="left-attach">0</property>
-                                <property name="top-attach">2</property>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">4</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkComboBoxText" id="comboBoxTension">
+                                <property name="visible">True</property>
+                                <property name="can-focus">False</property>
+                                <property name="has-entry">True</property>
+                                <items>
+                                  <item id="tensionNormal" translatable="yes">ARTERIELLE_NORMAL</item>
+                                  <item id="tensionHypertendu" translatable="yes">ARTERIELLE_HYPERTENDU</item>
+                                  <item id="tensionForte" translatable="yes">ARTERIELLE_HYPERTENSION_FORTE</item>
+                                </items>
+                                <child internal-child="entry">
+                                  <object class="GtkEntry">
+                                    <property name="can-focus">False</property>
+                                    <property name="placeholder-text" translatable="yes">Tension</property>
+                                  </object>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">5</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkComboBoxText" id="comboBoxDiabete">
+                                <property name="visible">True</property>
+                                <property name="can-focus">False</property>
+                                <property name="has-entry">True</property>
+                                <items>
+                                  <item id="diabeteNormal" translatable="yes">DIABETE_NORMAL</item>
+                                  <item id="diabeteModere" translatable="yes">DIABETE_MODERE</item>
+                                  <item id="diabeteAvance" translatable="yes">DIABETE_AVANCE</item>
+                                </items>
+                                <child internal-child="entry">
+                                  <object class="GtkEntry">
+                                    <property name="can-focus">False</property>
+                                    <property name="placeholder-text" translatable="yes">Diabete</property>
+                                  </object>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">6</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkComboBoxText" id="comboBoxCardiaque">
+                                <property name="visible">True</property>
+                                <property name="can-focus">False</property>
+                                <property name="has-entry">True</property>
+                                <items>
+                                  <item id="cardiacNormal" translatable="yes">CARDIAQUE_NORMAL</item>
+                                  <item id="cardiacMalade" translatable="yes">CARDIAQUE_MALADE</item>
+                                  <item id="cardiacSevere" translatable="yes">CARDIAQUE_SEVERE</item>
+                                </items>
+                                <child internal-child="entry">
+                                  <object class="GtkEntry">
+                                    <property name="can-focus">False</property>
+                                    <property name="placeholder-text" translatable="yes">Cardiaque</property>
+                                  </object>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">7</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkComboBoxText" id="comboBoxPoumons">
+                                <property name="visible">True</property>
+                                <property name="can-focus">False</property>
+                                <property name="has-entry">True</property>
+                                <items>
+                                  <item id="poumonsSein" translatable="yes">POUMONS_SEIN</item>
+                                  <item id="poumonsMalade" translatable="yes">POUMONS_MALADE</item>
+                                  <item id="poumonsGrave" translatable="yes">POUMONS_GRAVE</item>
+                                </items>
+                                <child internal-child="entry">
+                                  <object class="GtkEntry">
+                                    <property name="can-focus">False</property>
+                                    <property name="placeholder-text" translatable="yes">Poumons</property>
+                                  </object>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">8</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkLabel" id="label12">
+                                <property name="visible">True</property>
+                                <property name="can-focus">False</property>
+                                <property name="label" translatable="yes">ID :</property>
+                                <property name="width-chars">4</property>
+                                <property name="xalign">0.11999999731779099</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">9</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkEntry" id="entryID1">
+                                <property name="visible">True</property>
+                                <property name="can-focus">True</property>
+                                <property name="placeholder-text" translatable="yes">Entrez l'Id du Personne</property>
+                                <property name="input-purpose">number</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">10</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkLabel" id="label13">
+                                <property name="visible">True</property>
+                                <property name="can-focus">False</property>
+                                <property name="label" translatable="yes">Virus-ID :</property>
+                                <property name="width-chars">4</property>
+                                <property name="xalign">0.11999999731779099</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">11</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkComboBoxText" id="comboBoxVirus">
+                                <property name="visible">True</property>
+                                <property name="can-focus">False</property>
+                                <property name="has-entry">True</property>
+                                <items>
+                                  <item id="c19" translatable="yes">COVID_19</item>
+                                  <item id="sars" translatable="yes">SARS_COV</item>
+                                </items>
+                                <child internal-child="entry">
+                                  <object class="GtkEntry">
+                                    <property name="can-focus">False</property>
+                                    <property name="placeholder-text" translatable="yes">Virus</property>
+                                  </object>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">12</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkLabel" id="label14">
+                                <property name="visible">True</property>
+                                <property name="can-focus">False</property>
+                                <property name="label" translatable="yes">Age :</property>
+                                <property name="width-chars">7</property>
+                                <property name="xalign">0.11999999731779099</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">13</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkEntry" id="entryAge1">
+                                <property name="visible">True</property>
+                                <property name="can-focus">True</property>
+                                <property name="placeholder-text" translatable="yes">1 à 130 ans</property>
+                                <property name="input-purpose">number</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">14</property>
                               </packing>
                             </child>
                           </object>
@@ -734,234 +562,135 @@
                           </packing>
                         </child>
                         <child>
-                          <!-- n-columns=1 n-rows=5 -->
-                          <object class="GtkGrid" id="stackGrid2">
+                          <object class="GtkBox" id="GrandSonBox5">
+                            <property name="width-request">200</property>
                             <property name="visible">True</property>
                             <property name="can-focus">False</property>
-                            <property name="row-homogeneous">True</property>
-                            <property name="column-homogeneous">True</property>
+                            <property name="orientation">vertical</property>
                             <child>
-                              <object class="GtkBox" id="GrandSonBox5">
+                              <object class="GtkLabel" id="label6">
                                 <property name="visible">True</property>
                                 <property name="can-focus">False</property>
-                                <property name="orientation">vertical</property>
-                                <child>
-                                  <object class="GtkLabel" id="label6">
-                                    <property name="visible">True</property>
-                                    <property name="can-focus">False</property>
-                                    <property name="label" translatable="yes">Pourcent Contam :</property>
-                                    <property name="width-chars">10</property>
-                                  </object>
-                                  <packing>
-                                    <property name="expand">False</property>
-                                    <property name="fill">True</property>
-                                    <property name="position">0</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkScale" id="scale1">
-                                    <property name="width-request">100</property>
-                                    <property name="visible">True</property>
-                                    <property name="can-focus">True</property>
-                                    <property name="adjustment">adjust1</property>
-                                    <property name="round-digits">1</property>
-                                  </object>
-                                  <packing>
-                                    <property name="expand">False</property>
-                                    <property name="fill">True</property>
-                                    <property name="position">1</property>
-                                  </packing>
-                                </child>
+                                <property name="label" translatable="yes">Pourcent Contam :</property>
+                                <property name="width-chars">10</property>
                               </object>
                               <packing>
-                                <property name="left-attach">0</property>
-                                <property name="top-attach">0</property>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">0</property>
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkBox" id="GrandSonBox6">
-                                <property name="width-request">126</property>
-                                <property name="height-request">104</property>
+                              <object class="GtkScale" id="scale1">
+                                <property name="width-request">100</property>
                                 <property name="visible">True</property>
-                                <property name="can-focus">False</property>
-                                <property name="orientation">vertical</property>
-                                <property name="homogeneous">True</property>
-                                <child>
-                                  <object class="GtkButton" id="subutton2">
-                                    <property name="label" translatable="yes">Submit</property>
-                                    <property name="height-request">-1</property>
-                                    <property name="visible">True</property>
-                                    <property name="can-focus">True</property>
-                                    <property name="receives-default">True</property>
-                                    <property name="halign">center</property>
-                                    <property name="valign">center</property>
-                                  </object>
-                                  <packing>
-                                    <property name="expand">False</property>
-                                    <property name="fill">True</property>
-                                    <property name="pack-type">end</property>
-                                    <property name="position">0</property>
-                                  </packing>
-                                </child>
+                                <property name="can-focus">True</property>
+                                <property name="adjustment">adjust1</property>
+                                <property name="round-digits">1</property>
                               </object>
                               <packing>
-                                <property name="left-attach">0</property>
-                                <property name="top-attach">4</property>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">1</property>
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkBox" id="GrandSonBox7">
+                              <object class="GtkLabel" id="label8">
                                 <property name="visible">True</property>
                                 <property name="can-focus">False</property>
-                                <property name="orientation">vertical</property>
-                                <child>
-                                  <object class="GtkLabel" id="label8">
-                                    <property name="visible">True</property>
-                                    <property name="can-focus">False</property>
-                                    <property name="label" translatable="yes">Taux Mortalité :</property>
-                                    <property name="width-chars">7</property>
-                                  </object>
-                                  <packing>
-                                    <property name="expand">False</property>
-                                    <property name="fill">True</property>
-                                    <property name="position">0</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkScale" id="scale2">
-                                    <property name="width-request">100</property>
-                                    <property name="visible">True</property>
-                                    <property name="can-focus">True</property>
-                                    <property name="adjustment">adjust2</property>
-                                    <property name="round-digits">1</property>
-                                  </object>
-                                  <packing>
-                                    <property name="expand">False</property>
-                                    <property name="fill">True</property>
-                                    <property name="position">1</property>
-                                  </packing>
-                                </child>
+                                <property name="label" translatable="yes">Taux Mortalité :</property>
+                                <property name="width-chars">7</property>
                               </object>
                               <packing>
-                                <property name="left-attach">0</property>
-                                <property name="top-attach">1</property>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">2</property>
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkBox" id="GrandSonBox8">
+                              <object class="GtkScale" id="scale2">
+                                <property name="width-request">100</property>
                                 <property name="visible">True</property>
-                                <property name="can-focus">False</property>
-                                <property name="orientation">vertical</property>
-                                <child>
-                                  <object class="GtkLabel" id="label7">
-                                    <property name="width-request">100</property>
-                                    <property name="visible">True</property>
-                                    <property name="can-focus">False</property>
-                                    <property name="label" translatable="yes">Distance Contam :</property>
-                                    <property name="width-chars">7</property>
-                                  </object>
-                                  <packing>
-                                    <property name="expand">False</property>
-                                    <property name="fill">True</property>
-                                    <property name="position">0</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkSpinButton" id="spinButton">
-                                    <property name="width-request">100</property>
-                                    <property name="visible">True</property>
-                                    <property name="can-focus">True</property>
-                                    <property name="text" translatable="yes">1</property>
-                                    <property name="input-purpose">digits</property>
-                                    <property name="adjustment">adjust3</property>
-                                  </object>
-                                  <packing>
-                                    <property name="expand">False</property>
-                                    <property name="fill">True</property>
-                                    <property name="position">1</property>
-                                  </packing>
-                                </child>
+                                <property name="can-focus">True</property>
+                                <property name="adjustment">adjust2</property>
+                                <property name="round-digits">1</property>
                               </object>
                               <packing>
-                                <property name="left-attach">0</property>
-                                <property name="top-attach">2</property>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">3</property>
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkBox" id="GrandSonBox9">
+                              <object class="GtkLabel" id="label7">
+                                <property name="width-request">100</property>
                                 <property name="visible">True</property>
                                 <property name="can-focus">False</property>
-                                <property name="orientation">vertical</property>
-                                <child>
-                                  <object class="GtkLabel" id="label9">
-                                    <property name="visible">True</property>
-                                    <property name="can-focus">False</property>
-                                    <property name="label" translatable="yes">Nom :</property>
-                                    <property name="width-chars">4</property>
-                                  </object>
-                                  <packing>
-                                    <property name="expand">False</property>
-                                    <property name="fill">True</property>
-                                    <property name="position">0</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkEntry" id="entryNom1">
-                                    <property name="visible">True</property>
-                                    <property name="can-focus">True</property>
-                                    <property name="placeholder-text" translatable="yes">Entrez le nom</property>
-                                    <property name="input-purpose">number</property>
-                                  </object>
-                                  <packing>
-                                    <property name="expand">False</property>
-                                    <property name="fill">True</property>
-                                    <property name="position">1</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkLabel" id="label10">
-                                    <property name="visible">True</property>
-                                    <property name="can-focus">False</property>
-                                    <property name="label" translatable="yes">Virus-ID :</property>
-                                    <property name="width-chars">4</property>
-                                  </object>
-                                  <packing>
-                                    <property name="expand">False</property>
-                                    <property name="fill">True</property>
-                                    <property name="position">2</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkComboBox" id="comboBox12">
-                                    <property name="visible">True</property>
-                                    <property name="can-focus">False</property>
-                                    <property name="model">list6</property>
-                                    <property name="row-span-column">2</property>
-                                    <property name="column-span-column">2</property>
-                                    <property name="has-entry">True</property>
-                                    <child>
-                                      <object class="GtkCellRendererText"/>
-                                      <attributes>
-                                        <attribute name="text">0</attribute>
-                                      </attributes>
-                                    </child>
-                                    <child internal-child="entry">
-                                      <object class="GtkEntry">
-                                        <property name="can-focus">False</property>
-                                        <property name="placeholder-text" translatable="yes">L'Id du Virus</property>
-                                      </object>
-                                    </child>
-                                  </object>
-                                  <packing>
-                                    <property name="expand">False</property>
-                                    <property name="fill">True</property>
-                                    <property name="position">3</property>
-                                  </packing>
-                                </child>
+                                <property name="label" translatable="yes">Distance Contam :</property>
+                                <property name="width-chars">7</property>
                               </object>
                               <packing>
-                                <property name="left-attach">0</property>
-                                <property name="top-attach">3</property>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">4</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkSpinButton" id="spinButton">
+                                <property name="width-request">100</property>
+                                <property name="visible">True</property>
+                                <property name="can-focus">True</property>
+                                <property name="text" translatable="yes">3</property>
+                                <property name="input-purpose">digits</property>
+                                <property name="adjustment">adjust3</property>
+                                <property name="value">3</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">5</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkLabel" id="label9">
+                                <property name="visible">True</property>
+                                <property name="can-focus">False</property>
+                                <property name="label" translatable="yes">Nom :</property>
+                                <property name="width-chars">4</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">6</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkEntry" id="entryNomVirus">
+                                <property name="visible">True</property>
+                                <property name="can-focus">True</property>
+                                <property name="placeholder-text" translatable="yes">Entrez le nom</property>
+                                <property name="input-purpose">number</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">7</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkButton" id="subutton2">
+                                <property name="label" translatable="yes">Submit</property>
+                                <property name="height-request">-1</property>
+                                <property name="visible">True</property>
+                                <property name="can-focus">True</property>
+                                <property name="receives-default">True</property>
+                                <property name="halign">center</property>
+                                <property name="valign">center</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">8</property>
                               </packing>
                             </child>
                           </object>
@@ -988,7 +717,7 @@
           <packing>
             <property name="expand">False</property>
             <property name="fill">True</property>
-            <property name="position">1</property>
+            <property name="position">2</property>
           </packing>
         </child>
         <child>
@@ -1000,7 +729,7 @@
           <packing>
             <property name="expand">False</property>
             <property name="fill">True</property>
-            <property name="position">2</property>
+            <property name="position">3</property>
           </packing>
         </child>
       </object>
