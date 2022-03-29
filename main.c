@@ -396,6 +396,7 @@ gboolean add_individu (GtkWidget *widget,GdkEvent *event,gpointer path)
 
     GtkWindow *window = gtk_widget_get_parent_window(widget);
 
+
     g_timeout_add(650,doruzidDor,image);
     return FALSE;
 }
@@ -408,7 +409,7 @@ void create_backgroundBox(GtkGrid *grid)
             GtkWidget *box = gtk_event_box_new();
             g_signal_connect (box, "button-press-event", (GCallback)add_individu, NULL);
 
-            gtk_grid_attach(GTK_GRID(grid), GTK_WIDGET(box), i, j, 1, 1);
+            gtk_grid_attach(GTK_GRID(grid), GTK_WIDGET(box), j, i, 1, 1);
             gtk_style_context_add_class(gtk_widget_get_style_context(box), "box");
         }
     }
