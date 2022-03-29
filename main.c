@@ -114,24 +114,23 @@ void loadCSS(GtkWidget *window)
 
 void afficher_virus_enregistre(GObject *object)
 {
-    Virus *a = ((Virus *)g_object_get_data(object,"listVirus"));
-
-    printf("%d\n",a->Id);
-    printf("%s\n",a->nom);
-    printf("%f\n",a->prctContam);
-    printf("%f\n",a->prctMortel);
-    printf("%d\n",a->cercleDeContam);
+    GList *a = ((GList *)g_object_get_data(object,"listVirus"));
+    Virus * vir = ((Virus *) a->data);
+    printf("%d\n",vir->Id);
+    printf("%s\n",vir->nom);
+    printf("%f\n",vir->prctContam);
+    printf("%f\n",vir->prctMortel);
+    printf("%d\n",vir->cercleDeContam);
 }
 
-GList * inserer_data_GObject(GObject * object,gchar * key,gpointer data)
+void inserer_data_GObject(GObject * object,gchar * key,gpointer data)
 {
     GList * l = g_object_get_data(object,key);
 
     l = g_list_append(l,data);
 
-    g_object_set_data(object,key,data);
+    g_object_set_data(object,"listVirus",l);
 
-    return ((GList *) l);
 }
 
 int id = 0;
@@ -151,16 +150,17 @@ void enregistrer_virus(GtkButton *button, gpointer builder)
     v->cercleDeContam = ((gint)gtk_adjustment_get_value (GTK_ADJUSTMENT(adjust3)));
     v->nom = gtk_entry_get_text(GTK_ENTRY(entryNomVirus));
 
-    GList * l = inserer_data_GObject(builder,"listVirus",v);
+    //inserer_data_GObject(builder,"listVirus",v);
+
+    GList * l = g_object_get_data(builder,"listVirus");
+
+    l = g_list_append(l,v);
+
+    g_object_set_data(builder,"listVirus",l);
 
     afficher_virus_enregistre(builder);
 
 }
-
-
-
-
-
 
 void create_backgroundBox(GtkGrid *grid)
 {
