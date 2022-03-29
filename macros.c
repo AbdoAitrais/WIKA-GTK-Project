@@ -758,8 +758,6 @@ gboolean macro_moveGrid(gpointer image) {
     GtkWidget *boxDst;
 
 
-
-    //printf("top = %d left = %d",top,left);
     /*
 				    0
 				    ^
@@ -797,6 +795,7 @@ gboolean macro_moveGrid(gpointer image) {
         default:
             return returnVal;
     }
+
     printf("\nnew pos : top = %d left = %d. ", top, left);
     boxDst = gtk_grid_get_child_at(
             GTK_GRID(gtk_widget_get_parent(GTK_WIDGET(boxSrc))), left, top);
@@ -813,7 +812,7 @@ gboolean macro_moveGrid(gpointer image) {
          * The API reference will always tell you if you’re dealing with something you own, or just a pointer to something that
          * is owned by something else.
          */
-        printf("is valid\n\n", top, left);
+        printf("is valid\n\n");
         g_object_ref(child);
         gtk_container_remove(GTK_CONTAINER(boxSrc), child);
         ///child->pos.x = top;
@@ -824,4 +823,29 @@ gboolean macro_moveGrid(gpointer image) {
     return returnVal;
 
 }
+
+
+gboolean add_individu (GtkWidget *widget,GdkEvent *event,gpointer path)
+{
+
+    if (gtk_bin_get_child((GTK_BIN(widget)))) {
+        g_printerr("\nAlready has child\n");
+        return FALSE;
+    }
+    GtkWidget *image = gtk_image_new_from_file ("person.png");
+    gtk_container_add(GTK_CONTAINER (widget),image);
+
+    gtk_widget_show(image);
+    gint left, top;
+    gtk_container_child_get(GTK_CONTAINER(gtk_widget_get_parent(GTK_WIDGET(widget))),
+                            GTK_WIDGET(widget), "left-attach",
+                            &left, "top-attach", &top, NULL);
+    g_print("\nadded image  top = %d, left = %d.\n", top, left);
+
+
+
+    g_timeout_add(500,macro_moveGrid,image);
+    return FALSE;
+}
+
 
