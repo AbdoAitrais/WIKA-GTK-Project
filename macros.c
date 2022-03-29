@@ -732,8 +732,17 @@ typedef struct {
 } Participant;// peut être animal,personne...
 
 
-void macro_moveGrid(GtkEventBox *boxSrc) {
+gboolean doruzidDor()
+{
+    macro_moveGrid();
+    return TRUE;
+}
 
+gboolean macro_moveGrid(gpointer image) {
+
+    gboolean returnVal = TRUE;
+
+    GtkEventBox *boxSrc = GTK_EVENT_BOX(gtk_widget_get_parent(image));
     gint top, left;
 
     gtk_container_child_get(GTK_CONTAINER(gtk_widget_get_parent(GTK_WIDGET(boxSrc))),
@@ -747,9 +756,9 @@ void macro_moveGrid(GtkEventBox *boxSrc) {
     GtkWidget *child = gtk_bin_get_child(GTK_BIN(boxSrc));
     if (!child) {
         g_printerr("child does not exist");
-        return;
+        return returnVal;
     }
-    gint pas = g_random_int_range(0, 3);
+    gint pas = g_random_int_range(0, 4);
     GtkWidget *boxDst;
 
 
@@ -777,20 +786,20 @@ void macro_moveGrid(GtkEventBox *boxSrc) {
             }
         }
         case 2: {
-            if ((top + 1) < MAXcol) {
+            if ((top + 1) < MAXrow) {
                 top++;
                 break;
             }
         }
         case 3: {
-            if ((left + 1) < MAXrow) {
+            if ((left + 1) < MAXcol) {
                 left++;
                 break;
             } else
-                return;
+                return returnVal;
         }
         default:
-            return;
+            return returnVal;
     }
     printf("\nnew pos : top = %d left = %d. ", top, left);
     boxDst = gtk_grid_get_child_at(
@@ -816,5 +825,7 @@ void macro_moveGrid(GtkEventBox *boxSrc) {
         gtk_container_add(GTK_CONTAINER(boxDst), child);
         g_object_unref(child);
     }
+    return returnVal;
+
 }
 

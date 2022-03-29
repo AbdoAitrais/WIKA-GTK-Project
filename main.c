@@ -309,11 +309,7 @@ void loadCSS(GtkWidget *window)
 gint isOn = 1;
 guint t = 1;
 
-gboolean doruzidDor(gpointer image)
-{
-    macro_moveGrid(GTK_EVENT_BOX(gtk_widget_get_parent(image)));
-    return TRUE;
-}
+
 
 void start_pause(GtkWidget *button, gpointer image)
 {
@@ -467,7 +463,7 @@ int main(int argc, char *argv [])
       /* Création du chemin complet pour accéder au fichier test.glade. */
       /* g_build_filename(); construit le chemin complet en fonction du système */
       /* d'exploitation. ( / pour Linux et \ pour Windows) */
-      filename =  g_build_filename ("C:\\msys64\\mingw64\\bin\\Interface2.glade", NULL);
+      filename =  g_build_filename ("Interface2.glade", NULL);
 
           /* Chargement du fichier test.glade. */
       gtk_builder_add_from_file (builder, filename, &error);
