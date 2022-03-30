@@ -177,15 +177,6 @@ void create_backgroundBox(GtkGrid *grid)
         }
     }
 }
-void enregistrer_add_individu(GtkGrid *grid,gchar *path)
-{
-    for (int i = 0; i < MAXrow; ++i) {
-        for (int j = 0; j < MAXcol; ++j) {
-
-            g_signal_connect (gtk_grid_get_child_at(grid, i, j), "button-press-event", (GCallback)add_individu, path);
-        }
-    }
-}
 
 int main(int argc, char *argv [])
 {

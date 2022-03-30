@@ -825,8 +825,17 @@ gboolean macro_moveGrid(gpointer image) {
 }
 
 
+
+
 gboolean add_individu (GtkWidget *widget,GdkEvent *event,gpointer path)
 {
+
+    const gchar *labels[] = {
+            ("Show Bookmarks"),
+            ("Edit Bookmarks"),
+            ("Previous Item"),
+            ("Next Item"),
+    };
     if (gtk_bin_get_child((GTK_BIN(widget)))) {
         g_printerr("\nAlready has child\n");
         return FALSE;

@@ -527,6 +527,110 @@
                               </packing>
                             </child>
                             <child>
+                              <object class="GtkScrolledWindow">
+                                <property name="visible">True</property>
+                                <property name="can-focus">True</property>
+                                <property name="shadow-type">in</property>
+                                <child>
+                                  <object class="GtkViewport">
+                                    <property name="visible">True</property>
+                                    <property name="can-focus">False</property>
+                                    <child>
+                                      <object class="GtkListBox" id="virus-list">
+                                        <property name="visible">True</property>
+                                        <property name="can-focus">False</property>
+                                        <property name="margin-top">5</property>
+                                        <property name="margin-bottom">5</property>
+                                        <property name="selection-mode">browse</property>
+                                        <child type="placeholder">
+                                          <placeholder/>
+                                        </child>
+                                        <child>
+                                          <object class="GtkListBoxRow" id="qqweqw">
+                                            <property name="visible">True</property>
+                                            <property name="can-focus">True</property>
+                                            <child>
+                                              <object class="GtkLabel">
+                                                <property name="visible">True</property>
+                                                <property name="can-focus">False</property>
+                                                <property name="label" translatable="yes">choice 1</property>
+                                                <property name="selectable">True</property>
+                                              </object>
+                                            </child>
+                                          </object>
+                                        </child>
+                                        <child>
+                                          <object class="GtkListBoxRow" id="wqeqqw">
+                                            <property name="visible">True</property>
+                                            <property name="can-focus">True</property>
+                                            <child>
+                                              <object class="GtkCheckButton">
+                                                <property name="label" translatable="yes">choice 2</property>
+                                                <property name="visible">True</property>
+                                                <property name="can-focus">True</property>
+                                                <property name="receives-default">False</property>
+                                                <property name="draw-indicator">True</property>
+                                              </object>
+                                            </child>
+                                          </object>
+                                        </child>
+                                        <child>
+                                          <object class="GtkListBoxRow" id="qqweqw1">
+                                            <property name="visible">True</property>
+                                            <property name="can-focus">True</property>
+                                            <child>
+                                              <object class="GtkCheckButton">
+                                                <property name="label" translatable="yes">choice 3</property>
+                                                <property name="visible">True</property>
+                                                <property name="can-focus">True</property>
+                                                <property name="receives-default">False</property>
+                                                <property name="draw-indicator">True</property>
+                                              </object>
+                                            </child>
+                                          </object>
+                                        </child>
+                                        <child>
+                                          <object class="GtkListBoxRow" id="qqweqw2">
+                                            <property name="visible">True</property>
+                                            <property name="can-focus">True</property>
+                                            <child>
+                                              <object class="GtkCheckButton">
+                                                <property name="label" translatable="yes">choice 4</property>
+                                                <property name="visible">True</property>
+                                                <property name="can-focus">True</property>
+                                                <property name="receives-default">False</property>
+                                                <property name="draw-indicator">True</property>
+                                              </object>
+                                            </child>
+                                          </object>
+                                        </child>
+                                        <child>
+                                          <object class="GtkListBoxRow">
+                                            <property name="visible">True</property>
+                                            <property name="can-focus">True</property>
+                                            <child>
+                                              <object class="GtkLabel">
+                                                <property name="visible">True</property>
+                                                <property name="can-focus">False</property>
+                                                <property name="label" translatable="yes">choice 5</property>
+                                                <property name="selectable">True</property>
+                                              </object>
+                                            </child>
+                                          </object>
+                                        </child>
+                                      </object>
+                                    </child>
+                                  </object>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="expand">True</property>
+                                <property name="fill">True</property>
+                                <property name="padding">10</property>
+                                <property name="position">13</property>
+                              </packing>
+                            </child>
+                            <child>
                               <object class="GtkLabel" id="label14">
                                 <property name="visible">True</property>
                                 <property name="can-focus">False</property>
@@ -537,7 +641,7 @@
                               <packing>
                                 <property name="expand">False</property>
                                 <property name="fill">True</property>
-                                <property name="position">13</property>
+                                <property name="position">14</property>
                               </packing>
                             </child>
                             <child>
@@ -550,7 +654,7 @@
                               <packing>
                                 <property name="expand">False</property>
                                 <property name="fill">True</property>
-                                <property name="position">14</property>
+                                <property name="position">15</property>
                               </packing>
                             </child>
                           </object>
@@ -736,4 +840,3 @@
     </child>
   </object>
 </interface>
-
