@@ -112,15 +112,20 @@ void loadCSS(GtkWidget *window)
 
 
 
-void afficher_virus_enregistre(GObject *object)
+void afficher_virus(Virus *vir)
 {
-    GList *a = ((GList *)g_object_get_data(object,"listVirus"));
-    Virus * vir = ((Virus *) a->data);
     printf("%d\n",vir->Id);
     printf("%s\n",vir->nom);
     printf("%f\n",vir->prctContam);
     printf("%f\n",vir->prctMortel);
     printf("%d\n",vir->cercleDeContam);
+}
+
+void afficher_virus_enregistre(GObject *object)
+{
+    GList *a = ((GList *)g_object_get_data(object,"listVirus"));
+    Virus * vir = ((Virus *) a->data);
+    afficher_virus(vir);
 }
 
 void inserer_data_GObject(GObject * object,gchar * key,gpointer data)
@@ -148,8 +153,10 @@ void enregistrer_virus(GtkButton *button, gpointer builder)
     v->prctContam = ((gfloat)gtk_adjustment_get_value (GTK_ADJUSTMENT(adjust1)));
     v->prctMortel = ((gfloat)gtk_adjustment_get_value(GTK_ADJUSTMENT(adjust2)));
     v->cercleDeContam = ((gint)gtk_adjustment_get_value (GTK_ADJUSTMENT(adjust3)));
-    v->nom = gtk_entry_get_text(GTK_ENTRY(entryNomVirus));
+    v->nom = g_strdup(gtk_entry_get_text(GTK_ENTRY(entryNomVirus)));
 
+    g_print("\nVirus from input : \n");
+    afficher_virus(v);
     inserer_data_GObject(builder,"listVirus",v);
 
 
