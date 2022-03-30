@@ -738,12 +738,12 @@ gboolean macro_moveGrid(gpointer image) {
 
     gboolean returnVal = TRUE;
 
-    GtkEventBox *boxSrc = GTK_EVENT_BOX(gtk_widget_get_parent(image));
+    GtkEventBox *boxSrc = GTK_EVENT_BOX (gtk_widget_get_parent(image));
     gint top, left;
 
-    gtk_container_child_get(GTK_CONTAINER(gtk_widget_get_parent(GTK_WIDGET(boxSrc))),
-                            GTK_WIDGET(boxSrc), "left-attach",
-                            &left, "top-attach", &top, NULL);
+    gtk_container_child_get(GTK_CONTAINER (gtk_widget_get_parent(GTK_WIDGET(boxSrc))),
+                            GTK_WIDGET (boxSrc), "left-attach",
+                            &left, "top-attach", &top, NULL)    ;
 
 //    printf("\ninit pos : top = %d left = %d\n", top, left);
 
