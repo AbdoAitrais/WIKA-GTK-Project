@@ -854,16 +854,19 @@ void inserer_data_GObject(GObject * object,gchar * key,gpointer data)
 
 void Afficher_individu(Individu * indiv)
 {
-    g_print("individu gender = %d\n",indiv->gender);
-    g_print("individu genetic = %d\n",indiv->health.genetic);
-    g_print("individu tension = %d\n",indiv->health.tension);
-    g_print("individu diabete = %d\n",indiv->health.diabete);
-    g_print("individu cardiac = %d\n",indiv->health.cardiac);
-    g_print("individu poumons = %d\n",indiv->health.poumons);
-    g_print("individu categorie = %d\n",indiv->categorie);
-    if(indiv->Vir)
-        g_print("individu Virus = %s\n",indiv->Vir->nom);
-    g_print("individu Virus = (NULL)\n");
+    if(indiv)
+    {
+        g_print("individu gender = %d\n",indiv->gender);
+        g_print("individu genetic = %d\n",indiv->health.genetic);
+        g_print("individu tension = %d\n",indiv->health.tension);
+        g_print("individu diabete = %d\n",indiv->health.diabete);
+        g_print("individu cardiac = %d\n",indiv->health.cardiac);
+        g_print("individu poumons = %d\n",indiv->health.poumons);
+        g_print("individu categorie = %d\n",indiv->categorie);
+        if(indiv->Vir)
+            g_print("individu Virus = %s\n",indiv->Vir->nom);
+        g_print("individu Virus = (NULL)\n");
+    }
 }
 
 
