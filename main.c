@@ -128,15 +128,7 @@ void afficher_virus_enregistre(GObject *object)
     afficher_virus(vir);
 }
 
-void inserer_data_GObject(GObject * object,gchar * key,gpointer data)
-{
-    GList * l = g_object_get_data(object,key);
 
-    l = g_list_append(l,data);
-
-    g_object_set_data(object,"listVirus",l);
-
-}
 
 int id = 0;
 
@@ -165,15 +157,179 @@ void enregistrer_virus(GtkButton *button, gpointer builder)
 
 }
 
-void create_backgroundBox(GtkGrid *grid)
+void get_selected_radioButtonLabel_fromGrp(GSList * List,gchar *label)
+{
+    GSList *crt = List;
+    while (crt)
+    {
+        //GtkRadioButton *radio = crt->data;
+        if(gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(crt->data)))
+        {
+//            g_print("gender from GSList = %s\n",gtk_button_get_label(GTK_BUTTON(crt->data)));
+            g_stpcpy(label,gtk_button_get_label(GTK_BUTTON(crt->data)));
+            //g_print("gender from GSList = %s\n",label);
+            return ;
+        }
+        crt = crt->next;
+    }
+}
+
+Genre get_genre_fromString(gchar *genre)
+{
+    if(!g_strcmp0(genre,"Homme"))
+        return GENRE_MALE;
+    if(!g_strcmp0(genre,"Femme"))
+        return GENRE_FEMALE;
+    return GENRE_UNSPECIFIED;
+}
+
+Genitique get_genetic_fromString(gchar *genetic)
+{
+    if(!g_strcmp0(genetic,"GENETIQUEMENT_FRAGILE"))
+        return GENETIQUEMENT_FRAGILE;
+    if(!g_strcmp0(genetic,"GENETIQUEMENT_MOYEN"))
+        return GENETIQUEMENT_MOYEN;
+    if(!g_strcmp0(genetic,"GENETIQUEMENT_FORT"))
+        return GENETIQUEMENT_FORT;
+    return GENETIQUEMENT_FAIBLE;
+}
+
+Tension get_tension_fromString(gchar *tension)
+{
+    if(!g_strcmp0(tension,"ARTERIELLE_HYPERTENDU"))
+        return ARTERIELLE_HYPERTENDU;
+    if(!g_strcmp0(tension,"ARTERIELLE_HYPERTENSION_FORTE"))
+        return ARTERIELLE_HYPERTENSION_FORTE;
+    return ARTERIELLE_NORMAL;
+}
+
+Diabete get_diabete_fromString(gchar *diabete)
+{
+    if(!g_strcmp0(diabete,"DIABETE_MODERE"))
+        return DIABETE_MODERE;
+    if(!g_strcmp0(diabete,"DIABETE_AVANCE"))
+        return DIABETE_AVANCE;
+    return DIABETE_NORMAL;
+}
+
+Cardiaque get_cardiac_fromString(gchar *cardiac)
+{
+    if(!g_strcmp0(cardiac,"CARDIAQUE_MALADE"))
+        return CARDIAQUE_MALADE;
+    if(!g_strcmp0(cardiac,"CARDIAQUE_SEVERE"))
+        return CARDIAQUE_SEVERE;
+    return CARDIAQUE_NORMAL;
+}
+
+Poumons get_poumons_fromString(gchar *poumons)
+{
+    if(!g_strcmp0(poumons,"POUMONS_MALADE"))
+        return POUMONS_MALADE;
+    if(!g_strcmp0(poumons,"POUMONS_GRAVE"))
+        return POUMONS_GRAVE;
+    return POUMONS_SEIN;
+}
+
+Age get_age_fromString(gchar *age)
+{
+    if(!g_strcmp0(age,"inférieur à 12 ans"))
+        return AGE_KIDS;
+    if(!g_strcmp0(age,"entre 12 et 25 ans"))
+        return AGE_TEENS;
+    if(!g_strcmp0(age,"entre 40 et 65 ans"))
+        return AGE_ADULT;
+    if(!g_strcmp0(age,"plus de 65 ans"))
+        return AGE_OLD;
+    return AGE_YOUTH;
+}
+
+/*GList * glist_find_virus(GList *list,gchar * nom)
+{
+    GList * crt = list;
+
+    while(crt)
+    {
+        if(!g_strcmp0(crt->data->nom))
+        crt = crt->next;
+    }
+}*/
+
+gint compare_virus(gpointer virus,gpointer nom)
+{
+    gchar * name = nom;
+    Virus * v = virus;
+    return g_strcmp0(v->nom,name);
+}
+
+Virus * get_virus_fromString(const gchar *nom,gpointer builder)
+{
+    GList * elem = g_list_find_custom(g_object_get_data(builder,"listVirus"),nom,(GCompareFunc)compare_virus);
+
+    return elem?((Virus*) elem->data): NULL;
+}
+
+Individu *lire_Indiv(gpointer builder)
+{
+    Individu *individu = (Individu*)malloc(sizeof(Individu));
+    GtkRadioButton * radioButton =  GTK_RADIO_BUTTON(gtk_builder_get_object (builder, "radioButtonHomme"));
+    GSList * radioGrp = gtk_radio_button_get_group(radioButton);
+    gchar * genre = (gchar*)malloc(sizeof(gchar));
+    GtkWidget *comboBoxGen = GTK_WIDGET(gtk_builder_get_object (builder, "comboBoxGenitiques"));
+    GtkWidget *comboBoxTens = GTK_WIDGET(gtk_builder_get_object (builder, "comboBoxTension"));
+    GtkWidget *comboBoxDiab = GTK_WIDGET(gtk_builder_get_object (builder, "comboBoxGenitiques"));
+    GtkWidget *comboBoxCard = GTK_WIDGET(gtk_builder_get_object (builder, "comboBoxCardiaque"));
+    GtkWidget *comboBoxPoum = GTK_WIDGET(gtk_builder_get_object (builder, "comboBoxPoumons"));
+    GtkWidget *comboBoxVir = GTK_WIDGET(gtk_builder_get_object (builder, "comboBoxVirus"));
+    GtkWidget *comboBoxAge = GTK_WIDGET(gtk_builder_get_object (builder, "comboBoxAge"));
+
+
+    get_selected_radioButtonLabel_fromGrp(radioGrp,genre);
+    //g_print("string gender = %s\n",genre);
+    individu->gender = get_genre_fromString(genre);
+    individu->health.genetic = get_genetic_fromString(
+            gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(comboBoxGen))
+            );
+    individu->health.tension = get_tension_fromString(
+            gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(comboBoxTens))
+    );
+    individu->health.diabete = get_diabete_fromString(
+            gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(comboBoxDiab))
+    );
+    individu->health.cardiac = get_cardiac_fromString(
+            gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(comboBoxCard))
+    );
+    individu->health.poumons = get_poumons_fromString(
+            gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(comboBoxPoum))
+    );
+    individu->Vir = get_virus_fromString(
+            gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(comboBoxVir)),builder
+    );
+    individu->categorie = get_age_fromString(
+            gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(comboBoxAge))
+    );
+
+    return individu;
+}
+
+void create_backgroundBox(GtkGrid *grid,GtkBuilder *builder)
 {
     for (int i = 0; i < MAXrow; ++i) {
         for (int j = 0; j < MAXcol; ++j) {
             GtkWidget *box = gtk_event_box_new();
-            g_signal_connect (box, "button-press-event", (GCallback)add_individu, NULL);
+            g_signal_connect (box, "button-press-event", (GCallback)add_individu, builder);
 
             gtk_grid_attach(GTK_GRID(grid), GTK_WIDGET(box), j, i, 1, 1);
             gtk_style_context_add_class(gtk_widget_get_style_context(box), "box");
+        }
+    }
+}
+
+void enregistrer_add_individu(GtkGrid *grid,GObject *builder)
+{
+    for (int i = 0; i < MAXrow; ++i) {
+        for (int j = 0; j < MAXcol; ++j) {
+
+            g_signal_connect (gtk_grid_get_child_at(grid, i, j), "button-press-event", (GCallback)add_individu, builder);
         }
     }
 }
@@ -201,8 +357,9 @@ int main(int argc, char *argv [])
       GtkWidget *button = NULL;
       GtkWidget *button1 = NULL;
       GtkWidget *SonBox = NULL;
-        GtkWidget *grid = NULL;
-    Virus *v = NULL;
+      GtkWidget *grid = NULL;
+
+      Virus *v = NULL;
 
 
       GtkBuilder *builder = NULL;
@@ -278,7 +435,7 @@ int main(int argc, char *argv [])
     g_printerr("\nReached me\n");
 
     grid = macro_createGrid(gprops);
-    create_backgroundBox(GTK_GRID(grid));
+    create_backgroundBox(GTK_GRID(grid),builder);
     //gtk_box_pack_start(GTK_BOX(SonBox),grid,TRUE,TRUE,0);
     gtk_container_add(GTK_CONTAINER(ViewPort2),grid);
 

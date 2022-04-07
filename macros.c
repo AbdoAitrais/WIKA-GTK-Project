@@ -709,27 +709,45 @@ typedef enum {
 } Poumons;
 
 typedef struct {
-    Genitique G;
-    Tension TA;
-    Diabete D;
-    Cardiaque C;
-    Poumons P;
+    Genitique genetic;
+    Tension tension;
+    Diabete diabete;
+    Cardiaque cardiac;
+    Poumons poumons;
 } Sante;
 
 typedef enum {
+    GENRE_UNSPECIFIED,
     GENRE_MALE,
     GENRE_FEMALE
 } Genre;
+
+typedef enum {
+    AGE_KIDS,
+    AGE_TEENS,
+    AGE_YOUTH,
+    AGE_ADULT,
+    AGE_OLD
+} Age;
+
+typedef enum {
+    AGE_INF12,
+    AGE_BETWEEN1225,
+    AGE_BETWEEN2540,
+    AGE_BETWEEN4065,
+    AGE_SUP65
+} Age2;
+
 // si vous voulez faire deux entites (personne,animal) mais je pense c'est pas le peine
 typedef struct {
-    gint Id;// identifiant de Participant
-    Genre S;// le sexe de participant
-    gint age;//l'âge de participant
-    gint categorie;//la categorie associé à le participant selon son âge
-    Coord pos;//les coordonnées où se présente le participant
-    Sante etat;// l'état sanitaire associé à le participant
-    Virus *V;// liste des virus qui a le participant
-} Participant;// peut être animal,personne...
+
+    Genre gender;// le sexe de Individu
+    ///gint age;//l'âge de Individu
+    Age categorie;//la categorie associé à le Individu selon son âge
+    Coord pos;//les coordonnées où se présente le Individu
+    Sante health;// l'état sanitaire associé à le Individu
+    Virus *Vir;// liste des virus qui a le Individu
+} Individu;// peut être animal,personne...
 
 
 
@@ -824,10 +842,34 @@ gboolean macro_moveGrid(gpointer image) {
 
 }
 
+void inserer_data_GObject(GObject * object,gchar * key,gpointer data)
+{
+    GList * l = g_object_get_data(object,key);
+
+    l = g_list_append(l,data);
+
+    g_object_set_data(object,key,l);
+
+}
+
+void Afficher_individu(Individu * indiv)
+{
+    g_print("individu gender = %d\n",indiv->gender);
+    g_print("individu genetic = %d\n",indiv->health.genetic);
+    g_print("individu tension = %d\n",indiv->health.tension);
+    g_print("individu diabete = %d\n",indiv->health.diabete);
+    g_print("individu cardiac = %d\n",indiv->health.cardiac);
+    g_print("individu poumons = %d\n",indiv->health.poumons);
+    g_print("individu categorie = %d\n",indiv->categorie);
+    if(indiv->Vir)
+        g_print("individu Virus = %s\n",indiv->Vir->nom);
+    g_print("individu Virus = (NULL)\n");
+}
 
 
 
-gboolean add_individu (GtkWidget *widget,GdkEvent *event,gpointer path)
+Individu *lire_Indiv(gpointer builder);
+gboolean add_individu (GtkWidget *widget,GdkEvent *event,gpointer builder)
 {
 
     const gchar *labels[] = {
@@ -841,6 +883,7 @@ gboolean add_individu (GtkWidget *widget,GdkEvent *event,gpointer path)
         return FALSE;
     }
     GtkWidget *image = gtk_image_new_from_file ("person.png");
+    GtkWidget *window = GTK_WIDGET(gtk_builder_get_object (builder, "MainWindow"));
     gtk_container_add(GTK_CONTAINER (widget),image);
 
     gtk_widget_show(image);
@@ -850,6 +893,10 @@ gboolean add_individu (GtkWidget *widget,GdkEvent *event,gpointer path)
                             &left, "top-attach", &top, NULL);
     g_print("\nadded image  top = %d, left = %d.\n", top, left);
 
+    Individu * indiv = lire_Indiv(builder);
+
+    g_object_set_data((GObject *) image,"individu",indiv);
+    inserer_data_GObject(G_OBJECT(window),"ListIndividus",image);
 
 
     g_timeout_add(500,macro_moveGrid,image);
