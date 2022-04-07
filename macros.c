@@ -746,7 +746,7 @@ typedef struct {
     Age categorie;//la categorie associé à le Individu selon son âge
     Coord pos;//les coordonnées où se présente le Individu
     Sante health;// l'état sanitaire associé à le Individu
-    Virus *Vir;// liste des virus qui a le Individu
+    GList *VirusList;// liste des virus qui a le Individu
 } Individu;// peut être animal,personne...
 
 
@@ -842,6 +842,15 @@ gboolean macro_moveGrid(gpointer image) {
 
 }
 
+void afficher_virus(Virus *vir)
+{
+    printf("L'id = %d\n",vir->Id);
+    printf("Le nom = %s\n",vir->nom);
+    printf("Le pourcentage de contamination = %f\n",vir->prctContam);
+    printf("Le taux de mortalite = %f\n",vir->prctMortel);
+    printf("Le cercle de contamination = %d\n",vir->cercleDeContam);
+}
+
 void inserer_data_GObject(GObject * object,gchar * key,gpointer data)
 {
     GList * l = g_object_get_data(object,key);
@@ -850,6 +859,16 @@ void inserer_data_GObject(GObject * object,gchar * key,gpointer data)
 
     g_object_set_data(object,key,l);
 
+}
+
+void Afficher_VirusList(GList * VirusList)
+{
+    GList *crt = VirusList;
+    while (crt)
+    {
+        afficher_virus((Virus *)crt->data);
+        crt = crt->next;
+    }
 }
 
 void Afficher_individu(Individu * indiv)
@@ -863,9 +882,7 @@ void Afficher_individu(Individu * indiv)
         g_print("individu cardiac = %d\n",indiv->health.cardiac);
         g_print("individu poumons = %d\n",indiv->health.poumons);
         g_print("individu categorie = %d\n",indiv->categorie);
-        if(indiv->Vir)
-            g_print("individu Virus = %s\n",indiv->Vir->nom);
-        g_print("individu Virus = (NULL)\n");
+        Afficher_VirusList(indiv->VirusList);
     }
 }
 
@@ -897,7 +914,7 @@ gboolean add_individu (GtkWidget *widget,GdkEvent *event,gpointer builder)
     g_print("\nadded image  top = %d, left = %d.\n", top, left);
 
     Individu * indiv = lire_Indiv(builder);
-
+    Afficher_individu(indiv);
     g_object_set_data((GObject *) image,"individu",indiv);
     inserer_data_GObject(G_OBJECT(window),"ListIndividus",image);
 

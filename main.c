@@ -110,25 +110,41 @@ void loadCSS(GtkWidget *window)
 
 
 
-
-
-void afficher_virus(Virus *vir)
+gint compare_virus(gpointer virus,gpointer nom)
 {
-    printf("%d\n",vir->Id);
-    printf("%s\n",vir->nom);
-    printf("%f\n",vir->prctContam);
-    printf("%f\n",vir->prctMortel);
-    printf("%d\n",vir->cercleDeContam);
+    gchar * name = nom;
+    Virus * v = virus;
+    return g_strcmp0(v->nom,name);
 }
 
-void afficher_virus_enregistre(GObject *object)
+GList * get_virus_fromString(const gchar *nom,gpointer builder)
 {
-    GList *a = ((GList *)g_object_get_data(object,"listVirus"));
-    Virus * vir = ((Virus *) a->data);
-    afficher_virus(vir);
+    GList * elem = g_list_find_custom(
+            g_object_get_data(builder,"listVirus"),nom,(GCompareFunc)compare_virus
+    );
+
+    return elem;
 }
 
+void add_checkbutton_with_label_toBox(GtkWidget *box,Virus * virus)
+{
+    GtkWidget * checkButton = gtk_check_button_new_with_label(virus->nom);
+    gtk_box_pack_start(GTK_BOX(box), checkButton, TRUE, TRUE, 0);
+    gtk_widget_show_all(box);
+}
 
+void inserer_virus(gpointer builder,Virus *virus)
+{
+    GtkWidget *buttonBox = GTK_WIDGET(gtk_builder_get_object (builder, "ButtonBoxVirus"));
+    if(!get_virus_fromString(virus->nom,builder))
+    {
+        g_print("\nVirus from input : \n");
+        afficher_virus(virus);
+        inserer_data_GObject(builder,"listVirus",virus);
+        add_checkbutton_with_label_toBox(buttonBox,virus);
+    }
+
+}
 
 int id = 0;
 
@@ -147,13 +163,12 @@ void enregistrer_virus(GtkButton *button, gpointer builder)
     v->cercleDeContam = ((gint)gtk_adjustment_get_value (GTK_ADJUSTMENT(adjust3)));
     v->nom = g_strdup(gtk_entry_get_text(GTK_ENTRY(entryNomVirus)));
 
-    g_print("\nVirus from input : \n");
-    afficher_virus(v);
-    inserer_data_GObject(builder,"listVirus",v);
 
 
+    inserer_virus(builder,v);
 
-    afficher_virus_enregistre(builder);
+
+    //afficher_virus_enregistre(builder);
 
 }
 
@@ -243,30 +258,34 @@ Age get_age_fromString(gchar *age)
     return AGE_YOUTH;
 }
 
-/*GList * glist_find_virus(GList *list,gchar * nom)
-{
-    GList * crt = list;
 
-    while(crt)
+
+
+
+GList *get_selected_checkButtons_fromButtonList(GList * buttonList,gpointer builder)
+{
+    GList *crt = buttonList;
+    GList *VirusList = NULL;
+    while (crt)
     {
-        if(!g_strcmp0(crt->data->nom))
+        //GtkRadioButton *radio = crt->data;
+        if(gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(crt->data)))
+        {
+            VirusList = get_virus_fromString(
+                    gtk_button_get_label(GTK_BUTTON(crt->data)),builder
+                    );
+        }
         crt = crt->next;
     }
-}*/
-
-gint compare_virus(gpointer virus,gpointer nom)
-{
-    gchar * name = nom;
-    Virus * v = virus;
-    return g_strcmp0(v->nom,name);
+    return ((GList *) VirusList);
 }
 
-Virus * get_virus_fromString(const gchar *nom,gpointer builder)
-{
-    GList * elem = g_list_find_custom(g_object_get_data(builder,"listVirus"),nom,(GCompareFunc)compare_virus);
-
-    return elem?((Virus*) elem->data): NULL;
-}
+//GList * get_virus_list_fromCheckButtons(GtkButtonBox * buttonBox,gpointer builder)
+//{
+//    GList * buttonList = gtk_container_get_children(GTK_CONTAINER(buttonBox));
+//    GList * VirusList = get_selected_checkButtons_fromButtonList(buttonList,builder);
+//    return ((GList *) VirusList);
+//}
 
 Individu *lire_Indiv(gpointer builder)
 {
@@ -279,7 +298,7 @@ Individu *lire_Indiv(gpointer builder)
     GtkWidget *comboBoxDiab = GTK_WIDGET(gtk_builder_get_object (builder, "comboBoxGenitiques"));
     GtkWidget *comboBoxCard = GTK_WIDGET(gtk_builder_get_object (builder, "comboBoxCardiaque"));
     GtkWidget *comboBoxPoum = GTK_WIDGET(gtk_builder_get_object (builder, "comboBoxPoumons"));
-    GtkWidget *comboBoxVir = GTK_WIDGET(gtk_builder_get_object (builder, "comboBoxVirus"));
+    GtkWidget *buttonBox = GTK_WIDGET(gtk_builder_get_object (builder, "ButtonBoxVirus"));
     GtkWidget *comboBoxAge = GTK_WIDGET(gtk_builder_get_object (builder, "comboBoxAge"));
 
 
@@ -301,8 +320,8 @@ Individu *lire_Indiv(gpointer builder)
     individu->health.poumons = get_poumons_fromString(
             gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(comboBoxPoum))
     );
-    individu->Vir = get_virus_fromString(
-            gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(comboBoxVir)),builder
+    individu->VirusList = get_selected_checkButtons_fromButtonList(
+            gtk_container_get_children(GTK_CONTAINER(buttonBox)),builder
     );
     individu->categorie = get_age_fromString(
             gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(comboBoxAge))
@@ -404,7 +423,7 @@ int main(int argc, char *argv [])
     comboBox3 = GTK_WIDGET(gtk_builder_get_object (builder, "comboBoxDiabete"));
     comboBox4 = GTK_WIDGET(gtk_builder_get_object (builder, "comboBoxCardiaque"));
     comboBox5 = GTK_WIDGET(gtk_builder_get_object (builder, "comboBoxPoumons"));
-    comboBox6 = GTK_WIDGET(gtk_builder_get_object (builder, "comboBoxVirus"));
+
 
     scale1 = GTK_WIDGET(gtk_builder_get_object (builder, "scale1"));
     scale2 = GTK_WIDGET(gtk_builder_get_object (builder, "scale2"));
@@ -424,7 +443,7 @@ int main(int argc, char *argv [])
     gtk_style_context_add_class(gtk_widget_get_style_context(comboBox3), "comboBox");
     gtk_style_context_add_class(gtk_widget_get_style_context(comboBox4), "comboBox");
     gtk_style_context_add_class(gtk_widget_get_style_context(comboBox5), "comboBox");
-    gtk_style_context_add_class(gtk_widget_get_style_context(comboBox6), "comboBox");
+
     gtk_style_context_add_class(gtk_widget_get_style_context(scale1), "scale");
     gtk_style_context_add_class(gtk_widget_get_style_context(scale2), "scale");
     gtk_style_context_add_class(gtk_widget_get_style_context(textView1), "textView");
