@@ -2,7 +2,6 @@
 #include <stdlib.h>
 
 #include <gtk/gtk.h>
-#include <time.h>
 
 #include "macros.c"
 
@@ -22,11 +21,11 @@ typedef struct {
     gboolean rowhomogeneous	 ;   ///If TRUE, the rows are all the same height.
     gint	 rowspacing  ;       ///he amount of space between two consecutive rows.
 
-}Gridprops;
+}GridProps;
 
-Gridprops set_grid_props(gboolean colhomo,gboolean rowhomo,gint colspace,gint rowspace)
+GridProps set_grid_props(gboolean colhomo,gboolean rowhomo,gint colspace,gint rowspace)
 {
-    Gridprops props;
+    GridProps props;
     props.columnhomogeneous = colhomo;
     props.rowhomogeneous = rowhomo;
     props.columnspacing = colspace;
@@ -65,7 +64,7 @@ Tchildprops set_child_props()
 *@param props propriétés du Grid
 *******************************/
 
-void macro_applyGrid(GtkGrid *Grid,Gridprops props){
+void macro_applyGrid(GtkGrid *Grid,GridProps props){
     if( props.rowspacing)
         gtk_grid_set_row_spacing ( Grid, props.rowspacing);
     if(props.columnhomogeneous)
@@ -84,7 +83,7 @@ void macro_applyGrid(GtkGrid *Grid,Gridprops props){
 *@param props propriétés du Grid
 *******************************/
 ///create new grid widget
-GtkWidget *macro_createGrid(Gridprops props){
+GtkWidget *macro_createGrid(GridProps props){
     GtkWidget *Grid;
     Grid=gtk_grid_new ();
     macro_applyGrid(GTK_GRID(Grid),props);
@@ -105,16 +104,14 @@ gint compare_virus(gpointer virus,gpointer nom)
     return g_strcmp0(v->nom,name);
 }
 
-Virus * get_virus_fromString(const gchar *nom,gpointer builder)
+GList * get_virus_fromString(const gchar *nom,gpointer builder)
 {
     GList * elem = g_list_find_custom(
             g_object_get_data(builder,DATA_KEY_LIST_VIRUS),nom,(GCompareFunc)compare_virus
     );
 
-    return elem?((Virus *)elem->data):NULL;
+    return elem;
 }
-
-
 
 void add_checkbutton_with_label_toBox(GtkWidget *box,Virus * virus)
 {
@@ -157,6 +154,12 @@ void enregistrer_virus(GtkButton *button, gpointer builder)
     GtkAdjustment *adjust2 = GTK_ADJUSTMENT(gtk_builder_get_object (builder, "adjust2"));
     GtkAdjustment *adjust3 = GTK_ADJUSTMENT(gtk_builder_get_object (builder, "adjust3"));
     GtkWidget *entryNomVirus = GTK_WIDGET(gtk_builder_get_object (builder, "entryNomVirus"));
+
+    v->Id = ++id;
+    v->prctContam = ((gfloat)gtk_adjustment_get_value (GTK_ADJUSTMENT(adjust1)));
+    v->prctMortel = ((gfloat)gtk_adjustment_get_value(GTK_ADJUSTMENT(adjust2)));
+    v->cercleDeContam = ((gint)gtk_adjustment_get_value (GTK_ADJUSTMENT(adjust3)));
+    v->nom = g_strdup(gtk_entry_get_text(GTK_ENTRY(entryNomVirus)));
 
     remplir_virus(builder,++id,gtk_entry_get_text(GTK_ENTRY(entryNomVirus)),
                   ((gfloat)gtk_adjustment_get_value (GTK_ADJUSTMENT(adjust1))),
@@ -259,6 +262,9 @@ Age get_age_fromString(gchar *age)
 }
 
 
+
+
+
 GList *get_selected_checkButtons_fromButtonList(GList * buttonList,gpointer builder)
 {
     GList *crt = buttonList;
@@ -268,9 +274,9 @@ GList *get_selected_checkButtons_fromButtonList(GList * buttonList,gpointer buil
         //GtkRadioButton *radio = crt->data;
         if(gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(crt->data)))
         {
-            VirusList = g_list_append(VirusList,get_virus_fromString(
+            VirusList = get_virus_fromString(
                     gtk_button_get_label(GTK_BUTTON(crt->data)),builder
-            ));
+                    );
         }
         crt = crt->next;
     }
@@ -340,42 +346,35 @@ void create_backgroundBox(GtkGrid *grid,GtkBuilder *builder)
     }
 }
 
-void set_default_viruses(gpointer builder)
-{
-    /**COVID-19
-     * prctcontam 6.28% ( i did the calculations 496M infected out of 7.9B)
-     * tauxmortal 1.24% ( i did the calculations 6.17M died out of 496 =M)
-     * distance 1 à 2 mètres ( not so sure )
-     *
-     */
-    remplir_virus(builder,1,"COVID-19",6.28,1.24,2);
 
-}
 
 
 int main(int argc, char *argv [])
 {
-    /** declarations ***/
+
+
     GtkWidget *fenetre_principale = NULL;
     GtkWidget *button = NULL;
     GtkWidget *grid = NULL;
-    GtkWidget *ViewPort2 = NULL;
+
+    Virus *v = NULL;
+
+
     GtkBuilder *builder = NULL;
     GError *error = NULL;
     gchar *filename = NULL;
+    GridProps gprops = set_grid_props(TRUE, TRUE, 0, 0);
 
-    Gridprops gprops = set_grid_props(TRUE, TRUE, 0, 0);
 
-
-    /** Initialisation de la librairie Gtk. */
+    /* Initialisation de la librairie Gtk. */
     gtk_init(&argc, &argv);
 
-    /**Ouverture du fichier Glade de la fenêtre principale */
+    /*Ouverture du fichier Glade de la fenêtre principale */
     builder = gtk_builder_new();
 
-    /** Création du chemin complet pour accéder au fichier test.glade. */
-    /** g_build_filename(); construit le chemin complet en fonction du système */
-    /** d'exploitation. ( / pour Linux et \ pour Windows) */
+    /* Création du chemin complet pour accéder au fichier test.glade. */
+    /* g_build_filename(); construit le chemin complet en fonction du système */
+    /* d'exploitation. ( / pour Linux et \ pour Windows) */
     filename =  g_build_filename ("Interface2.glade", NULL);
 
           /* Chargement du fichier test.glade. */
@@ -389,36 +388,31 @@ int main(int argc, char *argv [])
         return code;
     }
 
-    /** Récupération du pointeur de la fenêtre principale */
+    /* Récupération du pointeur de la fenêtre principale */
     fenetre_principale = GTK_WIDGET(gtk_builder_get_object (builder, "MainWindow"));
-
-    /** this widget is gonna contain the grid **/
-    ViewPort2 = GTK_WIDGET(gtk_builder_get_object (builder, "ViewPort2"));
-    /** this button is for the signal to add a person **/
+    GtkWidget *ViewPort2 = GTK_WIDGET(gtk_builder_get_object (builder, "ViewPort2"));
     button = GTK_WIDGET(gtk_builder_get_object (builder, "subutton"));
 
 
     set_css(builder);
 
-    /** set default viruses **/
-    //set_default_viruses(builder);
+
 
     g_printerr("\nReached me\n");
 
-    /** creating and adding the grid to the ViewPort **/
     grid = macro_createGrid(gprops);
     create_backgroundBox(GTK_GRID(grid),builder);
+    //gtk_box_pack_start(GTK_BOX(SonBox),grid,TRUE,TRUE,0);
     gtk_container_add(GTK_CONTAINER(ViewPort2),grid);
 
 
-    /** Affectation du signal "destroy" à la fonction gtk_main_quit(); pour la */
-    /** fermeture de la fenêtre. */
+    /* Affectation du signal "destroy" à la fonction gtk_main_quit(); pour la */
+    /* fermeture de la fenêtre. */
     g_signal_connect (G_OBJECT(fenetre_principale), "destroy", (GCallback)gtk_main_quit, NULL);
-    /** the clicked signal on the adding person button **/
     g_signal_connect (GTK_BUTTON(button), "clicked", (GCallback)enregistrer_virus, builder);
 
 
-    /** Affichage de la fenêtre principale. */
+    /* Affichage de la fenêtre principale. */
     gtk_widget_show_all (fenetre_principale);
 
     gtk_main();
