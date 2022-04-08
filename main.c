@@ -292,7 +292,7 @@ Individu *lire_Indiv(gpointer builder)
     gchar * genre = (gchar*)malloc(sizeof(gchar));
     GtkWidget *comboBoxGen = GTK_WIDGET(gtk_builder_get_object (builder, "comboBoxGenitiques"));
     GtkWidget *comboBoxTens = GTK_WIDGET(gtk_builder_get_object (builder, "comboBoxTension"));
-    GtkWidget *comboBoxDiab = GTK_WIDGET(gtk_builder_get_object (builder, "comboBoxGenitiques"));
+    GtkWidget *comboBoxDiab = GTK_WIDGET(gtk_builder_get_object (builder, "comboBoxDiabete"));
     GtkWidget *comboBoxCard = GTK_WIDGET(gtk_builder_get_object (builder, "comboBoxCardiaque"));
     GtkWidget *comboBoxPoum = GTK_WIDGET(gtk_builder_get_object (builder, "comboBoxPoumons"));
     GtkWidget *buttonBox = GTK_WIDGET(gtk_builder_get_object (builder, "ButtonBoxVirus"));
