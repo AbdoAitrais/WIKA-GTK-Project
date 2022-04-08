@@ -2,7 +2,6 @@
 #include <stdlib.h>
 
 #include <gtk/gtk.h>
-#include <time.h>
 
 #include "macros.c"
 
