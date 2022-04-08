@@ -335,8 +335,15 @@ void create_backgroundBox(GtkGrid *grid,GtkBuilder *builder)
     }
 }
 
+void set_default_visruses(gpointer builder)
+{
+    /**COVID-19
+     * prctcontam 6.28% (i did the calculations ..) 496M out of 7.9B
+     * tauxmortal 1.24% (i did the calculations ..) 6.17M out of 496M
+     * cerclecontam 1 à 2 metres ( not sure )
+     * */
 
-
+}
 
 int main(int argc, char *argv [])
 {
