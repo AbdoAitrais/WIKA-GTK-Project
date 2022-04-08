@@ -92,11 +92,6 @@ GtkWidget *macro_createGrid(GridProps props){
 
 
 
-
-
-
-
-
 gint compare_virus(gpointer virus,gpointer nom)
 {
     gchar * name = nom;
