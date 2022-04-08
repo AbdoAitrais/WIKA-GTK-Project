@@ -107,14 +107,16 @@ gint compare_virus(gpointer virus,gpointer nom)
     return g_strcmp0(v->nom,name);
 }
 
-GList * get_virus_fromString(const gchar *nom,gpointer builder)
+Virus * get_virus_fromString(const gchar *nom,gpointer builder)
 {
     GList * elem = g_list_find_custom(
             g_object_get_data(builder,"listVirus"),nom,(GCompareFunc)compare_virus
     );
 
-    return elem;
+    return elem?((Virus *)elem->data):NULL;
 }
+
+
 
 void add_checkbutton_with_label_toBox(GtkWidget *box,Virus * virus)
 {
@@ -265,9 +267,6 @@ Age get_age_fromString(gchar *age)
 }
 
 
-
-
-
 GList *get_selected_checkButtons_fromButtonList(GList * buttonList,gpointer builder)
 {
     GList *crt = buttonList;
@@ -277,9 +276,9 @@ GList *get_selected_checkButtons_fromButtonList(GList * buttonList,gpointer buil
         //GtkRadioButton *radio = crt->data;
         if(gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(crt->data)))
         {
-            VirusList = get_virus_fromString(
+            VirusList = g_list_append(VirusList,get_virus_fromString(
                     gtk_button_get_label(GTK_BUTTON(crt->data)),builder
-                    );
+            ));
         }
         crt = crt->next;
     }
@@ -349,35 +348,42 @@ void create_backgroundBox(GtkGrid *grid,GtkBuilder *builder)
     }
 }
 
+void set_default_viruses(gpointer builder)
+{
+    /**COVID-19
+     * prctcontam 6.28% ( i did the calculations 496M infected out of 7.9B)
+     * tauxmortal 1.24% ( i did the calculations 6.17M died out of 496 =M)
+     * distance 1 à 2 mètres ( not so sure )
+     *
+     */
+    remplir_virus(builder,1,"COVID-19",6.28,1.24,2);
 
+}
 
 
 int main(int argc, char *argv [])
 {
-
-
+    /** declarations ***/
     GtkWidget *fenetre_principale = NULL;
     GtkWidget *button = NULL;
     GtkWidget *grid = NULL;
-
-    Virus *v = NULL;
-
-
+    GtkWidget *ViewPort2 = NULL;
     GtkBuilder *builder = NULL;
     GError *error = NULL;
     gchar *filename = NULL;
+
     Gridprops gprops = set_grid_props(TRUE, TRUE, 0, 0);
 
 
-    /* Initialisation de la librairie Gtk. */
+    /** Initialisation de la librairie Gtk. */
     gtk_init(&argc, &argv);
 
-    /*Ouverture du fichier Glade de la fenêtre principale */
+    /**Ouverture du fichier Glade de la fenêtre principale */
     builder = gtk_builder_new();
 
-    /* Création du chemin complet pour accéder au fichier test.glade. */
-    /* g_build_filename(); construit le chemin complet en fonction du système */
-    /* d'exploitation. ( / pour Linux et \ pour Windows) */
+    /** Création du chemin complet pour accéder au fichier test.glade. */
+    /** g_build_filename(); construit le chemin complet en fonction du système */
+    /** d'exploitation. ( / pour Linux et \ pour Windows) */
     filename =  g_build_filename ("Interface2.glade", NULL);
 
           /* Chargement du fichier test.glade. */
@@ -391,31 +397,36 @@ int main(int argc, char *argv [])
         return code;
     }
 
-    /* Récupération du pointeur de la fenêtre principale */
+    /** Récupération du pointeur de la fenêtre principale */
     fenetre_principale = GTK_WIDGET(gtk_builder_get_object (builder, "MainWindow"));
-    GtkWidget *ViewPort2 = GTK_WIDGET(gtk_builder_get_object (builder, "ViewPort2"));
+
+    /** this widget is gonna contain the grid **/
+    ViewPort2 = GTK_WIDGET(gtk_builder_get_object (builder, "ViewPort2"));
+    /** this button is for the signal to add a person **/
     button = GTK_WIDGET(gtk_builder_get_object (builder, "subutton"));
 
 
     set_css(builder);
 
-
+    /** set default viruses **/
+    //set_default_viruses(builder);
 
     g_printerr("\nReached me\n");
 
+    /** creating and adding the grid to the ViewPort **/
     grid = macro_createGrid(gprops);
     create_backgroundBox(GTK_GRID(grid),builder);
-    //gtk_box_pack_start(GTK_BOX(SonBox),grid,TRUE,TRUE,0);
     gtk_container_add(GTK_CONTAINER(ViewPort2),grid);
 
 
-    /* Affectation du signal "destroy" à la fonction gtk_main_quit(); pour la */
-    /* fermeture de la fenêtre. */
+    /** Affectation du signal "destroy" à la fonction gtk_main_quit(); pour la */
+    /** fermeture de la fenêtre. */
     g_signal_connect (G_OBJECT(fenetre_principale), "destroy", (GCallback)gtk_main_quit, NULL);
+    /** the clicked signal on the adding person button **/
     g_signal_connect (GTK_BUTTON(button), "clicked", (GCallback)enregistrer_virus, builder);
 
 
-    /* Affichage de la fenêtre principale. */
+    /** Affichage de la fenêtre principale. */
     gtk_widget_show_all (fenetre_principale);
 
     gtk_main();
