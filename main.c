@@ -158,12 +158,6 @@ void enregistrer_virus(GtkButton *button, gpointer builder)
     GtkAdjustment *adjust3 = GTK_ADJUSTMENT(gtk_builder_get_object (builder, "adjust3"));
     GtkWidget *entryNomVirus = GTK_WIDGET(gtk_builder_get_object (builder, "entryNomVirus"));
 
-    v->Id = ++id;
-    v->prctContam = ((gfloat)gtk_adjustment_get_value (GTK_ADJUSTMENT(adjust1)));
-    v->prctMortel = ((gfloat)gtk_adjustment_get_value(GTK_ADJUSTMENT(adjust2)));
-    v->cercleDeContam = ((gint)gtk_adjustment_get_value (GTK_ADJUSTMENT(adjust3)));
-    v->nom = g_strdup(gtk_entry_get_text(GTK_ENTRY(entryNomVirus)));
-
     remplir_virus(builder,++id,gtk_entry_get_text(GTK_ENTRY(entryNomVirus)),
                   ((gfloat)gtk_adjustment_get_value (GTK_ADJUSTMENT(adjust1))),
                   ((gfloat)gtk_adjustment_get_value(GTK_ADJUSTMENT(adjust2))),
