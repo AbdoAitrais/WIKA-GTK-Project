@@ -6,8 +6,6 @@
 
 #include "macros.c"
 
-#define MAXrow 70
-#define MAXcol 40
 
 
 
@@ -110,7 +108,7 @@ gint compare_virus(gpointer virus,gpointer nom)
 Virus * get_virus_fromString(const gchar *nom,gpointer builder)
 {
     GList * elem = g_list_find_custom(
-            g_object_get_data(builder,"listVirus"),nom,(GCompareFunc)compare_virus
+            g_object_get_data(builder,DATA_KEY_LIST_VIRUS),nom,(GCompareFunc)compare_virus
     );
 
     return elem?((Virus *)elem->data):NULL;
@@ -132,7 +130,7 @@ void inserer_virus(gpointer builder,Virus *virus)
     {
         g_print("\nVirus from input : \n");
         afficher_virus(virus);
-        inserer_data_GObject(builder,"listVirus",virus);
+        inserer_data_GObject(builder,DATA_KEY_LIST_VIRUS,virus);
         add_checkbutton_with_label_toBox(buttonBox,virus);
     }
 }

@@ -1,9 +1,10 @@
-#define MAXrow 70
-#define MAXcol 40
 
 //
 // Created by abdo on 3/8/2022.
 //
+
+
+#include "constants.h"
 
 ///la structure bouton
 typedef struct {
@@ -982,8 +983,8 @@ gboolean add_individu (GtkWidget *widget,GdkEvent *event,gpointer builder)
 
     Individu * indiv = lire_Indiv(builder);
     Afficher_individu(indiv);
-    g_object_set_data((GObject *) image,"individu",indiv);
-    inserer_data_GObject(G_OBJECT(window),"ListIndividus",image);
+    g_object_set_data((GObject *) image,DATA_KEY_INDIVIDU,indiv);
+    inserer_data_GObject(G_OBJECT(window),DATA_KEY_LIST_INDIVIDU,image);
 
 
     g_timeout_add(500,macro_moveGrid,image);
