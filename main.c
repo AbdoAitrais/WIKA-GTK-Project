@@ -2,7 +2,11 @@
 #include <stdlib.h>
 
 #include <gtk/gtk.h>
+#include <time.h>
+
 #include "macros.c"
+
+
 
 
 
@@ -18,11 +22,11 @@ typedef struct {
     gboolean rowhomogeneous	 ;   ///If TRUE, the rows are all the same height.
     gint	 rowspacing  ;       ///he amount of space between two consecutive rows.
 
-}GridProps;
+}Gridprops;
 
-GridProps set_grid_props(gboolean colhomo, gboolean rowhomo, gint colspace, gint rowspace)
+Gridprops set_grid_props(gboolean colhomo,gboolean rowhomo,gint colspace,gint rowspace)
 {
-    GridProps props;
+    Gridprops props;
     props.columnhomogeneous = colhomo;
     props.rowhomogeneous = rowhomo;
     props.columnspacing = colspace;
@@ -61,7 +65,7 @@ Tchildprops set_child_props()
 *@param props propriétés du Grid
 *******************************/
 
-void macro_applyGrid(GtkGrid *Grid, GridProps props){
+void macro_applyGrid(GtkGrid *Grid,Gridprops props){
     if( props.rowspacing)
         gtk_grid_set_row_spacing ( Grid, props.rowspacing);
     if(props.columnhomogeneous)
@@ -80,7 +84,7 @@ void macro_applyGrid(GtkGrid *Grid, GridProps props){
 *@param props propriétés du Grid
 *******************************/
 ///create new grid widget
-GtkWidget *macro_createGrid(GridProps props){
+GtkWidget *macro_createGrid(Gridprops props){
     GtkWidget *Grid;
     Grid=gtk_grid_new ();
     macro_applyGrid(GTK_GRID(Grid),props);
