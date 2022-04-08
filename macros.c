@@ -749,7 +749,74 @@ typedef struct {
     GList *VirusList;// liste des virus qui a le Individu
 } Individu;// peut être animal,personne...
 
+/*********** project functions ****************/
 
+void loadCSS(GtkWidget *window)
+{
+    GFile *css_gFile = g_file_new_for_path("style.css");
+    GtkCssProvider *cssProvider = gtk_css_provider_new();
+
+    gtk_css_provider_load_from_file(cssProvider, css_gFile, 0);
+
+    gtk_style_context_add_provider_for_screen(gtk_widget_get_screen(window),
+                                              GTK_STYLE_PROVIDER(cssProvider),
+                                              GTK_STYLE_PROVIDER_PRIORITY_USER);
+}
+
+void set_css(gpointer builder)
+{
+    GtkWidget *fenetre_principale = NULL;
+    GtkWidget *menu = NULL;
+    GtkWidget *stack = NULL;
+    GtkWidget *switcher = NULL;
+    GtkWidget *comboBox1 = NULL;
+    GtkWidget *comboBox2 = NULL;
+    GtkWidget *comboBox3 = NULL;
+    GtkWidget *comboBox4 = NULL;
+    GtkWidget *comboBox5 = NULL;
+
+    GtkWidget *textView1 = NULL;
+
+    GtkWidget *scale1 = NULL;
+    GtkWidget *scale2 = NULL;
+    GtkWidget *button = NULL;
+
+
+    fenetre_principale = GTK_WIDGET(gtk_builder_get_object (builder, "MainWindow"));
+    menu = GTK_WIDGET(gtk_builder_get_object (builder, "MenuBar"));
+
+    button = GTK_WIDGET(gtk_builder_get_object (builder, "subutton"));
+    stack = GTK_WIDGET(gtk_builder_get_object (builder, "stack"));
+    switcher = GTK_WIDGET(gtk_builder_get_object (builder, "switch"));
+    comboBox1 = GTK_WIDGET(gtk_builder_get_object (builder, "comboBoxGenitiques"));
+    comboBox2 = GTK_WIDGET(gtk_builder_get_object (builder, "comboBoxTension"));
+    comboBox3 = GTK_WIDGET(gtk_builder_get_object (builder, "comboBoxDiabete"));
+    comboBox4 = GTK_WIDGET(gtk_builder_get_object (builder, "comboBoxCardiaque"));
+    comboBox5 = GTK_WIDGET(gtk_builder_get_object (builder, "comboBoxPoumons"));
+    scale1 = GTK_WIDGET(gtk_builder_get_object (builder, "scale1"));
+    scale2 = GTK_WIDGET(gtk_builder_get_object (builder, "scale2"));
+    textView1 = GTK_WIDGET(gtk_builder_get_object (builder, "TextView"));
+
+
+
+    loadCSS(fenetre_principale);
+
+    gtk_style_context_add_class(gtk_widget_get_style_context(fenetre_principale), "class1");
+    gtk_style_context_add_class(gtk_widget_get_style_context(menu), "menu");
+    gtk_style_context_add_class(gtk_widget_get_style_context(stack), "stack");
+    gtk_style_context_add_class(gtk_widget_get_style_context(switcher), "switch");
+    gtk_style_context_add_class(gtk_widget_get_style_context(comboBox1), "comboBox");
+    gtk_style_context_add_class(gtk_widget_get_style_context(comboBox2), "comboBox");
+    gtk_style_context_add_class(gtk_widget_get_style_context(comboBox3), "comboBox");
+    gtk_style_context_add_class(gtk_widget_get_style_context(comboBox4), "comboBox");
+    gtk_style_context_add_class(gtk_widget_get_style_context(comboBox5), "comboBox");
+
+    gtk_style_context_add_class(gtk_widget_get_style_context(scale1), "scale");
+    gtk_style_context_add_class(gtk_widget_get_style_context(scale2), "scale");
+    gtk_style_context_add_class(gtk_widget_get_style_context(textView1), "textView");
+
+    gtk_style_context_add_class(gtk_widget_get_style_context(button), "button2");
+}
 
 
 gboolean macro_moveGrid(gpointer image) {

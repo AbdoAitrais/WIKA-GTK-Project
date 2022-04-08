@@ -95,17 +95,7 @@ GtkWidget *macro_createGrid(Gridprops props){
 
 
 
-void loadCSS(GtkWidget *window)
-{
-    GFile *css_gFile = g_file_new_for_path("style.css");
-    GtkCssProvider *cssProvider = gtk_css_provider_new();
 
-    gtk_css_provider_load_from_file(cssProvider, css_gFile, 0);
-
-    gtk_style_context_add_provider_for_screen(gtk_widget_get_screen(window),
-                                              GTK_STYLE_PROVIDER(cssProvider),
-                                              GTK_STYLE_PROVIDER_PRIORITY_USER);
-}
 
 
 
@@ -130,7 +120,7 @@ void add_checkbutton_with_label_toBox(GtkWidget *box,Virus * virus)
 {
     GtkWidget * checkButton = gtk_check_button_new_with_label(virus->nom);
     gtk_box_pack_start(GTK_BOX(box), checkButton, TRUE, TRUE, 0);
-    gtk_widget_show_all(box);
+    gtk_widget_show(checkButton);
 }
 
 void inserer_virus(gpointer builder,Virus *virus)
@@ -143,7 +133,18 @@ void inserer_virus(gpointer builder,Virus *virus)
         inserer_data_GObject(builder,"listVirus",virus);
         add_checkbutton_with_label_toBox(buttonBox,virus);
     }
+}
 
+void remplir_virus(gpointer builder,gint Id,const gchar *nom,gfloat prctContam,gfloat prctMortel,guint cercleDeContam)
+{
+    Virus *virus = (Virus*) malloc(sizeof(Virus));
+    virus->Id = Id;
+    virus->nom = g_strdup(nom);
+    virus->prctContam = prctContam;
+    virus->prctMortel = prctMortel;
+    virus->cercleDeContam = cercleDeContam;
+
+    inserer_virus(builder,virus);
 }
 
 int id = 0;
@@ -163,9 +164,14 @@ void enregistrer_virus(GtkButton *button, gpointer builder)
     v->cercleDeContam = ((gint)gtk_adjustment_get_value (GTK_ADJUSTMENT(adjust3)));
     v->nom = g_strdup(gtk_entry_get_text(GTK_ENTRY(entryNomVirus)));
 
+    remplir_virus(builder,++id,gtk_entry_get_text(GTK_ENTRY(entryNomVirus)),
+                  ((gfloat)gtk_adjustment_get_value (GTK_ADJUSTMENT(adjust1))),
+                  ((gfloat)gtk_adjustment_get_value(GTK_ADJUSTMENT(adjust2))),
+                  ((gint)gtk_adjustment_get_value (GTK_ADJUSTMENT(adjust3)))
+                  );
 
 
-    inserer_virus(builder,v);
+    //inserer_virus(builder,v);
 
 
     //afficher_virus_enregistre(builder);
@@ -343,112 +349,56 @@ void create_backgroundBox(GtkGrid *grid,GtkBuilder *builder)
     }
 }
 
-void enregistrer_add_individu(GtkGrid *grid,GObject *builder)
-{
-    for (int i = 0; i < MAXrow; ++i) {
-        for (int j = 0; j < MAXcol; ++j) {
 
-            g_signal_connect (gtk_grid_get_child_at(grid, i, j), "button-press-event", (GCallback)add_individu, builder);
-        }
-    }
-}
+
 
 int main(int argc, char *argv [])
 {
 
+
     GtkWidget *fenetre_principale = NULL;
+    GtkWidget *button = NULL;
+    GtkWidget *grid = NULL;
 
-      GtkWidget *menu = NULL;
-      GtkWidget *stack = NULL;
-      GtkWidget *switcher = NULL;
-      GtkWidget *comboBox1 = NULL;
-      GtkWidget *comboBox2 = NULL;
-      GtkWidget *comboBox3 = NULL;
-      GtkWidget *comboBox4 = NULL;
-      GtkWidget *comboBox5 = NULL;
-      GtkWidget *comboBox6 = NULL;
-      GtkWidget *comboBox7 = NULL;
-      GtkWidget *textView1 = NULL;
-      GtkWidget *textView2 = NULL;
-      GtkWidget *textView3 = NULL;
-      GtkWidget *scale1 = NULL;
-      GtkWidget *scale2 = NULL;
-      GtkWidget *button = NULL;
-      GtkWidget *button1 = NULL;
-      GtkWidget *SonBox = NULL;
-      GtkWidget *grid = NULL;
-
-      Virus *v = NULL;
+    Virus *v = NULL;
 
 
-      GtkBuilder *builder = NULL;
-      GError *error = NULL;
-      gchar *filename = NULL;
-      Gridprops gprops = set_grid_props(TRUE, TRUE, 0, 0);
+    GtkBuilder *builder = NULL;
+    GError *error = NULL;
+    gchar *filename = NULL;
+    Gridprops gprops = set_grid_props(TRUE, TRUE, 0, 0);
 
-      ButtonProps *props = set_button_props(NULL,TRUE,TRUE,GTK_POS_TOP,-1,-1, NULL,
-                                 GTK_RELIEF_NORMAL,"system-users-symbolic",FALSE);
-      /* Initialisation de la librairie Gtk. */
-      gtk_init(&argc, &argv);
 
-      /* Ouverture du fichier Glade de la fenêtre principale */
-      builder = gtk_builder_new();
+    /* Initialisation de la librairie Gtk. */
+    gtk_init(&argc, &argv);
 
-      /* Création du chemin complet pour accéder au fichier test.glade. */
-      /* g_build_filename(); construit le chemin complet en fonction du système */
-      /* d'exploitation. ( / pour Linux et \ pour Windows) */
-      filename =  g_build_filename ("Interface2.glade", NULL);
+    /*Ouverture du fichier Glade de la fenêtre principale */
+    builder = gtk_builder_new();
+
+    /* Création du chemin complet pour accéder au fichier test.glade. */
+    /* g_build_filename(); construit le chemin complet en fonction du système */
+    /* d'exploitation. ( / pour Linux et \ pour Windows) */
+    filename =  g_build_filename ("Interface2.glade", NULL);
 
           /* Chargement du fichier test.glade. */
-      gtk_builder_add_from_file (builder, filename, &error);
-      g_free (filename);
-      if (error)
-      {
+    gtk_builder_add_from_file (builder, filename, &error);
+    g_free (filename);
+    if (error)
+    {
         gint code = error->code;
         g_printerr("%s\n", error->message);
         g_error_free (error);
         return code;
-      }
+    }
 
     /* Récupération du pointeur de la fenêtre principale */
     fenetre_principale = GTK_WIDGET(gtk_builder_get_object (builder, "MainWindow"));
-    menu = GTK_WIDGET(gtk_builder_get_object (builder, "MenuBar"));
-    //grid = GTK_WIDGET(gtk_builder_get_object (builder, "GameGrid"));
-    button = GTK_WIDGET(gtk_builder_get_object (builder, "subutton2"));
-    button1 = GTK_WIDGET(gtk_builder_get_object (builder, "start_button"));
-    stack = GTK_WIDGET(gtk_builder_get_object (builder, "stack"));
-    switcher = GTK_WIDGET(gtk_builder_get_object (builder, "switch"));
-    comboBox1 = GTK_WIDGET(gtk_builder_get_object (builder, "comboBoxGenitiques"));
-    comboBox2 = GTK_WIDGET(gtk_builder_get_object (builder, "comboBoxTension"));
-    comboBox3 = GTK_WIDGET(gtk_builder_get_object (builder, "comboBoxDiabete"));
-    comboBox4 = GTK_WIDGET(gtk_builder_get_object (builder, "comboBoxCardiaque"));
-    comboBox5 = GTK_WIDGET(gtk_builder_get_object (builder, "comboBoxPoumons"));
-
-
-    scale1 = GTK_WIDGET(gtk_builder_get_object (builder, "scale1"));
-    scale2 = GTK_WIDGET(gtk_builder_get_object (builder, "scale2"));
-    textView1 = GTK_WIDGET(gtk_builder_get_object (builder, "TextView"));
-
-    //SonBox = GTK_WIDGET(gtk_builder_get_object (builder, "SonBox"));
     GtkWidget *ViewPort2 = GTK_WIDGET(gtk_builder_get_object (builder, "ViewPort2"));
+    button = GTK_WIDGET(gtk_builder_get_object (builder, "subutton"));
 
-    loadCSS(fenetre_principale);
 
-    gtk_style_context_add_class(gtk_widget_get_style_context(fenetre_principale), "class1");
-    gtk_style_context_add_class(gtk_widget_get_style_context(menu), "menu");
-    gtk_style_context_add_class(gtk_widget_get_style_context(stack), "stack");
-    gtk_style_context_add_class(gtk_widget_get_style_context(switcher), "switch");
-    gtk_style_context_add_class(gtk_widget_get_style_context(comboBox1), "comboBox");
-    gtk_style_context_add_class(gtk_widget_get_style_context(comboBox2), "comboBox");
-    gtk_style_context_add_class(gtk_widget_get_style_context(comboBox3), "comboBox");
-    gtk_style_context_add_class(gtk_widget_get_style_context(comboBox4), "comboBox");
-    gtk_style_context_add_class(gtk_widget_get_style_context(comboBox5), "comboBox");
+    set_css(builder);
 
-    gtk_style_context_add_class(gtk_widget_get_style_context(scale1), "scale");
-    gtk_style_context_add_class(gtk_widget_get_style_context(scale2), "scale");
-    gtk_style_context_add_class(gtk_widget_get_style_context(textView1), "textView");
-    //gtk_style_context_add_class(gtk_widget_get_style_context(grid), "grid");
-    gtk_style_context_add_class(gtk_widget_get_style_context(button), "button2");
 
 
     g_printerr("\nReached me\n");
@@ -458,29 +408,20 @@ int main(int argc, char *argv [])
     //gtk_box_pack_start(GTK_BOX(SonBox),grid,TRUE,TRUE,0);
     gtk_container_add(GTK_CONTAINER(ViewPort2),grid);
 
-/*
-    GtkWidget *image = gtk_image_new_from_file ("person.png");
-    GtkWidget *eBox = gtk_grid_get_child_at(GTK_GRID(grid),0,0);
-    gtk_container_add(GTK_CONTAINER(eBox),image);
 
-
-*/
-
-       // create_background(GTK_GRID(grid),props);
     /* Affectation du signal "destroy" à la fonction gtk_main_quit(); pour la */
     /* fermeture de la fenêtre. */
-    g_signal_connect (G_OBJECT (fenetre_principale), "destroy", (GCallback)gtk_main_quit, NULL);
+    g_signal_connect (G_OBJECT(fenetre_principale), "destroy", (GCallback)gtk_main_quit, NULL);
     g_signal_connect (GTK_BUTTON(button), "clicked", (GCallback)enregistrer_virus, builder);
- //   enregistrer_add_individu(GTK_GRID(grid),"person.png");
 
 
     /* Affichage de la fenêtre principale. */
     gtk_widget_show_all (fenetre_principale);
 
-      gtk_main();
+    gtk_main();
 
 
 
-      return 0;
+    return 0;
 }
 

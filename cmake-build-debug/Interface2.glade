@@ -766,7 +766,7 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkButton" id="subutton2">
+                              <object class="GtkButton" id="subutton">
                                 <property name="label" translatable="yes">Submit</property>
                                 <property name="height-request">-1</property>
                                 <property name="visible">True</property>
