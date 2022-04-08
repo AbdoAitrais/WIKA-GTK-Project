@@ -982,7 +982,7 @@ gboolean add_individu (GtkWidget *widget,GdkEvent *event,gpointer builder)
     g_print("\nadded image  top = %d, left = %d.\n", top, left);
 
     Individu * indiv = lire_Indiv(builder);
-    Afficher_individu(indiv);
+
     g_object_set_data((GObject *) image,DATA_KEY_INDIVIDU,indiv);
     inserer_data_GObject(G_OBJECT(window),DATA_KEY_LIST_INDIVIDU,image);
 
@@ -1015,4 +1015,5 @@ gboolean iterateIndividusList(gpointer data) {
 
     return FALSE;
 }
+
 
