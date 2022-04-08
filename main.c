@@ -104,13 +104,13 @@ gint compare_virus(gpointer virus,gpointer nom)
     return g_strcmp0(v->nom,name);
 }
 
-GList * get_virus_fromString(const gchar *nom,gpointer builder)
+Virus * get_virus_fromString(const gchar *nom,gpointer builder)
 {
     GList * elem = g_list_find_custom(
             g_object_get_data(builder,DATA_KEY_LIST_VIRUS),nom,(GCompareFunc)compare_virus
     );
 
-    return elem;
+    return elem?((Virus *)elem->data):NULL;
 }
 
 void add_checkbutton_with_label_toBox(GtkWidget *box,Virus * virus)
@@ -154,12 +154,6 @@ void enregistrer_virus(GtkButton *button, gpointer builder)
     GtkAdjustment *adjust2 = GTK_ADJUSTMENT(gtk_builder_get_object (builder, "adjust2"));
     GtkAdjustment *adjust3 = GTK_ADJUSTMENT(gtk_builder_get_object (builder, "adjust3"));
     GtkWidget *entryNomVirus = GTK_WIDGET(gtk_builder_get_object (builder, "entryNomVirus"));
-
-    v->Id = ++id;
-    v->prctContam = ((gfloat)gtk_adjustment_get_value (GTK_ADJUSTMENT(adjust1)));
-    v->prctMortel = ((gfloat)gtk_adjustment_get_value(GTK_ADJUSTMENT(adjust2)));
-    v->cercleDeContam = ((gint)gtk_adjustment_get_value (GTK_ADJUSTMENT(adjust3)));
-    v->nom = g_strdup(gtk_entry_get_text(GTK_ENTRY(entryNomVirus)));
 
     remplir_virus(builder,++id,gtk_entry_get_text(GTK_ENTRY(entryNomVirus)),
                   ((gfloat)gtk_adjustment_get_value (GTK_ADJUSTMENT(adjust1))),
@@ -274,9 +268,9 @@ GList *get_selected_checkButtons_fromButtonList(GList * buttonList,gpointer buil
         //GtkRadioButton *radio = crt->data;
         if(gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(crt->data)))
         {
-            VirusList = get_virus_fromString(
+            VirusList = g_list_append(VirusList,get_virus_fromString(
                     gtk_button_get_label(GTK_BUTTON(crt->data)),builder
-                    );
+            ));
         }
         crt = crt->next;
     }
