@@ -13,4 +13,7 @@
 #define MAXcol 40
 
 
+gboolean PLAY_MODE = TRUE;
+
+
 #endif //MAIN_C_CONSTANTS_H

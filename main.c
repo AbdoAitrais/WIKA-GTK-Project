@@ -397,9 +397,6 @@ int main(int argc, char *argv [])
     set_css(builder);
 
 
-
-    g_printerr("\nReached me\n");
-
     grid = macro_createGrid(gprops);
     create_backgroundBox(GTK_GRID(grid),builder);
     //gtk_box_pack_start(GTK_BOX(SonBox),grid,TRUE,TRUE,0);
@@ -414,6 +411,8 @@ int main(int argc, char *argv [])
 
     /* Affichage de la fenêtre principale. */
     gtk_widget_show_all (fenetre_principale);
+
+    g_timeout_add(1000, iterateIndividusList, fenetre_principale);
 
     gtk_main();
 

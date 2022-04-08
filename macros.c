@@ -987,8 +987,32 @@ gboolean add_individu (GtkWidget *widget,GdkEvent *event,gpointer builder)
     inserer_data_GObject(G_OBJECT(window),DATA_KEY_LIST_INDIVIDU,image);
 
 
-    g_timeout_add(500,macro_moveGrid,image);
+    //TODO :: Instead of running a timeout fro the individu add it to the list
+   // g_timeout_add(2000,macro_moveGrid,image);
     return FALSE;
 }
 
+
+void iterateSingleIndividu( gpointer data, gpointer user_data) {
+    if (PLAY_MODE)
+        macro_moveGrid(data);
+}
+
+
+
+gboolean iterateIndividusList(gpointer data) {
+    GTK_IS_WIDGET(data);
+
+    GList *pers = g_object_get_data(data, DATA_KEY_LIST_INDIVIDU);
+
+    g_list_foreach(pers, iterateSingleIndividu, NULL);
+
+
+    // TODO :: test if the play mode is started
+    //  GET PLAY MODE BOOLEAN FROM TOOLBAR
+    if (PLAY_MODE)
+        g_timeout_add(600, iterateIndividusList, data);
+
+    return FALSE;
+}
 
