@@ -345,14 +345,10 @@ void create_backgroundBox(GtkGrid *grid,GtkBuilder *builder)
 
 int main(int argc, char *argv [])
 {
-
-
+    /** Declarations **/
     GtkWidget *fenetre_principale = NULL;
     GtkWidget *button = NULL;
     GtkWidget *grid = NULL;
-
-    Virus *v = NULL;
-
 
     GtkBuilder *builder = NULL;
     GError *error = NULL;
@@ -360,18 +356,18 @@ int main(int argc, char *argv [])
     GridProps gprops = set_grid_props(TRUE, TRUE, 0, 0);
 
 
-    /* Initialisation de la librairie Gtk. */
+    /** Initialisation de la librairie Gtk. */
     gtk_init(&argc, &argv);
 
-    /*Ouverture du fichier Glade de la fenêtre principale */
+    /**Ouverture du fichier Glade de la fenêtre principale */
     builder = gtk_builder_new();
 
-    /* Création du chemin complet pour accéder au fichier test.glade. */
-    /* g_build_filename(); construit le chemin complet en fonction du système */
-    /* d'exploitation. ( / pour Linux et \ pour Windows) */
+    /** Création du chemin complet pour accéder au fichier test.glade. */
+    /** g_build_filename(); construit le chemin complet en fonction du système */
+    /** d'exploitation. ( / pour Linux et \ pour Windows) */
     filename =  g_build_filename ("Interface2.glade", NULL);
 
-          /* Chargement du fichier test.glade. */
+    /** Chargement du fichier test.glade. */
     gtk_builder_add_from_file (builder, filename, &error);
     g_free (filename);
     if (error)
@@ -382,9 +378,12 @@ int main(int argc, char *argv [])
         return code;
     }
 
-    /* Récupération du pointeur de la fenêtre principale */
+    /** Récupération du pointeur de la fenêtre principale */
     fenetre_principale = GTK_WIDGET(gtk_builder_get_object (builder, "MainWindow"));
+
+    /** The widget that contains the grid **/
     GtkWidget *ViewPort2 = GTK_WIDGET(gtk_builder_get_object (builder, "ViewPort2"));
+    /** button for signal **/
     button = GTK_WIDGET(gtk_builder_get_object (builder, "subutton"));
 
 
@@ -394,19 +393,21 @@ int main(int argc, char *argv [])
 
     g_printerr("\nReached me\n");
 
+    /** create and add the grid to the ViewPort **/
     grid = macro_createGrid(gprops);
     create_backgroundBox(GTK_GRID(grid),builder);
-    //gtk_box_pack_start(GTK_BOX(SonBox),grid,TRUE,TRUE,0);
     gtk_container_add(GTK_CONTAINER(ViewPort2),grid);
 
 
-    /* Affectation du signal "destroy" à la fonction gtk_main_quit(); pour la */
-    /* fermeture de la fenêtre. */
+    /** Affectation du signal "destroy" à la fonction gtk_main_quit(); pour la */
+    /** fermeture de la fenêtre. */
     g_signal_connect (G_OBJECT(fenetre_principale), "destroy", (GCallback)gtk_main_quit, NULL);
+
+    /** signal to get added virus **/
     g_signal_connect (GTK_BUTTON(button), "clicked", (GCallback)enregistrer_virus, builder);
 
 
-    /* Affichage de la fenêtre principale. */
+    /** Affichage de la fenêtre principale. */
     gtk_widget_show_all (fenetre_principale);
 
     gtk_main();
