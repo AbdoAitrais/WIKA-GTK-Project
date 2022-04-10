@@ -123,6 +123,11 @@ void macro_save_single_virus_node(gpointer virus_data, gpointer virussND) {
 }
 
 
+void macro_save_single_pers_node(gpointer pers_data, gpointer personsND) {
+
+}
+
+
 int
 main1(const gchar  *file, EnvInfo envInfo)
 {
@@ -149,15 +154,23 @@ main1(const gchar  *file, EnvInfo envInfo)
                         BAD_CAST TAG_DIMENSION,
                         NULL);
     sprintf(buff, "%d", envInfo.rows);
-    xmlNewProp(coord, BAD_CAST ATTR_DIMENSION_ROWS, BAD_CAST buff);
+    xmlNewProp(coord,
+               BAD_CAST ATTR_DIMENSION_ROWS,
+               BAD_CAST buff);
     sprintf(buff, "%d", envInfo.cols);
-    xmlNewProp(coord, BAD_CAST ATTR_DIMENSION_COLS, BAD_CAST buff);
+    xmlNewProp(coord,
+               BAD_CAST ATTR_DIMENSION_COLS,
+               BAD_CAST buff);
 
 
 
     /// create persons list node
     persons = xmlNewNode(NULL, BAD_CAST TAG_LIST_PERSONS);
     xmlAddChild(root_node, persons);
+    /// save persons list
+    g_list_foreach(envInfo.indivs,
+                   macro_save_single_pers_node,
+                   persons);
 
 
     /// create virus list node
