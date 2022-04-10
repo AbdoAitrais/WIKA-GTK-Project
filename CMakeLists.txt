@@ -3,6 +3,18 @@ project(TestProjectGtk C)
 
 set(CMAKE_CXX_STANDARD 14)
 
+
+
+
+
+find_package(LibXml2 REQUIRED)
+
+
+add_compile_definitions(parseGtkXML PUBLIC ${LIBXML2_DEFINITIONS})
+include_directories(PUBLIC ${LIBXML2_INCLUDE_DIRS})
+link_libraries(${LIBXML2_LIBRARIES})
+
+
 # On utilise le module PkgConfig pour détecter la librairie GTK+ sur le système
 FIND_PACKAGE(PkgConfig REQUIRED)
 PKG_CHECK_MODULES(GTK3 REQUIRED gtk+-3.0)

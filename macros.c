@@ -715,7 +715,7 @@ typedef struct {
     Diabete diabete;
     Cardiaque cardiac;
     Poumons poumons;
-} Sante;
+}Sante;
 
 typedef enum {
     GENRE_UNSPECIFIED,
