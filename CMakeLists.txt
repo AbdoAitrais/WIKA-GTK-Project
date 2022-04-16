@@ -33,7 +33,7 @@ ADD_DEFINITIONS(${GTK3_CFLAGS_OTHER})
 #endif (UNIX)
 
 # Ajoute un éxecutable à partir du main.c
-add_executable(TestProjectGtk main.c)
+add_executable(TestProjectGtk testMain.c)
 
 # Lie à l'éxecutable la librairie GTK+
 TARGET_LINK_LIBRARIES(TestProjectGtk ${GTK3_LIBRARIES})
