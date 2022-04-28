@@ -6,191 +6,14 @@
 #define MAIN_C_SAVE_STATUS_H
 
 
-
-
-/*
- * section:  Tree
- * synopsis: Creates a tree
- * purpose:  Shows how to create document, nodes and dump it to stdout or file.
- * usage:    tree2 <filename>  -Default output: stdout
- * test:     tree2 > tree2.tmp && diff tree2.tmp $(srcdir)/tree2.res
- * author:   Lucas Brasilino <brasilino@recife.pe.gov.br>
- * copy:     see Copyright for the status of this software
- */
-
 #include <stdio.h>
 #include <libxml2/libxml/parser.h>
 #include <libxml2/libxml/tree.h>
 #include <gtk/gtk.h>
-
-//#include "macros.c"
-
-#define TAG_ROOT                    "env"
-#define TAG_LIST_PERSONS            "persons"
-#define TAG_LIST_VIRUS              "viruss"
-#define TAG_PERSON                  "person"
-#define TAG_PERSON_SANTE            "sante"
-#define TAG_VIRUS                   "virus"
-#define TAG_DIMENSION               "dimension"
-#define TAG_SANTE                   "sante"
+#include "xml_management.h"
 
 
-#define ATTR_DIMENSION_ROWS         "rows"
-#define ATTR_DIMENSION_COLS         "cols"
-
-
-#define ATTR_PERSON_AGE             "age"
-#define ATTR_PERSON_GENRE           "genre"
-#define ATTR_PERSON_POUMON          "poumon"
-#define ATTR_PERSON_DIABETE         "diabete"
-#define ATTR_PERSON_TENSION         "tension"
-#define ATTR_PERSON_GENETIC         "genetic"
-#define ATTR_PERSON_CARDIAC         "cardiac"
-#define ATTR_PERSON_Y               "Y"
-#define ATTR_PERSON_X               "x"
-
-
-#define ATTR_VIRUS_ID               "id"
-#define ATTR_VIRUS_nom              "nom"
-#define ATTR_VIRUS_SPREAD           "spread"
-#define ATTR_VIRUS_MORTALITY        "mortality"
-#define ATTR_VIRUS_SPREAD_CIRCLE    "sp-circle"
-
-
-/********** structures ************/
-
-
-typedef struct cel {
-    gint Id;//Indentifiant du virus(peut être coleur par exemple rgb Ox......) // it can be gchar* too choose one
-    const gchar *nom;// le nom associé à le virus
-    gfloat prctContam;// le pourcentage de contamination de virus
-    gfloat prctMortel; // le pourcentage de mortalite de virus
-    guint cercleDeContam;// le rayon ou bien la cercle de contamination
-} Virus;
-
-typedef struct {
-    gint x;// la position selon les lignes
-    gint y;// la position selon les colonnes
-} Coord;// les cooordonnées d'une entité dans l'interface
-
-typedef enum {
-    GENETIQUEMENT_FAIBLE,
-    GENETIQUEMENT_FRAGILE,
-    GENETIQUEMENT_MOYEN,
-    GENETIQUEMENT_FORT
-} Genitique;
-
-typedef enum {
-    ARTERIELLE_NORMAL,
-    ARTERIELLE_HYPERTENDU,
-    ARTERIELLE_HYPERTENSION_FORTE,
-} Tension;
-
-typedef enum {
-    DIABETE_NORMAL,
-    DIABETE_MODERE,
-    DIABETE_AVANCE
-} Diabete;
-
-typedef enum {
-    CARDIAQUE_NORMAL,
-    CARDIAQUE_MALADE,
-    CARDIAQUE_SEVERE
-} Cardiaque;
-
-typedef enum {
-    POUMONS_SEIN,
-    POUMONS_MALADE,
-    POUMONS_GRAVE
-} Poumons;
-
-typedef struct {
-    Genitique genetic;
-    Tension tension;
-    Diabete diabete;
-    Cardiaque cardiac;
-    Poumons poumons;
-} Sante;
-
-typedef enum {
-    GENRE_UNSPECIFIED,
-    GENRE_MALE,
-    GENRE_FEMALE
-} Genre;
-
-typedef enum {
-    AGE_KIDS,
-    AGE_TEENS,
-    AGE_YOUTH,
-    AGE_ADULT,
-    AGE_OLD
-} Age;
-
-typedef enum {
-    AGE_INF12,
-    AGE_BETWEEN1225,
-    AGE_BETWEEN2540,
-    AGE_BETWEEN4065,
-    AGE_SUP65
-} Age2;
-
-// si vous voulez faire deux entites (personne,animal) mais je pense c'est pas le peine
-typedef struct {
-
-    Genre gender;// le sexe de Individu
-    ///gint age;//l'âge de Individu
-    Age categorie;//la categorie associé à le Individu selon son âge
-    Coord pos;//les coordonnées où se présente le Individu
-    Sante health;// l'état sanitaire associé à le Individu
-    GList *VirusList;// liste des virus qui a le Individu
-} Individu;// peut être animal,personne...
-
-/*********** project functions ****************/
-
-
-
-
-
-
-typedef struct {
-    guint x, y;
-    Individu indiv;
-} IndivInfo;
-
-
-typedef struct {
-    /// contains data of type IndivInfo
-    GList *indivs;
-    /// contains data of type Virus
-    GList *virus;
-    /// environnement dimension
-    guint cols, rows;
-
-} EnvInfo;
-
-
-/***
- * frees the pbjects used to parse the xml file
- * @param doc xml document to free
- */
-void macro_cleanupXML(xmlDoc *doc) {
-    /*free the document */
-    xmlFreeDoc(doc);
-
-    /*
-     *Free the global variables that may
-     *have been allocated by the parser.
-     */
-    xmlCleanupParser();
-
-    /*
-     * this is to debug memory for regression tests
-     */
-    xmlMemoryDump();
-}
-
-
-void macro_save_single_virus_node(gpointer virus_data, gpointer virussND) {
+static void macro_save_single_virus_node(gpointer virus_data, gpointer virussND) {
     Virus *virus = virus_data;
     xmlNode *virusND = NULL;
     gchar buffer[256];
@@ -215,7 +38,7 @@ void macro_save_single_virus_node(gpointer virus_data, gpointer virussND) {
 }
 
 
-xmlNode *trans_SanteToXmlNode(Sante sante) {
+static xmlNode *trans_SanteToXmlNode(Sante sante) {
 
     gchar buffer[256];
     xmlNode *santeND = xmlNewNode(NULL, BAD_CAST TAG_SANTE);
@@ -245,7 +68,7 @@ xmlNode *trans_SanteToXmlNode(Sante sante) {
 
 }
 
-void macro_save_single_pers_node(gpointer pers_data, gpointer personsND) {
+static void macro_save_single_pers_node(gpointer pers_data, gpointer personsND) {
     Individu *individu = pers_data;
     xmlNode *persNd = NULL;
     gchar buffer[256];
@@ -286,8 +109,7 @@ typedef struct {
     GList *virus_list;
 } NdVirusList;
 
-int
-main1(const gchar *file, EnvInfo envInfo) {
+int macro_saveStatus(const gchar *file, EnvInfo envInfo) {
     xmlDocPtr doc = NULL;       /* document pointer */
     xmlNodePtr root_node = NULL, persons = NULL, virus = NULL, coord = NULL;/* node pointers */
     char buff[256];
@@ -340,7 +162,7 @@ main1(const gchar *file, EnvInfo envInfo) {
 
 
     /// Dumping document to given file or status.kass
-    xmlSaveFormatFileEnc(file ? file : "status.kaas", doc, "UTF-8", 1);
+    xmlSaveFormatFileEnc(file ? file : DEFAULT_SAVE_FILE_NAME, doc, "UTF-8", 1);
 
 
     macro_cleanupXML(doc);
@@ -372,8 +194,165 @@ void test_save_virus() {
     envInfo.rows = 15;
     envInfo.cols = 15;
 
-    main1("test.xml", envInfo);
+    macro_saveStatus("test.wika", envInfo);
 }
 
+
+static EnvInfo *macro_initEnvInfo() {
+    EnvInfo *envInfo = g_malloc(sizeof(EnvInfo));
+    envInfo->virus = NULL;
+    envInfo->indivs = NULL;
+    envInfo->cols = DEFAULT_MAX_COLS;
+    envInfo->rows = DEFAULT_MAX_ROWS;
+    return envInfo;
+}
+
+
+void macro_parseDimension(EnvInfo *envInfo, xmlNode *node) {
+    const gchar *property = (gchar *) xmlGetProp(node, (const xmlChar *) ATTR_DIMENSION_ROWS);
+    envInfo->rows = g_ascii_strtoull(property, NULL, 0);
+
+    property = (gchar *) xmlGetProp(node, (const xmlChar *) ATTR_DIMENSION_COLS);
+    envInfo->cols = g_ascii_strtoull(property, NULL, 0);
+}
+
+Virus *macro_parseVirus(xmlNode *node) {
+    Virus *virus = g_malloc(sizeof(Virus));
+    const gchar *property = (gchar *) xmlGetProp(node, (const xmlChar *) ATTR_VIRUS_ID);
+    virus->Id = g_ascii_strtoll(property, NULL, 0);
+
+    property = (gchar *) xmlGetProp(node, (const xmlChar *) ATTR_VIRUS_MORTALITY);
+    virus->prctMortel = g_ascii_strtod(property, NULL);
+
+    property = (gchar *) xmlGetProp(node, (const xmlChar *) ATTR_VIRUS_SPREAD);
+    virus->prctContam = g_ascii_strtod(property, NULL);
+
+    property = (gchar *) xmlGetProp(node, (const xmlChar *) ATTR_VIRUS_SPREAD_CIRCLE);
+    virus->cercleDeContam = g_ascii_strtoull(property, NULL, 0);
+
+    virus->nom = g_strdup((gchar *) xmlNodeGetContent(node));
+
+    return ((Virus *) virus);
+}
+
+/********************************
+ * parse virus list
+ * @param node xmlNode representing the virus list
+ * @return List of parsed virus
+ */
+GList *macro_parseViruss( xmlNode *node) {
+    xmlNode *curNode;
+    GList *viruss = NULL;
+    for (curNode = node->children; curNode; curNode = curNode->next)
+        if (xmlStrcasecmp(curNode->name, (const xmlChar *) TAG_VIRUS))
+            viruss = g_list_append(viruss, macro_parseVirus(curNode));
+}
+
+void macro_parseIndividusSante(xmlNode *node, Sante *sante) {
+    const gchar *property = (gchar *) xmlGetProp(
+            node,
+            (const xmlChar *) ATTR_PERSON_TENSION);
+    sante->tension = g_ascii_strtoll(property, NULL, 0);
+
+    property = (gchar *) xmlGetProp(
+            node,
+            (const xmlChar *) ATTR_PERSON_POUMON);
+    sante->poumons = g_ascii_strtoll(property, NULL, 0);
+
+    property = (gchar *) xmlGetProp(
+            node,
+            (const xmlChar *) ATTR_PERSON_GENETIC);
+    sante->genetic = g_ascii_strtoll(property, NULL, 0);
+
+    property = (gchar *) xmlGetProp(
+            node,
+            (const xmlChar *) ATTR_PERSON_DIABETE);
+    sante->diabete = g_ascii_strtoll(property, NULL, 0);
+
+    property = (gchar *) xmlGetProp(
+            node,
+            (const xmlChar *) ATTR_PERSON_CARDIAC);
+    sante->cardiac = g_ascii_strtoll(property, NULL, 0);
+
+}
+
+Individu *macro_parseSingleIndiv(xmlNode *node) {
+    Individu *indiv = g_malloc(sizeof(Individu));
+    const gchar *property = (gchar *) xmlGetProp(
+            node,
+            (const xmlChar *) ATTR_PERSON_X);
+    indiv->pos.x = g_ascii_strtoll(property, NULL, 0);
+
+    property = (gchar *) xmlGetProp(
+            node,
+            (const xmlChar *) ATTR_PERSON_Y);
+    indiv->pos.y = g_ascii_strtoll(property, NULL, 0);
+
+    property = (gchar *) xmlGetProp(
+            node,
+            (const xmlChar *) ATTR_PERSON_GENRE);
+    indiv->gender = g_ascii_strtoll(property, NULL, 0);
+
+    property = (gchar *) xmlGetProp(
+            node,
+            (const xmlChar *) ATTR_PERSON_AGE);
+    indiv->categorie = g_ascii_strtoll(property, NULL, 0);
+
+    xmlNode *curNode;
+    for (curNode = node->children; curNode; curNode = curNode->next) {
+        if (xmlStrcasecmp(curNode->name, (const xmlChar *) TAG_LIST_VIRUS))
+            indiv->VirusList = macro_parseViruss(curNode);
+        else if (xmlStrcasecmp(curNode->name, (const xmlChar *) TAG_PERSON_SANTE))
+            macro_parseIndividusSante(curNode, &(indiv->health));
+    }
+
+    return ((Individu *) indiv);
+}
+
+
+void macro_parseIndividus(EnvInfo *envInfo, xmlNode *node) {
+    xmlNode *curNode;
+    for (curNode = node->children; curNode; curNode = curNode->next)
+        if (xmlStrcasecmp(curNode->name, (const xmlChar *) TAG_PERSON))
+            envInfo->indivs = g_list_append(envInfo->indivs, macro_parseSingleIndiv(curNode));
+
+}
+
+
+/**************************************
+ * parse saved status from wika file
+ * @param file wika file
+ * @return environnement properties
+ */
+EnvInfo *macro_parseStatus(const gchar *file) {
+    if (!file)
+        file = DEFAULT_SAVE_FILE_NAME;
+
+    EnvInfo *envInfo = macro_initEnvInfo();
+
+    xmlNode *root;
+    root = macro_getRootElem(file);
+    /// if the file is not found or could not be parsed
+    if (!root) return envInfo;
+
+    if (xmlStrcasecmp(root->name, (const xmlChar *) TAG_ROOT))
+        goto out_of_parsing;
+
+    xmlNode *curNode;
+    for (curNode = root->children; curNode; curNode = curNode->next) {
+        if (xmlStrcasecmp(curNode->name, (const xmlChar *) TAG_DIMENSION))
+            macro_parseDimension(envInfo, curNode);
+        else if (xmlStrcasecmp(curNode->name, (const xmlChar *) TAG_LIST_VIRUS))
+            envInfo->virus = macro_parseViruss(curNode);
+        else if (xmlStrcasecmp(curNode->name, (const xmlChar *) TAG_LIST_PERSONS))
+            macro_parseIndividus(envInfo, curNode);
+    }
+
+
+    out_of_parsing:
+    macro_cleanupXML(root->doc);
+
+    return envInfo;
+}
 
 #endif //MAIN_C_SAVE_STATUS_H

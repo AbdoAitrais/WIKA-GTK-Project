@@ -83,7 +83,7 @@ void macro_applyGrid(GtkGrid *Grid,GridProps props){
 *@param props propriétés du Grid
 *******************************/
 ///create new grid widget
-GtkWidget *macro_createGrid(GridProps props){
+GtkWidget *macro_createGrid(GridProps props) {
     GtkWidget *Grid;
     Grid=gtk_grid_new ();
     macro_applyGrid(GTK_GRID(Grid),props);
@@ -324,8 +324,8 @@ Individu *lire_Indiv(gpointer builder)
 
 void create_backgroundBox(GtkGrid *grid,GtkBuilder *builder)
 {
-    for (int i = 0; i < MAXrow; ++i) {
-        for (int j = 0; j < MAXcol; ++j) {
+    for (int i = 0; i < DEFAULT_MAX_ROWS; ++i) {
+        for (int j = 0; j < DEFAULT_MAX_COLS; ++j) {
             GtkWidget *box = gtk_event_box_new();
             g_signal_connect (box, "button-press-event", (GCallback)add_individu, builder);
 

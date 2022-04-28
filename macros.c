@@ -866,13 +866,13 @@ gboolean macro_moveGrid(gpointer image) {
             }
         }
         case 2: {
-            if ((top + 1) < MAXrow) {
+            if ((top + 1) < DEFAULT_MAX_ROWS) {
                 top++;
                 break;
             }
         }
         case 3: {
-            if ((left + 1) < MAXcol) {
+            if ((left + 1) < DEFAULT_MAX_COLS) {
                 left++;
                 break;
             } else

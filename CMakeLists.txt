@@ -4,11 +4,7 @@ project(TestProjectGtk C)
 set(CMAKE_CXX_STANDARD 14)
 
 
-
-
-
 find_package(LibXml2 REQUIRED)
-
 
 add_compile_definitions(parseGtkXML PUBLIC ${LIBXML2_DEFINITIONS})
 include_directories(PUBLIC ${LIBXML2_INCLUDE_DIRS})
@@ -33,7 +29,7 @@ ADD_DEFINITIONS(${GTK3_CFLAGS_OTHER})
 #endif (UNIX)
 
 # Ajoute un éxecutable à partir du main.c
-add_executable(TestProjectGtk testMain.c)
+add_executable(TestProjectGtk main.c)
 
 # Lie à l'éxecutable la librairie GTK+
 TARGET_LINK_LIBRARIES(TestProjectGtk ${GTK3_LIBRARIES})
