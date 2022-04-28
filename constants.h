@@ -9,11 +9,46 @@
 #define DATA_KEY_LIST_INDIVIDU "ListIndividus"
 #define DATA_KEY_LIST_VIRUS "listVirus"
 
-#define MAXrow 70
-#define MAXcol 40
+#define DEFAULT_MAX_ROWS 70
+#define DEFAULT_MAX_COLS 40
+
+#define DEFAULT_SAVE_FILE_NAME "status.wika"
+
+
+#define TAG_ROOT                    "env"
+#define TAG_LIST_PERSONS            "persons"
+#define TAG_LIST_VIRUS              "viruss"
+#define TAG_PERSON                  "person"
+#define TAG_PERSON_SANTE            "sante"
+#define TAG_VIRUS                   "virus"
+#define TAG_DIMENSION               "dimension"
+#define TAG_SANTE                   "sante"
+
+
+#define ATTR_DIMENSION_ROWS         "rows"
+#define ATTR_DIMENSION_COLS         "cols"
+
+
+#define ATTR_PERSON_AGE             "age"
+#define ATTR_PERSON_GENRE           "genre"
+#define ATTR_PERSON_POUMON          "poumon"
+#define ATTR_PERSON_DIABETE         "diabete"
+#define ATTR_PERSON_TENSION         "tension"
+#define ATTR_PERSON_GENETIC         "genetic"
+#define ATTR_PERSON_CARDIAC         "cardiac"
+#define ATTR_PERSON_Y               "Y"
+#define ATTR_PERSON_X               "x"
+
+
+#define ATTR_VIRUS_ID               "id"
+#define ATTR_VIRUS_SPREAD           "spread"
+#define ATTR_VIRUS_MORTALITY        "mortality"
+#define ATTR_VIRUS_SPREAD_CIRCLE    "sp-circle"
 
 
 gboolean PLAY_MODE = TRUE;
+
+
 
 
 #endif //MAIN_C_CONSTANTS_H
