@@ -177,8 +177,10 @@ Individu *lire_Indiv(gpointer builder);
 
 
 void iterateSingleIndividu( gpointer data, gpointer user_data) {
+
     if (PLAY_MODE)
         macro_moveGrid(data);
+
 }
 
 

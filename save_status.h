@@ -6,10 +6,7 @@
 #define MAIN_C_SAVE_STATUS_H
 
 
-#include <stdio.h>
-#include <libxml2/libxml/parser.h>
-#include <libxml2/libxml/tree.h>
-#include <gtk/gtk.h>
+
 #include "xml_management.h"
 #include "by Abderrahman/UI_individu_macros.h"
 
@@ -19,22 +16,23 @@ static void macro_save_single_virus_node(gpointer virus_data, gpointer virussND)
     xmlNode *virusND = NULL;
     gchar buffer[256];
 
+
     /// attach single virus to virus's list node
     /// with setting the nam as virus node content
-    virusND = xmlNewChild(virussND, NULL, BAD_CAST TAG_VIRUS,
+    virusND = xmlNewChild(virussND,NULL,BAD_CAST TAG_VIRUS,
                           BAD_CAST virus->nom);
 
-    sprintf(buffer, "%d", virus->Id);
-    xmlNewProp(virusND, BAD_CAST ATTR_VIRUS_ID, BAD_CAST buffer);
+    sprintf(buffer,"%d", virus->Id);
+    xmlNewProp(virusND,BAD_CAST ATTR_VIRUS_ID,BAD_CAST buffer);
 
     sprintf(buffer, "%u", virus->cercleDeContam);
-    xmlNewProp(virusND, BAD_CAST ATTR_VIRUS_SPREAD_CIRCLE, BAD_CAST buffer);
+    xmlNewProp(virusND,BAD_CAST ATTR_VIRUS_SPREAD_CIRCLE,BAD_CAST buffer);
 
-    sprintf(buffer, "%f", virus->prctContam);
-    xmlNewProp(virusND, BAD_CAST ATTR_VIRUS_SPREAD, BAD_CAST buffer);
+    sprintf(buffer,"%f", virus->prctContam);
+    xmlNewProp(virusND,BAD_CAST ATTR_VIRUS_SPREAD,BAD_CAST buffer);
 
-    sprintf(buffer, "%f", virus->prctMortel);
-    xmlNewProp(virusND, BAD_CAST ATTR_VIRUS_MORTALITY, BAD_CAST buffer);
+    sprintf(buffer,"%f", virus->prctMortel);
+    xmlNewProp(virusND,BAD_CAST ATTR_VIRUS_MORTALITY,BAD_CAST buffer);
 
 }
 
