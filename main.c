@@ -2,16 +2,9 @@
 #include <stdlib.h>
 
 #include <gtk/gtk.h>
-
 #include "macros.c"
 #include "by Abderrahman/UI_individu_macros.h"
 #include "by Abderrahman/init_env_macro.h"
-
-
-
-
-
-
 
 
 
@@ -35,8 +28,6 @@ int main(int argc, char *argv [])
     GtkBuilder *builder = NULL;
     GError *error = NULL;
     gchar *filename = NULL;
-
-
 
     /** Initialisation de la librairie Gtk. */
     gtk_init(&argc, &argv);
@@ -94,8 +85,6 @@ int main(int argc, char *argv [])
     g_timeout_add(1000, iterateIndividusList, fenetre_principale);
 
     gtk_main();
-
-
 
     return 0;
 }
