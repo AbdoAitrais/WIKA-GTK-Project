@@ -105,10 +105,6 @@ static void macro_save_single_pers_node(gpointer pers_data, gpointer personsND) 
 
 }
 
-typedef struct {
-    xmlNode *persons;
-    GList *virus_list;
-} NdVirusList;
 
 int macro_saveStatus(const gchar *file, EnvInfo envInfo) {
     xmlDocPtr doc = NULL;       /* document pointer */
@@ -226,7 +222,7 @@ static EnvInfo *macro_initEnvInfo() {
 }
 
 
-void macro_parseDimension(EnvInfo *envInfo, xmlNode *node) {
+static void macro_parseDimension(EnvInfo *envInfo, xmlNode *node) {
     const gchar *property = (gchar *) xmlGetProp(node, (const xmlChar *) ATTR_DIMENSION_ROWS);
     envInfo->rows = g_ascii_strtoull(property, NULL, 0);
 
@@ -235,7 +231,7 @@ void macro_parseDimension(EnvInfo *envInfo, xmlNode *node) {
 
 }
 
-Virus *macro_parseVirus(xmlNode *node) {
+static Virus *macro_parseVirus(xmlNode *node) {
     Virus *virus = g_malloc(sizeof(Virus));
     const gchar *property = (gchar *) xmlGetProp(node, (const xmlChar *) ATTR_VIRUS_ID);
     virus->Id = g_ascii_strtoll(property, NULL, 0);
@@ -259,7 +255,7 @@ Virus *macro_parseVirus(xmlNode *node) {
  * @param node xmlNode representing the virus list
  * @return List of parsed virus
  */
-GList *macro_parseViruss(xmlNode *node) {
+static GList *macro_parseViruss(xmlNode *node) {
     xmlNode *curNode;
     GList *viruss = NULL;
     for (curNode = node->children; curNode; curNode = curNode->next)
@@ -268,7 +264,7 @@ GList *macro_parseViruss(xmlNode *node) {
     return ((GList *)viruss);
 }
 
-void macro_parseIndividusSante(xmlNode *node, Sante *sante) {
+static void macro_parseIndividusSante(xmlNode *node, Sante *sante) {
     const gchar *property = (gchar *) xmlGetProp(
             node,
             (const xmlChar *) ATTR_PERSON_TENSION);
@@ -296,7 +292,7 @@ void macro_parseIndividusSante(xmlNode *node, Sante *sante) {
 
 }
 
-Individu *macro_parseSingleIndiv(xmlNode *node) {
+static Individu *macro_parseSingleIndiv(xmlNode *node) {
     Individu *indiv = g_malloc(sizeof(Individu));
     const gchar *property = (gchar *) xmlGetProp(
             node,
@@ -330,7 +326,7 @@ Individu *macro_parseSingleIndiv(xmlNode *node) {
 }
 
 
-void macro_parseIndividus(EnvInfo *envInfo, xmlNode *node) {
+static void macro_parseIndividus(EnvInfo *envInfo, xmlNode *node) {
     xmlNode *curNode;
     for (curNode = node->children; curNode; curNode = curNode->next)
         if (!xmlStrcasecmp(curNode->name, (const xmlChar *) TAG_PERSON))
@@ -344,7 +340,7 @@ void macro_parseIndividus(EnvInfo *envInfo, xmlNode *node) {
  * @param file wika file
  * @return environnement properties
  */
-EnvInfo *macro_parseStatus(const gchar *file) {
+static EnvInfo *macro_parseStatus(const gchar *file) {
     if (!file)
         file = DEFAULT_SAVE_FILE_NAME;
 
