@@ -266,7 +266,26 @@ void enregistrer_virus(GtkButton *button, gpointer builder)
     GtkAdjustment *adjust2 = GTK_ADJUSTMENT(gtk_builder_get_object (builder, "adjust2"));
     GtkAdjustment *adjust3 = GTK_ADJUSTMENT(gtk_builder_get_object (builder, "adjust3"));
     GtkWidget *entryNomVirus = GTK_WIDGET(gtk_builder_get_object (builder, "entryNomVirus"));
+    const gchar * nom = gtk_entry_get_text(GTK_ENTRY(entryNomVirus));
 
+    if(!g_strcmp0(nom,""))
+    {
+        GtkWidget *limit;
+
+        limit = gtk_message_dialog_new (NULL,
+                                        GTK_DIALOG_MODAL,
+                                        GTK_MESSAGE_INFO,
+                                        GTK_BUTTONS_CLOSE,
+                                        "Invalid Virus name !");
+
+        /* Affichage de la boite de message */
+        gtk_dialog_run(GTK_DIALOG(limit));
+
+        /* Destruction de la boite de message */
+        gtk_widget_destroy(limit);
+
+        return ;
+    }
     remplir_virus(builder,++id,gtk_entry_get_text(GTK_ENTRY(entryNomVirus)),
                   ((gfloat)gtk_adjustment_get_value (GTK_ADJUSTMENT(adjust1))),
                   ((gfloat)gtk_adjustment_get_value(GTK_ADJUSTMENT(adjust2))),
