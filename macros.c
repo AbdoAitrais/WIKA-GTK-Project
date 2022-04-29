@@ -8,7 +8,6 @@
 #include "by Abderrahman/structures.h"
 
 
-
 /*********** project functions ****************/
 
 void loadCSS(GtkWidget *window)
@@ -90,7 +89,6 @@ gboolean macro_moveGrid(gpointer image) {
                             GTK_WIDGET (boxSrc), "left-attach",
                             &left, "top-attach", &top, NULL)    ;
 
-//    printf("\ninit pos : top = %d left = %d\n", top, left);
 
     g_assert(GTK_IS_EVENT_BOX(boxSrc));
 
@@ -141,27 +139,14 @@ gboolean macro_moveGrid(gpointer image) {
             return returnVal;
     }
 
-//    printf("\nnew pos : top = %d left = %d. ", top, left);
     boxDst = gtk_grid_get_child_at(
             GTK_GRID(gtk_widget_get_parent(GTK_WIDGET(boxSrc))), left, top);
     g_assert(GTK_IS_EVENT_BOX(boxDst));
-    if (boxDst && !(gtk_bin_get_child(GTK_BIN(boxDst))))// si la case ne contient pas bnadem on ajoute
-    {
-        /*
-         * GObject is a reference counted type. Reference counting is a form of garbage collection.
-         * Every time you take ownership of an object instance, you must acquire a reference to it—using g_object_ref().
-         * Once you drop the ownership of that instance, you must release the reference you acquired—using g_object_unref().
 
-         * If you get an object back from a function, and the documentation says “transfer full” or “newly allocated” or “a new reference”,
-         * then you need to call g_object_unref() to release the reference you’re given.
-         * The API reference will always tell you if you’re dealing with something you own, or just a pointer to something that
-         * is owned by something else.
-         */
-//        printf("is valid\n\n");
+    /// si la case ne contient pas bnadem on ajoute
+    if (boxDst && !(gtk_bin_get_child(GTK_BIN(boxDst)))) {
         g_object_ref(child);
         gtk_container_remove(GTK_CONTAINER(boxSrc), child);
-        ///child->pos.x = top;
-        ///child->pos.y=left;
         gtk_container_add(GTK_CONTAINER(boxDst), child);
         g_object_unref(child);
     }
@@ -176,9 +161,15 @@ Individu *lire_Indiv(gpointer builder);
 
 
 
-void iterateSingleIndividu( gpointer data, gpointer user_data) {
+void iterateSingleIndividu(gpointer data, gpointer user_data) {
+
     if (PLAY_MODE)
         macro_moveGrid(data);
+    /// TODO :: Contaminate Individu
+    /// TODO :: si a new virus :: calculate new abc
+    /// TODO :: tester hp <= 0 :: dead man
+    /// TODO :: Decrement hp with 'abc'
+
 }
 
 
@@ -191,8 +182,6 @@ gboolean iterateIndividusList(gpointer data) {
     g_list_foreach(pers, iterateSingleIndividu, NULL);
 
 
-    // TODO :: test if the play mode is started
-    //  GET PLAY MODE BOOLEAN FROM TOOLBAR
     if (PLAY_MODE)
         g_timeout_add(600, iterateIndividusList, data);
 

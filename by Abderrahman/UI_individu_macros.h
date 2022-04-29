@@ -10,8 +10,8 @@
 
 /************* Individu ***************/
 
-void Afficher_VirusList(GList * VirusList);
-void Afficher_individu(Individu * indiv)
+void afficher_VirusList(GList * VirusList);
+void afficher_individu(Individu * indiv)
 {
     if(indiv)
     {
@@ -22,7 +22,7 @@ void Afficher_individu(Individu * indiv)
         g_print("individu cardiac = %d\n",indiv->health.cardiac);
         g_print("individu poumons = %d\n",indiv->health.poumons);
         g_print("individu categorie = %d\n",indiv->categorie);
-        Afficher_VirusList(indiv->VirusList);
+        afficher_VirusList(indiv->VirusList);
     }
 }
 
@@ -213,7 +213,7 @@ void afficher_virus(Virus *vir)
 
 
 
-void Afficher_VirusList(GList * VirusList)
+void afficher_VirusList(GList * VirusList)
 {
     GList *crt = VirusList;
     while (crt)
