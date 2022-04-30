@@ -163,16 +163,40 @@ Individu *lire_Indiv(gpointer builder);
 
 void iterateSingleIndividu(gpointer data, gpointer user_data) {
 
+                        /**     modified by me   **/
+    int i,j;
+    Coord pos;
     if (PLAY_MODE)
         macro_moveGrid(data);
-    /// TODO :: Contaminate Individu
-    /// TODO :: si a new virus :: calculate new abc
-    /// TODO :: tester hp <= 0 :: dead man
-    /// TODO :: Decrement hp with 'abc'
 
+                                        /**PARCOURT TOUT LE GRID  **/
+                                        /** FAIRE LA CONTAMINATION VIRUS PAR VIRUS **/
+
+    for(i=0;    i<DEFAULT_MAX_ROWS; i++)
+    {
+        pos.x = i;
+        for(j=0;    j<DEFAULT_MAX_COLS; j++)
+        {
+            pos.y = j;
+            GtkWidget *box = (GtkWidget*)gtk_grid_get_child_at(grid,i,j);
+            GtkWidget *image = ((GtkWidget*)gtk_bin_get_child(box));
+            if(image)
+            {
+                Individu* individu = (Individu*)g_object_get_data(G_OBJECT(image),DATA_KEY_INDIVIDU);
+                GList *liste = individu->VirusList;
+                Virus *virus = liste->data;
+                /// pour la liste des virus de cet individu tanque il y a des virus à traiter
+                while(virus)
+                {
+                    contaminationDesIndividus((GtkGrid*)grid,individu->pos,*virus);/// on faire la contamination par cette fonction
+                    /// passer à le virus suivant
+                    liste = liste->next;
+                    virus = liste->data;
+                }
+            }
+        }
+    }
 }
-
-
 
 gboolean iterateIndividusList(gpointer data) {
     GTK_IS_WIDGET(data);
@@ -185,7 +209,8 @@ gboolean iterateIndividusList(gpointer data) {
     if (PLAY_MODE)
         g_timeout_add(600, iterateIndividusList, data);
 
-    return FALSE;*/
+    return FALSE;
+    */
 }
 
 
