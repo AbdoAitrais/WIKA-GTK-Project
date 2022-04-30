@@ -6,9 +6,9 @@
 #define MAIN_C_SAVE_STATUS_H
 
 
-
 #include "xml_management.h"
 #include "by Abderrahman/UI_individu_macros.h"
+#include "by Abderrahman/gobject_utils.h"
 
 
 static void macro_save_single_virus_node(gpointer virus_data, gpointer virussND) {
@@ -19,20 +19,20 @@ static void macro_save_single_virus_node(gpointer virus_data, gpointer virussND)
 
     /// attach single virus to virus's list node
     /// with setting the nam as virus node content
-    virusND = xmlNewChild(virussND,NULL,BAD_CAST TAG_VIRUS,
+    virusND = xmlNewChild(virussND, NULL, BAD_CAST TAG_VIRUS,
                           BAD_CAST virus->nom);
 
-    sprintf(buffer,"%d", virus->Id);
-    xmlNewProp(virusND,BAD_CAST ATTR_VIRUS_ID,BAD_CAST buffer);
+//    sprintf(buffer,"%d", virus->Id);
+//    xmlNewProp(virusND,BAD_CAST ATTR_VIRUS_ID,BAD_CAST buffer);
 
     sprintf(buffer, "%u", virus->cercleDeContam);
-    xmlNewProp(virusND,BAD_CAST ATTR_VIRUS_SPREAD_CIRCLE,BAD_CAST buffer);
+    xmlNewProp(virusND, BAD_CAST ATTR_VIRUS_SPREAD_CIRCLE, BAD_CAST buffer);
 
-    sprintf(buffer,"%f", virus->prctContam);
-    xmlNewProp(virusND,BAD_CAST ATTR_VIRUS_SPREAD,BAD_CAST buffer);
+    sprintf(buffer, "%f", virus->prctContam);
+    xmlNewProp(virusND, BAD_CAST ATTR_VIRUS_SPREAD, BAD_CAST buffer);
 
-    sprintf(buffer,"%f", virus->prctMortel);
-    xmlNewProp(virusND,BAD_CAST ATTR_VIRUS_MORTALITY,BAD_CAST buffer);
+    sprintf(buffer, "%f", virus->prctMortel);
+    xmlNewProp(virusND, BAD_CAST ATTR_VIRUS_MORTALITY, BAD_CAST buffer);
 
 }
 
@@ -170,7 +170,7 @@ static GList *test_sample_virus_list() {
     virus->prctMortel = 15.5;
     virus->prctContam = 52.5;
     virus->cercleDeContam = 10;
-    virus->Id = 11155;
+//    virus->Id = 11155;
     virus->nom = "premier virus";
 
 
@@ -206,7 +206,6 @@ static GList *test_sample_indiv_list() {
 }
 
 
-
 static EnvInfo *macro_initEnvInfo() {
     EnvInfo *envInfo = g_malloc(sizeof(EnvInfo));
     envInfo->virus = NULL;
@@ -228,11 +227,12 @@ static void macro_parseDimension(EnvInfo *envInfo, xmlNode *node) {
 
 static Virus *macro_parseVirus(xmlNode *node) {
     Virus *virus = g_malloc(sizeof(Virus));
-    const gchar *property = (gchar *) xmlGetProp(node, (const xmlChar *) ATTR_VIRUS_ID);
-    virus->Id = g_ascii_strtoll(property, NULL, 0);
 
-    property = (gchar *) xmlGetProp(node, (const xmlChar *) ATTR_VIRUS_MORTALITY);
+    const gchar *property = (gchar *) xmlGetProp(node, (const xmlChar *) ATTR_VIRUS_MORTALITY);
     virus->prctMortel = g_ascii_strtod(property, NULL);
+
+//    property = (gchar *) xmlGetProp(node, (const xmlChar *) ATTR_VIRUS_ID);
+//    virus->Id = g_ascii_strtoll(property, NULL, 0);
 
     property = (gchar *) xmlGetProp(node, (const xmlChar *) ATTR_VIRUS_SPREAD);
     virus->prctContam = g_ascii_strtod(property, NULL);
@@ -256,24 +256,20 @@ static GList *macro_parseViruss(xmlNode *node) {
     for (curNode = node->children; curNode; curNode = curNode->next)
         if (!xmlStrcasecmp(curNode->name, (const xmlChar *) TAG_VIRUS))
             viruss = g_list_append(viruss, macro_parseVirus(curNode));
-    return ((GList *)viruss);
+    return ((GList *) viruss);
 }
 
 
-static gint macro_find_compareVirusByID(gpointer virus,gpointer id)
-{
-    int virus_id = g_ascii_strtoll(id, NULL, 0);
-    Virus * v = virus;
-    return v->Id - virus_id;
-}
+
 
 static GList *macro_appendIndivVirus(GList *indiv_viruss, GList *viruss, xmlNode *node) {
-    const gchar *property = (gchar *) xmlGetProp(node, (const xmlChar *) ATTR_VIRUS_ID);
+    const gchar *nom = (gchar *) xmlNodeGetContent(node);
 
-    GList *virus =  g_list_find_custom(viruss, property, (GCompareFunc) macro_find_compareVirusByID);
+    GList *virus = g_list_find_custom(viruss, nom, (GCompareFunc) macro_find_compareVirusByName);
 
     if (virus)
         indiv_viruss = g_list_append(indiv_viruss, virus->data);
+
     return indiv_viruss;
 }
 
@@ -283,7 +279,7 @@ static GList *macro_parseIndivViruss(xmlNode *node, GList *viruss) {
     for (curNode = node->children; curNode; curNode = curNode->next)
         if (!xmlStrcasecmp(curNode->name, (const xmlChar *) TAG_VIRUS))
             indiv_viruss = macro_appendIndivVirus(indiv_viruss, viruss, curNode);
-    return  ((GList*) indiv_viruss);
+    return ((GList *) indiv_viruss);
 }
 
 
@@ -415,9 +411,6 @@ void test_parse_env() {
 
     afficher_individu(envInfo->indivs->data);
 }
-
-
-
 
 
 #endif //MAIN_C_SAVE_STATUS_H

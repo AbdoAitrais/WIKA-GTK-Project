@@ -10,7 +10,7 @@
 /********** structures ************/
 
 
-typedef struct cel {
+typedef struct {
     const gchar *nom;//Indentifiant du virus le nom associé à le virus
     gfloat prctContam;// le pourcentage de contamination de virus
     gfloat prctMortel; // le pourcentage de mortalite de virus
@@ -93,8 +93,8 @@ typedef struct {
     Coord pos;//les coordonnées où se présente le Individu
     Sante health;// l'état sanitaire associé à le Individu
     GList *virusList;// liste des virus qui a le Individu
-    float hp;//
-    float abc;/// c'est la valeur pour decrementer le hp selon les virus associés à l'individu
+    gfloat hp;//
+    gfloat abc;/// c'est la valeur pour decrementer le hp selon les virus associés à l'individu
 } Individu;// peut être animal,personne...
 
 #endif //MAIN_C_STRUCTURES_H

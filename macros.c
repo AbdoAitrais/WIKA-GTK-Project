@@ -208,13 +208,15 @@ void iterateSingleIndividu(gpointer data, gpointer user_data) {
 
     G_STATIC_ASSERT_EXPR(GTK_IS_IMAGE(data));
 
-   if (PLAY_MODE){
+    if (PLAY_MODE) {
+        macro_moveGrid(data);
 
-
-    Individu *individu = (Individu *) g_object_get_data(G_OBJECT(data), DATA_KEY_INDIVIDU);
-    g_list_foreach(individu->virusList, (GFunc) contaminate_indivCercleSingleVrs, data);
-    macro_moveGrid(data);
-}
+        Individu *individu = (Individu *) g_object_get_data(G_OBJECT(data), DATA_KEY_INDIVIDU);
+        g_list_foreach(individu->virusList, (GFunc) contaminate_indivCercleSingleVrs, data);
+        if (individu->hp <= 0)
+                gtk_image_set_from_icon_name(data, "computer",
+                                             GTK_ICON_SIZE_BUTTON);
+    }
 }
 
 gboolean iterateIndividusList(gpointer data) {
