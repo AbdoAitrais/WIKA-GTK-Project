@@ -53,7 +53,7 @@ int main(int argc, char *argv [])
         return code;
     }
 
-    /** init and save stats to builder **/
+    /** init and save stats to builder  **/
     init_save_Stats(builder);
 
     /** Récupération du pointeur de la fenêtre principale */

@@ -10,6 +10,7 @@
 #define DATA_KEY_LIST_VIRUS "listVirus"
 #define DATA_STATS "stats"
 
+
 #define DEFAULT_MAX_ROWS 70
 #define DEFAULT_MAX_COLS 40
 

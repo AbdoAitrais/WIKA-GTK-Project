@@ -261,6 +261,7 @@ Stats * calculate_stats(gpointer builder,Stats *stat)
 void afficher_StatVirus(GList * Statv)
 {
     GList * crt = Statv;
+
     printf("\nVirus Infections :");
     while(crt)
     {

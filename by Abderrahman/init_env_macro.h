@@ -98,6 +98,7 @@ gboolean add_individu (GtkWidget *widget,GdkEvent *event,gpointer builder)
     afficher_Stats(((Stats *) g_object_get_data(builder,DATA_STATS)));
 
 
+
     //TODO :: Instead of running a timeout fro the individu add it to the list
     // g_timeout_add(2000,macro_moveGrid,image);
     return FALSE;
