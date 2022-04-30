@@ -52,7 +52,7 @@ void set_css(gpointer builder) {
     comboBox5 = GTK_WIDGET(gtk_builder_get_object(builder, "comboBoxPoumons"));
     scale1 = GTK_WIDGET(gtk_builder_get_object(builder, "scale1"));
     scale2 = GTK_WIDGET(gtk_builder_get_object(builder, "scale2"));
-    textView1 = GTK_WIDGET(gtk_builder_get_object(builder, "TextView"));
+
 
 
     loadCSS(fenetre_principale);
@@ -69,7 +69,7 @@ void set_css(gpointer builder) {
 
     gtk_style_context_add_class(gtk_widget_get_style_context(scale1), "scale");
     gtk_style_context_add_class(gtk_widget_get_style_context(scale2), "scale");
-    gtk_style_context_add_class(gtk_widget_get_style_context(textView1), "textView");
+
 
     gtk_style_context_add_class(gtk_widget_get_style_context(button), "button2");
 }
