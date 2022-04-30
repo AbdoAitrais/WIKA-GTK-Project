@@ -196,11 +196,7 @@ static void contaminate_indivCercleSingleVrs(gpointer *virus, gpointer *img) {
             g_assert(GTK_IS_GRID(grid));
 
             GtkWidget *box = (GtkWidget *) gtk_grid_get_child_at(GTK_GRID(grid), (gint)i, (gint)j);
-            g_printerr("\n***********************");
-            g_printerr("\n type of the box : %s", g_type_name_from_instance(&((GObject *)box)->g_type_instance));
-            g_printerr("\n***********************\n");
-            g_assert(GTK_IS_EVENT_BOX(box));
-            g_assert(GTK_IS_BIN(box));
+
 
             GtkWidget *image = ((GtkWidget *) gtk_bin_get_child(GTK_BIN(box)));
             if (image) {

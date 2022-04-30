@@ -5,7 +5,9 @@
 #ifndef MAIN_C_CONSTANTS_H
 #define MAIN_C_CONSTANTS_H
 
+/// key of individu  in window storage
 #define DATA_KEY_INDIVIDU "individu"
+/// key of individu list in window storage
 #define DATA_KEY_LIST_INDIVIDU "ListIndividus"
 #define DATA_KEY_LIST_VIRUS "listVirus"
 #define DATA_STATS "stats"

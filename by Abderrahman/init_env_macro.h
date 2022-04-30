@@ -7,7 +7,6 @@
 #include <gtk/gtk.h>
 #include "../constants.h"
 #include "gobject_utils.h"
-#include "structures.h"
 #include "UI_individu_macros.h"
 #include "../by ismail/contaminate_utils.h"
 #include "Statistics.h"
