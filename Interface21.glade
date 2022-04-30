@@ -344,7 +344,7 @@
               </object>
               <packing>
                 <property name="expand">False</property>
-                <property name="fill">True</property>
+                <property name="fill">False</property>
                 <property name="pack-type">end</property>
                 <property name="position">2</property>
               </packing>
@@ -367,7 +367,7 @@
                         <property name="hhomogeneous">False</property>
                         <property name="transition-type">crossfade</property>
                         <child>
-                          <object class="GtkBox" id="stackBox">
+                          <object class="GtkBox" id="GrandSonBox6">
                             <property name="visible">True</property>
                             <property name="can-focus">False</property>
                             <property name="orientation">vertical</property>
@@ -412,6 +412,7 @@
                                 <property name="visible">True</property>
                                 <property name="can-focus">False</property>
                                 <property name="orientation">vertical</property>
+                                <property name="homogeneous">True</property>
                                 <property name="layout-style">expand</property>
                                 <child>
                                   <object class="GtkRadioButton" id="radioButtonHomme">
@@ -434,7 +435,6 @@
                                     <property name="visible">True</property>
                                     <property name="can-focus">True</property>
                                     <property name="receives-default">False</property>
-                                    <property name="active">True</property>
                                     <property name="draw-indicator">True</property>
                                     <property name="group">radioButtonHomme</property>
                                     <style>
@@ -473,6 +473,8 @@
                               <object class="GtkComboBoxText" id="comboBoxGenitiques">
                                 <property name="visible">True</property>
                                 <property name="can-focus">False</property>
+                                <property name="margin-left">5</property>
+                                <property name="margin-right">5</property>
                                 <property name="margin-start">5</property>
                                 <property name="margin-end">5</property>
                                 <property name="has-entry">True</property>
@@ -484,7 +486,7 @@
                                 </items>
                                 <child internal-child="entry">
                                   <object class="GtkEntry">
-                                    <property name="can-focus">False</property>
+                                    <property name="can-focus">True</property>
                                     <property name="placeholder-text" translatable="yes">Genitique</property>
                                   </object>
                                 </child>
@@ -499,6 +501,8 @@
                               <object class="GtkComboBoxText" id="comboBoxTension">
                                 <property name="visible">True</property>
                                 <property name="can-focus">False</property>
+                                <property name="margin-left">5</property>
+                                <property name="margin-right">5</property>
                                 <property name="margin-start">5</property>
                                 <property name="margin-end">5</property>
                                 <property name="has-entry">True</property>
@@ -509,7 +513,7 @@
                                 </items>
                                 <child internal-child="entry">
                                   <object class="GtkEntry">
-                                    <property name="can-focus">False</property>
+                                    <property name="can-focus">True</property>
                                     <property name="placeholder-text" translatable="yes">Tension</property>
                                   </object>
                                 </child>
@@ -524,6 +528,8 @@
                               <object class="GtkComboBoxText" id="comboBoxDiabete">
                                 <property name="visible">True</property>
                                 <property name="can-focus">False</property>
+                                <property name="margin-left">5</property>
+                                <property name="margin-right">5</property>
                                 <property name="margin-start">5</property>
                                 <property name="margin-end">5</property>
                                 <property name="has-entry">True</property>
@@ -534,7 +540,7 @@
                                 </items>
                                 <child internal-child="entry">
                                   <object class="GtkEntry">
-                                    <property name="can-focus">False</property>
+                                    <property name="can-focus">True</property>
                                     <property name="placeholder-text" translatable="yes">Diabete</property>
                                   </object>
                                 </child>
@@ -549,6 +555,8 @@
                               <object class="GtkComboBoxText" id="comboBoxCardiaque">
                                 <property name="visible">True</property>
                                 <property name="can-focus">False</property>
+                                <property name="margin-left">5</property>
+                                <property name="margin-right">5</property>
                                 <property name="margin-start">5</property>
                                 <property name="margin-end">5</property>
                                 <property name="has-entry">True</property>
@@ -559,7 +567,7 @@
                                 </items>
                                 <child internal-child="entry">
                                   <object class="GtkEntry">
-                                    <property name="can-focus">False</property>
+                                    <property name="can-focus">True</property>
                                     <property name="placeholder-text" translatable="yes">Cardiaque</property>
                                   </object>
                                 </child>
@@ -574,6 +582,8 @@
                               <object class="GtkComboBoxText" id="comboBoxPoumons">
                                 <property name="visible">True</property>
                                 <property name="can-focus">False</property>
+                                <property name="margin-left">5</property>
+                                <property name="margin-right">5</property>
                                 <property name="margin-start">5</property>
                                 <property name="margin-end">5</property>
                                 <property name="has-entry">True</property>
@@ -584,7 +594,7 @@
                                 </items>
                                 <child internal-child="entry">
                                   <object class="GtkEntry">
-                                    <property name="can-focus">False</property>
+                                    <property name="can-focus">True</property>
                                     <property name="placeholder-text" translatable="yes">Poumons</property>
                                   </object>
                                 </child>
@@ -613,6 +623,8 @@
                               <object class="GtkScrolledWindow" id="scrolledWindVirus">
                                 <property name="visible">True</property>
                                 <property name="can-focus">True</property>
+                                <property name="margin-left">5</property>
+                                <property name="margin-right">5</property>
                                 <property name="margin-start">5</property>
                                 <property name="margin-end">5</property>
                                 <property name="shadow-type">in</property>
@@ -629,60 +641,7 @@
                                         <property name="homogeneous">True</property>
                                         <property name="layout-style">expand</property>
                                         <child>
-                                          <object class="GtkCheckButton" id="checkButtonVirus1">
-                                            <property name="label" translatable="yes">COVID-19</property>
-                                            <property name="visible">True</property>
-                                            <property name="can-focus">True</property>
-                                            <property name="receives-default">False</property>
-                                            <property name="draw-indicator">True</property>
-                                          </object>
-                                          <packing>
-                                            <property name="expand">True</property>
-                                            <property name="fill">True</property>
-                                            <property name="position">0</property>
-                                          </packing>
-                                        </child>
-                                        <child>
-                                          <object class="GtkCheckButton" id="checkButtonVirus2">
-                                            <property name="label" translatable="yes">SARS-COV-1</property>
-                                            <property name="visible">True</property>
-                                            <property name="can-focus">True</property>
-                                            <property name="receives-default">False</property>
-                                            <property name="draw-indicator">True</property>
-                                          </object>
-                                          <packing>
-                                            <property name="expand">True</property>
-                                            <property name="fill">True</property>
-                                            <property name="position">1</property>
-                                          </packing>
-                                        </child>
-                                        <child>
-                                          <object class="GtkCheckButton" id="checkButtonVirus3">
-                                            <property name="label" translatable="yes">EBOLA</property>
-                                            <property name="visible">True</property>
-                                            <property name="can-focus">True</property>
-                                            <property name="receives-default">False</property>
-                                            <property name="draw-indicator">True</property>
-                                          </object>
-                                          <packing>
-                                            <property name="expand">True</property>
-                                            <property name="fill">True</property>
-                                            <property name="position">2</property>
-                                          </packing>
-                                        </child>
-                                        <child>
-                                          <object class="GtkCheckButton" id="checkButtonVirus4">
-                                            <property name="label" translatable="yes">HIV</property>
-                                            <property name="visible">True</property>
-                                            <property name="can-focus">True</property>
-                                            <property name="receives-default">False</property>
-                                            <property name="draw-indicator">True</property>
-                                          </object>
-                                          <packing>
-                                            <property name="expand">True</property>
-                                            <property name="fill">True</property>
-                                            <property name="position">3</property>
-                                          </packing>
+                                          <placeholder/>
                                         </child>
                                       </object>
                                     </child>
@@ -713,6 +672,8 @@
                               <object class="GtkComboBoxText" id="comboBoxAge">
                                 <property name="visible">True</property>
                                 <property name="can-focus">False</property>
+                                <property name="margin-left">5</property>
+                                <property name="margin-right">5</property>
                                 <property name="margin-start">5</property>
                                 <property name="margin-end">5</property>
                                 <property name="has-entry">True</property>
@@ -724,8 +685,8 @@
                                   <item id="100" translatable="yes">plus de 65 ans</item>
                                 </items>
                                 <child internal-child="entry">
-                                  <object class="GtkEntry" id="EntryAge">
-                                    <property name="can-focus">False</property>
+                                  <object class="GtkEntry">
+                                    <property name="can-focus">True</property>
                                     <property name="placeholder-text" translatable="yes">Categorie d'age</property>
                                   </object>
                                 </child>
@@ -769,6 +730,8 @@
                                 <property name="width-request">100</property>
                                 <property name="visible">True</property>
                                 <property name="can-focus">True</property>
+                                <property name="margin-left">5</property>
+                                <property name="margin-right">5</property>
                                 <property name="margin-start">5</property>
                                 <property name="margin-end">5</property>
                                 <property name="adjustment">adjust1</property>
@@ -798,6 +761,8 @@
                                 <property name="width-request">100</property>
                                 <property name="visible">True</property>
                                 <property name="can-focus">True</property>
+                                <property name="margin-left">5</property>
+                                <property name="margin-right">5</property>
                                 <property name="margin-start">5</property>
                                 <property name="margin-end">5</property>
                                 <property name="adjustment">adjust2</property>
@@ -828,6 +793,8 @@
                                 <property name="width-request">100</property>
                                 <property name="visible">True</property>
                                 <property name="can-focus">True</property>
+                                <property name="margin-left">5</property>
+                                <property name="margin-right">5</property>
                                 <property name="margin-start">5</property>
                                 <property name="margin-end">5</property>
                                 <property name="text" translatable="yes">3</property>
@@ -858,6 +825,8 @@
                               <object class="GtkEntry" id="entryNomVirus">
                                 <property name="visible">True</property>
                                 <property name="can-focus">True</property>
+                                <property name="margin-left">5</property>
+                                <property name="margin-right">5</property>
                                 <property name="margin-start">5</property>
                                 <property name="margin-end">5</property>
                                 <property name="placeholder-text" translatable="yes">Entrez le nom</property>
@@ -893,6 +862,22 @@
                             <property name="position">2</property>
                           </packing>
                         </child>
+                        <child>
+                          <object class="GtkBox" id="GrandSonBoxStats">
+                            <property name="visible">True</property>
+                            <property name="can-focus">False</property>
+                            <property name="orientation">vertical</property>
+                            <child>
+                              <placeholder/>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="name">page3</property>
+                            <property name="title" translatable="yes">page3</property>
+                            <property name="icon-name">edit-paste</property>
+                            <property name="position">3</property>
+                          </packing>
+                        </child>
                       </object>
                     </child>
                   </object>
@@ -914,6 +899,8 @@
         </child>
         <child>
           <object class="GtkTextView" id="TextView">
+            <property name="width-request">79</property>
+            <property name="height-request">-1</property>
             <property name="visible">True</property>
             <property name="can-focus">True</property>
             <property name="buffer">textBuff</property>

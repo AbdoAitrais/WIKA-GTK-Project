@@ -214,10 +214,8 @@ void calculate_StatVirus(GList * individus,Stats * stat)
     }
 }
 
-void reset_Stats(Stats * stat)
+void reset_StatVirus_Stats(Stats * stat)
 {
-    stat->currentPopulation = 0;
-    stat->virusInfection = 0;
     g_list_free(stat->virusInfection);
     stat->virusInfection = NULL;
 }
@@ -239,11 +237,19 @@ Stats * init_Stats()
     return ((Stats *) stat);
 }
 
-Stats * calculate_stats(gpointer builder)
+void init_save_Stats(gpointer builder)
+{
+    Stats * stat = init_Stats();
+    if(g_object_get_data(builder,DATA_STATS))
+        return;
+    g_object_set_data(builder,DATA_STATS,stat);
+}
+
+Stats * calculate_stats(gpointer builder,Stats *stat)
 {
     GtkWidget * window = GTK_WIDGET(gtk_builder_get_object(builder,"MainWindow"));
     GList * Individus = g_object_get_data(G_OBJECT(window),DATA_KEY_LIST_INDIVIDU);
-    Stats * stat = init_Stats();
+    reset_StatVirus_Stats(stat);
     if(stat)
     {
         stat->currentPopulation = sum_GList(Individus);
@@ -268,9 +274,53 @@ void afficher_Stats(Stats * stat)
 {
     if(stat)
     {
+
         printf("\nCurrent Population : %d",stat->currentPopulation);
         afficher_StatVirus(stat->virusInfection);
     }
+}
+
+TextBufferProps * set_TextBufferProps(const gchar * color_bg,const gchar *color_fg,gint weight,PangoStyle style)
+{
+    TextBufferProps * tbp = (TextBufferProps *) g_malloc(sizeof(TextBufferProps));
+
+    tbp->color_bg = g_strdup(color_bg);
+    tbp->color_fg = g_strdup(color_fg);
+    tbp->weight = weight;
+    tbp->style = style;
+
+
+
+    return ((TextBufferProps *) tbp);
+}
+
+TextViewProps * set_TextViewProps(gint margeLeft,gint margeRight,gint margeTop,gint margeBot,gboolean edit,
+                                  GtkJustification justify,gboolean cursor_visible,gchar * text,
+                                  TextBufferProps bufferprops)
+{
+    TextViewProps * tvp = (TextViewProps *) g_malloc(sizeof(TextViewProps));
+
+    tvp->marge.left = margeLeft;
+    tvp->marge.right = margeRight;
+    tvp->marge.top = margeTop;
+    tvp->marge.bottom = margeBot;
+
+    tvp->editable = edit;
+    tvp->justification = justify;
+    tvp->cursor_visible = cursor_visible;
+    tvp->text = g_strdup(text);
+    tvp->bufferprops = bufferprops;
+
+
+    return ((TextViewProps *) tvp);
+}
+
+void add_TextView_to_stack(gpointer builder,gchar * text)
+{
+    GtkWidget * box = GTK_WIDGET(gtk_builder_get_object(builder,"GrandSonBoxStats"));
+    TextBufferProps * tbp = set_TextBufferProps("grey",NULL,20,PANGO_STYLE_NORMAL);
+    TextViewProps * tvp = set_TextViewProps(10,10,10,10,FALSE,
+                                            GTK_JUSTIFY_LEFT,FALSE,text,*tbp);
 }
 
 #endif //MAIN_C_STATISTICS_H

@@ -40,7 +40,7 @@ int main(int argc, char *argv [])
     /** Création du chemin complet pour accéder au fichier test.glade. */
     /** g_build_filename(); construit le chemin complet en fonction du système */
     /** d'exploitation. ( / pour Linux et \ pour Windows) */
-    filename =  g_build_filename ("Interface2.glade", NULL);
+    filename =  g_build_filename ("../Interface21.glade", NULL);
 
     /** Chargement du fichier test.glade. */
     gtk_builder_add_from_file (builder, filename, &error);
@@ -53,7 +53,8 @@ int main(int argc, char *argv [])
         return code;
     }
 
-
+    /** init and save stats to builder **/
+    init_save_Stats(builder);
 
     /** Récupération du pointeur de la fenêtre principale */
     fenetre_principale = GTK_WIDGET(gtk_builder_get_object (builder, "MainWindow"));
