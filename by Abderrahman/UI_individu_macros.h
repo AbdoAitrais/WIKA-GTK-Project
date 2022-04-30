@@ -24,7 +24,7 @@ void afficher_individu(Individu * indiv)
         g_print("individu poumons = %d\n",indiv->health.poumons);
         g_print("individu categorie = %d\n",indiv->categorie);
         g_print("individu hp = %.2f\n",indiv->hp);
-        afficher_VirusList(indiv->VirusList);
+        afficher_VirusList(indiv->virusList);
     }
 }
 
@@ -154,8 +154,8 @@ GList *get_selected_checkButtons_fromButtonList(GList * buttonList,gpointer buil
 //GList * get_virus_list_fromCheckButtons(GtkButtonBox * buttonBox,gpointer builder)
 //{
 //    GList * buttonList = gtk_container_get_children(GTK_CONTAINER(buttonBox));
-//    GList * VirusList = get_selected_checkButtons_fromButtonList(buttonList,builder);
-//    return ((GList *) VirusList);
+//    GList * virusList = get_selected_checkButtons_fromButtonList(buttonList,builder);
+//    return ((GList *) virusList);
 //}
 
 Individu *lire_Indiv(gpointer builder)
@@ -191,7 +191,7 @@ Individu *lire_Indiv(gpointer builder)
     individu->health.poumons = get_poumons_fromString(
             gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(comboBoxPoum))
     );
-    individu->VirusList = get_selected_checkButtons_fromButtonList(
+    individu->virusList = get_selected_checkButtons_fromButtonList(
             gtk_container_get_children(GTK_CONTAINER(buttonBox)),builder
     );
     individu->categorie = get_age_fromString(
@@ -211,7 +211,7 @@ void afficher_virus(Virus *vir)
     printf("Le pourcentage de contamination = %f\n",vir->prctContam);
     printf("Le taux de mortalite = %f\n",vir->prctMortel);
     printf("Le cercle de contamination = %d\n",vir->cercleDeContam);
-    printf("la valeur associé à le virus est  = %.2f\n",vir->val);
+    printf("la valeur associé à le virus est  = %.2f\n",vir->damage);
 }
 
 
@@ -255,11 +255,10 @@ void remplir_virus(gpointer builder,gint Id,const gchar *nom,gfloat prctContam,g
     virus->prctContam = prctContam;
     virus->prctMortel = prctMortel;
     virus->cercleDeContam = cercleDeContam;
-    virus->val = calculeLechampABC(virus);
+    virus->damage = calculeVirusDamageField(virus);
     inserer_virus(builder,virus);
 }
 
-int id = 0;
 
 void enregistrer_virus(GtkButton *button, gpointer builder)
 {
@@ -270,7 +269,7 @@ void enregistrer_virus(GtkButton *button, gpointer builder)
     GtkAdjustment *adjust3 = GTK_ADJUSTMENT(gtk_builder_get_object (builder, "adjust3"));
     GtkWidget *entryNomVirus = GTK_WIDGET(gtk_builder_get_object (builder, "entryNomVirus"));
 
-    remplir_virus(builder,++id,gtk_entry_get_text(GTK_ENTRY(entryNomVirus)),
+    remplir_virus(builder, ++SEQUENCE_ID_VALUE, gtk_entry_get_text(GTK_ENTRY(entryNomVirus)),
                   ((gfloat)gtk_adjustment_get_value (GTK_ADJUSTMENT(adjust1))),
                   ((gfloat)gtk_adjustment_get_value(GTK_ADJUSTMENT(adjust2))),
                   ((gint)gtk_adjustment_get_value (GTK_ADJUSTMENT(adjust3)))

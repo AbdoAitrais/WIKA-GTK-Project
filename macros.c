@@ -78,7 +78,7 @@ void set_css(gpointer builder)
 }
 
 
-gboolean macro_moveGrid(gpointer image) {
+gboolean macro_moveGrid(GtkImage *image) {
 
     gboolean returnVal = TRUE;
 
@@ -87,7 +87,7 @@ gboolean macro_moveGrid(gpointer image) {
 
     gtk_container_child_get(GTK_CONTAINER (gtk_widget_get_parent(GTK_WIDGET(boxSrc))),
                             GTK_WIDGET (boxSrc), "left-attach",
-                            &left, "top-attach", &top, NULL)    ;
+                            &left, "top-attach", &top, NULL);
 
 
     g_assert(GTK_IS_EVENT_BOX(boxSrc));
@@ -160,42 +160,67 @@ gboolean macro_moveGrid(gpointer image) {
 Individu *lire_Indiv(gpointer builder);
 
 
+static void macro_contaminateSingleIndiv(Individu *individu, Virus *virus) {
+    gint result = g_list_index(individu->virusList, virus);
+    if (result > -1) {
+        individu->virusList = g_list_append(individu->virusList, virus);
+        ///TODO :: Update abc value
+        individu->abc += virus->damage;
+    }
+}
 
-void iterateSingleIndividu(gpointer data, gpointer user_data) {
+static void contaminate_indivCercleSingleVrs(gpointer *virus, gpointer *img) {
+    guint i,j;
+    guint left, top;
+    GtkWidget *imgBox = gtk_widget_get_parent(GTK_WIDGET(img)),
+                *grid = gtk_widget_get_parent(GTK_WIDGET(imgBox));
 
-                        /**     modified by me   **/
-    int i,j;
-    Coord pos;
-    if (PLAY_MODE)
-        macro_moveGrid(data);
+    gtk_container_child_get(GTK_CONTAINER(grid),
+                            GTK_WIDGET(imgBox), "left-attach",
+                            &left, "top-attach", &top, NULL);
 
-                                        /**PARCOURT TOUT LE GRID  **/
-                                        /** FAIRE LA CONTAMINATION VIRUS PAR VIRUS **/
-
-    for(i=0;    i<DEFAULT_MAX_ROWS; i++)
+    guint leftBorder = left - (((Virus*)virus)->cercleDeContam),
+            rightBorder, topBorder, bottomBorder;
     {
-        pos.x = i;
-        for(j=0;    j<DEFAULT_MAX_COLS; j++)
-        {
-            pos.y = j;
-            GtkWidget *box = (GtkWidget*)gtk_grid_get_child_at(grid,i,j);
-            GtkWidget *image = ((GtkWidget*)gtk_bin_get_child(box));
+        if (leftBorder < 0)
+            leftBorder = 0;
+        if (rightBorder > DEFAULT_MAX_ROWS)
+            rightBorder = DEFAULT_MAX_ROWS;
+        if (topBorder > 0)
+            topBorder = 0;
+        if (bottomBorder > DEFAULT_MAX_COLS)
+            bottomBorder = DEFAULT_MAX_COLS;
+    }
+
+    for(i = leftBorder; i < rightBorder; i++) {
+        for(j = topBorder; j < bottomBorder; j++) {
+            if (i == left  && j == top)
+                continue;
+            GtkWidget *box = (GtkWidget*)gtk_grid_get_child_at(GTK_GRID(grid),i,j);
+            GtkWidget *image = ((GtkWidget*)gtk_bin_get_child(GTK_BIN(box)));
             if(image)
             {
                 Individu* individu = (Individu*)g_object_get_data(G_OBJECT(image),DATA_KEY_INDIVIDU);
-                GList *liste = individu->VirusList;
-                Virus *virus = liste->data;
-                /// pour la liste des virus de cet individu tanque il y a des virus à traiter
-                while(virus)
-                {
-                    contaminationDesIndividus((GtkGrid*)grid,individu->pos,*virus);/// on faire la contamination par cette fonction
-                    /// passer à le virus suivant
-                    liste = liste->next;
-                    virus = liste->data;
-                }
+
+                macro_contaminateSingleIndiv(individu, (Virus *) virus);
+
             }
         }
     }
+}
+
+
+
+void iterateSingleIndividu(gpointer data, gpointer user_data) {
+
+    G_STATIC_ASSERT_EXPR(GTK_IS_IMAGE(data));
+
+    if (PLAY_MODE)
+        macro_moveGrid(data);
+
+    Individu *individu = (Individu*)g_object_get_data(G_OBJECT(data),DATA_KEY_INDIVIDU);
+    g_list_foreach(individu->virusList, (GFunc) contaminate_indivCercleSingleVrs, data);
+
 }
 
 gboolean iterateIndividusList(gpointer data) {

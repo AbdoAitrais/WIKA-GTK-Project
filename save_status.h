@@ -99,7 +99,7 @@ static void macro_save_single_pers_node(gpointer pers_data, gpointer personsND) 
     xmlNode *virus = xmlNewChild(persNd, NULL,
                                  BAD_CAST TAG_LIST_VIRUS,
                                  NULL);
-    g_list_foreach(individu->VirusList, macro_save_single_virus_node, virus);
+    g_list_foreach(individu->virusList, macro_save_single_virus_node, virus);
 
 }
 
@@ -134,26 +134,23 @@ int macro_saveStatus(const gchar *file, EnvInfo envInfo) {
 
 
 
+    /// create virus list node
+    virus = xmlNewNode(NULL, BAD_CAST TAG_LIST_VIRUS);
+    xmlAddChild(root_node, virus);
+    /// save virus list
+    g_list_foreach(envInfo.virus,
+                   macro_save_single_virus_node,
+                   virus);
+
+
     /// create persons list node
     persons = xmlNewNode(NULL, BAD_CAST TAG_LIST_PERSONS);
     xmlAddChild(root_node, persons);
-
-    ///TODO :: to use on parsing document
-//    NdVirusList *persNd_virusList = g_malloc(sizeof (NdVirusList));
-//    persNd_virusList->virus_list = envInfo.virus;
-//    persNd_virusList->persons = persons;
     /// save persons list
     g_list_foreach(envInfo.indivs,
                    macro_save_single_pers_node,
                    persons);
 
-
-
-    /// create virus list node
-    virus = xmlNewNode(NULL, BAD_CAST TAG_LIST_VIRUS);
-    xmlAddChild(root_node, virus);
-    /// save virus list
-    g_list_foreach(envInfo.virus, macro_save_single_virus_node, virus);
 
 
     /// Dumping document to given file or status.kass
@@ -198,7 +195,7 @@ static GList *test_sample_indiv_list() {
     individu->health.genetic = GENETIQUEMENT_FORT;
     individu->health.tension = ARTERIELLE_HYPERTENSION_FORTE;
     individu->health.poumons = POUMONS_SEIN;
-    individu->VirusList = test_sample_virus_list();
+    individu->virusList = test_sample_virus_list();
 
 
     list = g_list_append(list, individu);
@@ -262,6 +259,34 @@ static GList *macro_parseViruss(xmlNode *node) {
     return ((GList *)viruss);
 }
 
+
+static gint macro_find_compareVirusByID(gpointer virus,gpointer id)
+{
+    int virus_id = g_ascii_strtoll(id, NULL, 0);
+    Virus * v = virus;
+    return v->Id - virus_id;
+}
+
+static GList *macro_appendIndivVirus(GList *indiv_viruss, GList *viruss, xmlNode *node) {
+    const gchar *property = (gchar *) xmlGetProp(node, (const xmlChar *) ATTR_VIRUS_ID);
+
+    GList *virus =  g_list_find_custom(viruss, property, (GCompareFunc) macro_find_compareVirusByID);
+
+    if (virus)
+        indiv_viruss = g_list_append(indiv_viruss, virus->data);
+    return indiv_viruss;
+}
+
+static GList *macro_parseIndivViruss(xmlNode *node, GList *viruss) {
+    xmlNode *curNode;
+    GList *indiv_viruss = NULL;
+    for (curNode = node->children; curNode; curNode = curNode->next)
+        if (!xmlStrcasecmp(curNode->name, (const xmlChar *) TAG_VIRUS))
+            indiv_viruss = macro_appendIndivVirus(indiv_viruss, viruss, curNode);
+    return  ((GList*) indiv_viruss);
+}
+
+
 static void macro_parseIndividusSante(xmlNode *node, Sante *sante) {
     const gchar *property = (gchar *) xmlGetProp(
             node,
@@ -290,7 +315,7 @@ static void macro_parseIndividusSante(xmlNode *node, Sante *sante) {
 
 }
 
-static Individu *macro_parseSingleIndiv(xmlNode *node) {
+static Individu *macro_parseSingleIndiv(xmlNode *node, GList *viruss) {
     Individu *indiv = g_malloc(sizeof(Individu));
     const gchar *property = (gchar *) xmlGetProp(
             node,
@@ -315,7 +340,7 @@ static Individu *macro_parseSingleIndiv(xmlNode *node) {
     xmlNode *curNode;
     for (curNode = node->children; curNode; curNode = curNode->next) {
         if (!xmlStrcasecmp(curNode->name, (const xmlChar *) TAG_LIST_VIRUS))
-            indiv->VirusList = macro_parseViruss(curNode);
+            indiv->virusList = macro_parseIndivViruss(curNode, viruss);
         else if (!xmlStrcasecmp(curNode->name, (const xmlChar *) TAG_PERSON_SANTE))
             macro_parseIndividusSante(curNode, &(indiv->health));
     }
@@ -328,7 +353,7 @@ static void macro_parseIndividus(EnvInfo *envInfo, xmlNode *node) {
     xmlNode *curNode;
     for (curNode = node->children; curNode; curNode = curNode->next)
         if (!xmlStrcasecmp(curNode->name, (const xmlChar *) TAG_PERSON))
-            envInfo->indivs = g_list_append(envInfo->indivs, macro_parseSingleIndiv(curNode));
+            envInfo->indivs = g_list_append(envInfo->indivs, macro_parseSingleIndiv(curNode, envInfo->virus));
 
 }
 

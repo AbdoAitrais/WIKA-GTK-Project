@@ -188,7 +188,7 @@ void calculate_StatVirus(GList * individus,Stats * stat)
     GList *crtIndividu = individus;
     while(crtIndividu)
     {
-        GList * crtvirus = ((Individu *) g_object_get_data(G_OBJECT(crtIndividu->data),DATA_KEY_INDIVIDU))->VirusList;
+        GList * crtvirus = ((Individu *) g_object_get_data(G_OBJECT(crtIndividu->data),DATA_KEY_INDIVIDU))->virusList;
 
         while (crtvirus)
         {

@@ -128,7 +128,7 @@ int categorieDeVirus(Virus *V)
     if(V->prctMortel == 100) return (int)5;
 }
 /// association à chaque catégorie un réel
-float calculeLechampABC(Virus *V)
+float calculeVirusDamageField(Virus *V)
 {
     //int cas = categorieDeVirus(V);
     switch(categorieDeVirus(V))
@@ -144,7 +144,7 @@ float calculeLechampABC(Virus *V)
 
 int VirusExiste(Individu *P,Virus *V)
 {
-    GList *temp = P->VirusList;
+    GList *temp = P->virusList;
     while(temp)
     {
         if( !compare_virus(temp->data,V->nom))
@@ -159,7 +159,7 @@ int VirusExiste(Individu *P,Virus *V)
 void contaminationDesIndividus(GtkGrid* grid, Coord pos, Virus virus)
 {
     int i,j;
-    float x = (float)calculeLechampABC(&virus);
+    float x = (float) calculeVirusDamageField(&virus);
     ///On parcourt la cercle de contamination de première ligne jusqu'à le dernière
     for(i = (pos.x - virus.cercleDeContam); i < (pos.x + virus.cercleDeContam); i++)
     {
@@ -171,19 +171,19 @@ void contaminationDesIndividus(GtkGrid* grid, Coord pos, Virus virus)
         {
             if( j< 0 || j >= DEFAULT_MAX_COLS)/// if it is out of the table(grid)
                 continue;
-            GtkWidget *box = (GtkWidget*)gtk_grid_get_child_at(grid,i,j);
-            GtkWidget* image = ((GtkWidget*)gtk_bin_get_child(box));
+            GtkWidget *box = gtk_grid_get_child_at(grid,i,j);
+            GtkWidget* image = gtk_bin_get_child(GTK_BIN(box));
             if(image)
             {
                 Individu* individu = (Individu*)g_object_get_data(G_OBJECT(image),DATA_KEY_INDIVIDU);
                 if( !VirusExiste(individu,&virus))
                 {
                     /// set le virus au l'individu
-                    individu->VirusList = g_list_append(individu->VirusList,&virus);
+                    individu->virusList = g_list_append(individu->virusList, &virus);
                     individu->abc += x;
-                    individu->hp -=individu->abc;
+//                    individu->hp -=individu->abc;
                     if(individu->hp <=0)
-                        gtk_widget_hide(image);/// just to know it is the one until we decide how we kill a individu
+                        gtk_image_set_from_icon_name(image, "computer", GTK_ICON_SIZE_BUTTON);/// just to know it is the one until we decide how we kill a individu
                 }
             }
         }
