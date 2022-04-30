@@ -157,7 +157,7 @@ Individu *lire_Indiv(gpointer builder);
 
 static void macro_contaminateSingleIndiv(Individu *individu, Virus *virus) {
     gint result = g_list_index(individu->virusList, virus);
-    if (result > -1) {
+    if (result == -1) {
         individu->virusList = g_list_append(individu->virusList, virus);
         ///TODO :: Update abc value
         individu->abc += virus->damage;
@@ -197,12 +197,12 @@ static void contaminate_indivCercleSingleVrs(gpointer *virus, gpointer *img) {
 
             GtkWidget *box = (GtkWidget *) gtk_grid_get_child_at(GTK_GRID(grid), (gint)i, (gint)j);
 
-
             GtkWidget *image = ((GtkWidget *) gtk_bin_get_child(GTK_BIN(box)));
             if (image) {
-                Individu *individu = (Individu *) g_object_get_data(G_OBJECT(image), DATA_KEY_INDIVIDU);
 
+                Individu *individu = (Individu *) g_object_get_data(G_OBJECT(image), DATA_KEY_INDIVIDU);
                 macro_contaminateSingleIndiv(individu, (Virus *) virus);
+
 
             }
         }

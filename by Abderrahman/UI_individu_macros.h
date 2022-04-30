@@ -188,7 +188,6 @@ Individu *lire_Indiv(gpointer builder) {
 
 
 void afficher_virus(Virus *vir) {
-
     g_print("Le nom = %s\n", vir->nom);
     g_print("Le pourcentage de contamination = %f\n", vir->prctContam);
     g_print("Le taux de mortalite = %f\n", vir->prctMortel);
