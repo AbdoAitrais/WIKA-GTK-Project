@@ -208,12 +208,13 @@ void iterateSingleIndividu(gpointer data, gpointer user_data) {
 
     G_STATIC_ASSERT_EXPR(GTK_IS_IMAGE(data));
 
-    if (PLAY_MODE)
-        macro_moveGrid(data);
+   if (PLAY_MODE){
+
 
     Individu *individu = (Individu *) g_object_get_data(G_OBJECT(data), DATA_KEY_INDIVIDU);
     g_list_foreach(individu->virusList, (GFunc) contaminate_indivCercleSingleVrs, data);
-
+    macro_moveGrid(data);
+}
 }
 
 gboolean iterateIndividusList(gpointer data) {
