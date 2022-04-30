@@ -2,6 +2,7 @@
 <!-- Generated with glade 3.38.2 -->
 <interface>
   <requires lib="gtk+" version="3.24"/>
+  <object class="GtkTextBuffer" id="TextBuffTotalPopulation"/>
   <object class="GtkAdjustment" id="adjust1">
     <property name="lower">1</property>
     <property name="upper">100</property>
@@ -23,7 +24,18 @@
     <property name="step-increment">1</property>
     <property name="page-increment">10</property>
   </object>
-  <object class="GtkTextBuffer" id="textBuff"/>
+  <object class="GtkAdjustment" id="adjustCurrentPopulation">
+    <property name="lower">1</property>
+    <property name="upper">100</property>
+    <property name="step-increment">1</property>
+    <property name="page-increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustDeaths">
+    <property name="lower">1</property>
+    <property name="upper">100</property>
+    <property name="step-increment">1</property>
+    <property name="page-increment">10</property>
+  </object>
   <object class="GtkWindow" id="MainWindow">
     <property name="can-focus">False</property>
     <child>
@@ -374,16 +386,10 @@
                             <child>
                               <placeholder/>
                             </child>
-                            <child>
-                              <placeholder/>
-                            </child>
-                            <child>
-                              <placeholder/>
-                            </child>
                           </object>
                           <packing>
                             <property name="name">page2</property>
-                            <property name="title" translatable="yes">page2</property>
+                            <property name="title" translatable="yes">Acceuil</property>
                             <property name="icon-name">go-home</property>
                           </packing>
                         </child>
@@ -730,8 +736,6 @@
                                 <property name="width-request">100</property>
                                 <property name="visible">True</property>
                                 <property name="can-focus">True</property>
-                                <property name="margin-left">5</property>
-                                <property name="margin-right">5</property>
                                 <property name="margin-start">5</property>
                                 <property name="margin-end">5</property>
                                 <property name="adjustment">adjust1</property>
@@ -761,8 +765,6 @@
                                 <property name="width-request">100</property>
                                 <property name="visible">True</property>
                                 <property name="can-focus">True</property>
-                                <property name="margin-left">5</property>
-                                <property name="margin-right">5</property>
                                 <property name="margin-start">5</property>
                                 <property name="margin-end">5</property>
                                 <property name="adjustment">adjust2</property>
@@ -793,8 +795,6 @@
                                 <property name="width-request">100</property>
                                 <property name="visible">True</property>
                                 <property name="can-focus">True</property>
-                                <property name="margin-left">5</property>
-                                <property name="margin-right">5</property>
                                 <property name="margin-start">5</property>
                                 <property name="margin-end">5</property>
                                 <property name="text" translatable="yes">3</property>
@@ -825,8 +825,6 @@
                               <object class="GtkEntry" id="entryNomVirus">
                                 <property name="visible">True</property>
                                 <property name="can-focus">True</property>
-                                <property name="margin-left">5</property>
-                                <property name="margin-right">5</property>
                                 <property name="margin-start">5</property>
                                 <property name="margin-end">5</property>
                                 <property name="placeholder-text" translatable="yes">Entrez le nom</property>
@@ -864,16 +862,109 @@
                         </child>
                         <child>
                           <object class="GtkBox" id="GrandSonBoxStats">
+                            <property name="width-request">200</property>
                             <property name="visible">True</property>
                             <property name="can-focus">False</property>
                             <property name="orientation">vertical</property>
                             <child>
-                              <placeholder/>
+                              <object class="GtkLabel" id="CurrentPopulation">
+                                <property name="visible">True</property>
+                                <property name="can-focus">False</property>
+                                <property name="label" translatable="yes">Current Population :</property>
+                                <property name="xalign">0.11999999731779099</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">False</property>
+                                <property name="padding">6</property>
+                                <property name="position">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkScale" id="scaleCurrentPopulation">
+                                <property name="width-request">100</property>
+                                <property name="visible">True</property>
+                                <property name="sensitive">False</property>
+                                <property name="can-focus">True</property>
+                                <property name="margin-start">5</property>
+                                <property name="margin-end">5</property>
+                                <property name="adjustment">adjustCurrentPopulation</property>
+                                <property name="round-digits">1</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">1</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkLabel" id="Deaths">
+                                <property name="visible">True</property>
+                                <property name="can-focus">False</property>
+                                <property name="label" translatable="yes">Deaths :</property>
+                                <property name="xalign">0.11999999731779099</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">False</property>
+                                <property name="padding">6</property>
+                                <property name="position">2</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkScale" id="scaleDeaths">
+                                <property name="width-request">100</property>
+                                <property name="visible">True</property>
+                                <property name="sensitive">False</property>
+                                <property name="can-focus">True</property>
+                                <property name="margin-start">5</property>
+                                <property name="margin-end">5</property>
+                                <property name="adjustment">adjustDeaths</property>
+                                <property name="round-digits">1</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">3</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkLabel" id="TotalPopulation">
+                                <property name="visible">True</property>
+                                <property name="can-focus">False</property>
+                                <property name="label" translatable="yes">Total Population :</property>
+                                <property name="xalign">0.11999999731779099</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">False</property>
+                                <property name="padding">6</property>
+                                <property name="position">4</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkTextView" id="TextViewTotalPopulation">
+                                <property name="height-request">40</property>
+                                <property name="visible">True</property>
+                                <property name="can-focus">True</property>
+                                <property name="margin-start">5</property>
+                                <property name="margin-end">5</property>
+                                <property name="left-margin">10</property>
+                                <property name="right-margin">10</property>
+                                <property name="top-margin">5</property>
+                                <property name="bottom-margin">5</property>
+                                <property name="buffer">TextBuffTotalPopulation</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">5</property>
+                              </packing>
                             </child>
                           </object>
                           <packing>
                             <property name="name">page3</property>
-                            <property name="title" translatable="yes">page3</property>
+                            <property name="title" translatable="yes">Statistiques</property>
                             <property name="icon-name">edit-paste</property>
                             <property name="position">3</property>
                           </packing>
@@ -898,12 +989,14 @@
           </packing>
         </child>
         <child>
-          <object class="GtkTextView" id="TextView">
-            <property name="width-request">79</property>
-            <property name="height-request">-1</property>
+          <object class="GtkStatusbar" id="StatusBar">
             <property name="visible">True</property>
-            <property name="can-focus">True</property>
-            <property name="buffer">textBuff</property>
+            <property name="can-focus">False</property>
+            <property name="margin-start">10</property>
+            <property name="margin-end">10</property>
+            <property name="margin-top">6</property>
+            <property name="margin-bottom">6</property>
+            <property name="spacing">2</property>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -914,4 +1007,5 @@
       </object>
     </child>
   </object>
+  <object class="GtkTextBuffer" id="textBuff"/>
 </interface>

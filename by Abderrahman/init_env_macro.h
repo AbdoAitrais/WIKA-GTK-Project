@@ -12,6 +12,7 @@
 #include "../by ismail/contaminate_utils.h"
 #include "Statistics.h"
 
+
 typedef struct {
     gint	 baselinerow;	       /*The row to align the to the baseline
                                     when valign is GTK_ALIGN_BASELINE.Default value: 0*/
@@ -80,6 +81,7 @@ gboolean add_individu (GtkWidget *widget,GdkEvent *event,gpointer builder)
 
     GtkWidget *image = gtk_image_new_from_file ("person.png");
     GtkWidget *window = GTK_WIDGET(gtk_builder_get_object (builder, "MainWindow"));
+
     gtk_container_add(GTK_CONTAINER (widget),image);
 
     gtk_widget_show(image);
@@ -88,23 +90,26 @@ gboolean add_individu (GtkWidget *widget,GdkEvent *event,gpointer builder)
                             GTK_WIDGET(widget), "left-attach",
                             &left, "top-attach", &top, NULL);
     g_print("\nadded image  top = %d, left = %d.\n", top, left);
-    /**added by ismail **/
+    /** added by ismail **/
     Individu *indiv = lire_Indiv(builder);
     indiv->hp = calculerHPdeIndividu(*indiv);
     indiv->abc = -0.01;
-    //**added by ismail**/
+    /** added by ismail **/
+
     g_object_set_data((GObject *) image,DATA_KEY_INDIVIDU,indiv);
     inserer_data_GObject(G_OBJECT(window),DATA_KEY_LIST_INDIVIDU,image);
     afficher_individu(indiv);// juste pour savoir est-ce que les calcules ont bien fait
 
-    calculate_stats(builder,((Stats *) g_object_get_data(builder,DATA_STATS)));
+    Stats * stat = ((Stats *) g_object_get_data(builder,DATA_STATS));
+    calculate_Stats_Individu(g_object_get_data(G_OBJECT(window),DATA_KEY_LIST_INDIVIDU),indiv,stat);
+    g_object_set_data(builder,DATA_STATS,stat);
     //Stats * stat = calculate_stats(builder);
     afficher_Stats(((Stats *) g_object_get_data(builder,DATA_STATS)));
-
+    show_Stats(builder,((Stats *) g_object_get_data(builder,DATA_STATS)));
 
 
     //TODO :: Instead of running a timeout fro the individu add it to the list
-    // g_timeout_add(2000,macro_moveGrid,image);
+    //g_timeout_add(2000, (GSourceFunc) macro_moveGrid, image);
     return FALSE;
 }
 
