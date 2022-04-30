@@ -902,10 +902,10 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkLabel" id="Deaths">
+                              <object class="GtkLabel" id="deaths">
                                 <property name="visible">True</property>
                                 <property name="can-focus">False</property>
-                                <property name="label" translatable="yes">Deaths :</property>
+                                <property name="label" translatable="yes">deaths :</property>
                                 <property name="xalign">0.11999999731779099</property>
                               </object>
                               <packing>

@@ -160,7 +160,7 @@ gint VirusExiste(Individu *individu, Virus *virus) {
                     /// set le virus au l'individu
                     individu->virusList = g_list_append(individu->virusList, virus);
                     individu->abc += x;
-//                    individu->hp -=individu->abc;
+                    //individu->hp -=individu->abc;
                     if (individu->hp <= 0)
                         gtk_image_set_from_icon_name(image, "computer",
                                                      GTK_ICON_SIZE_BUTTON);/// just to know it is the one until we decide how we kill a individu

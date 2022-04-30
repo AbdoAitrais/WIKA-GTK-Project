@@ -54,7 +54,6 @@ void set_css(gpointer builder) {
     scale2 = GTK_WIDGET(gtk_builder_get_object(builder, "scale2"));
 
 
-
     loadCSS(fenetre_principale);
 
     gtk_style_context_add_class(gtk_widget_get_style_context(fenetre_principale), "class1");
@@ -181,12 +180,12 @@ static void contaminate_indivCercleSingleVrs(gpointer *virus, gpointer *img) {
     {
         if (leftBorder < 0)
             leftBorder = 0;
-        if (rightBorder > DEFAULT_MAX_ROWS-1)
-            rightBorder = DEFAULT_MAX_ROWS-1;
+        if (rightBorder > DEFAULT_MAX_ROWS - 1)
+            rightBorder = DEFAULT_MAX_ROWS - 1;
         if (bottomBorder < 0)
             bottomBorder = 0;
-        if (topBorder > DEFAULT_MAX_COLS-1)
-            topBorder = DEFAULT_MAX_COLS-1;
+        if (topBorder > DEFAULT_MAX_COLS - 1)
+            topBorder = DEFAULT_MAX_COLS - 1;
     }
 
     for (i = leftBorder; i < rightBorder; i++) {
@@ -195,7 +194,7 @@ static void contaminate_indivCercleSingleVrs(gpointer *virus, gpointer *img) {
                 continue;
             g_assert(GTK_IS_GRID(grid));
 
-            GtkWidget *box = (GtkWidget *) gtk_grid_get_child_at(GTK_GRID(grid), (gint)i, (gint)j);
+            GtkWidget *box = (GtkWidget *) gtk_grid_get_child_at(GTK_GRID(grid), (gint) i, (gint) j);
 
 
             GtkWidget *image = ((GtkWidget *) gtk_bin_get_child(GTK_BIN(box)));
@@ -210,29 +209,43 @@ static void contaminate_indivCercleSingleVrs(gpointer *virus, gpointer *img) {
 }
 
 
-void iterateSingleIndividu(gpointer data, gpointer user_data) {
+void iterateSingleIndividu(gpointer data, gpointer builder) {
 
+    Stats *stat = ((Stats *) g_object_get_data(builder, DATA_KEY_STATS));
 
     if (PLAY_MODE) {
-        macro_moveGrid(data);
-
         Individu *individu = (Individu *) g_object_get_data(G_OBJECT(data), DATA_KEY_INDIVIDU);
-        individu->hp += individu->abc;
-        g_list_foreach(individu->virusList, (GFunc) contaminate_indivCercleSingleVrs, data);
-        if (individu->hp <= 0)
-                gtk_image_set_from_icon_name(data, "computer",
-                                             GTK_ICON_SIZE_BUTTON);
+
+        if (individu->hp == -99) {
+
+        } else if (individu->hp <= 0) {
+            gtk_image_set_from_icon_name(data, "computer",
+                                         GTK_ICON_SIZE_BUTTON);
+            stat->deaths++;
+            show_Stats(builder,stat);
+            individu->hp = -99;
+
+        } else {
+            macro_moveGrid(data);
+
+
+            individu->hp += individu->abc;
+            g_list_foreach(individu->virusList, (GFunc) contaminate_indivCercleSingleVrs, data);
+        }
+
+
     }
 }
 
-gboolean iterateIndividusList(gpointer data) {
-    GTK_IS_WIDGET(data);
+gboolean iterateIndividusList(gpointer builder) {
+    GTK_IS_WIDGET(builder);
+    GtkWidget *window = GTK_WIDGET(gtk_builder_get_object(builder, BUILDER_ID_MAIN_WINDOW));
 
-    GList *pers = g_object_get_data(data, DATA_KEY_LIST_INDIVIDU);
+    GList *pers = g_object_get_data(G_OBJECT(window), DATA_KEY_LIST_INDIVIDU);
 
-    g_list_foreach(pers, iterateSingleIndividu, NULL);
+    g_list_foreach(pers, iterateSingleIndividu, builder);
 
-    g_timeout_add(PLAY_SPEED, iterateIndividusList, data);
+    g_timeout_add(PLAY_SPEED, iterateIndividusList, builder);
 
     return FALSE;
 }

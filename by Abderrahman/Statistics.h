@@ -126,7 +126,7 @@ typedef struct{
 }StatVirus;
 
 typedef struct{
-    guint currentPopulation;
+    guint deaths;
     guint totalPopulation;
     GList * virusInfection;
 }Stats;
@@ -231,7 +231,7 @@ Stats * init_Stats()
         exit(0);
     }
     stat->virusInfection = NULL;
-    stat->currentPopulation = 0;
+    stat->deaths = 0;
     stat->totalPopulation = 0;
 
     return ((Stats *) stat);
@@ -240,23 +240,22 @@ Stats * init_Stats()
 void init_save_Stats(gpointer builder)
 {
     Stats * stat = init_Stats();
-    if(g_object_get_data(builder,DATA_STATS))
+    if(g_object_get_data(builder, DATA_KEY_STATS))
         return;
-    g_object_set_data(builder,DATA_STATS,stat);
+    g_object_set_data(builder, DATA_KEY_STATS, stat);
 }
 
-Stats * calculate_stats(gpointer builder,Stats *stat)
-{
-    GtkWidget * window = GTK_WIDGET(gtk_builder_get_object(builder,"MainWindow"));
-    GList * Individus = g_object_get_data(G_OBJECT(window),DATA_KEY_LIST_INDIVIDU);
-    reset_StatVirus_Stats(stat);
-    if(stat)
-    {
-        stat->currentPopulation = sum_GList(Individus);
-        calculate_StatVirus(Individus,stat);
-    }
-    return stat;
-}
+//Stats * calculate_stats(gpointer builder,Stats *stat)
+//{
+//    GtkWidget * window = GTK_WIDGET(gtk_builder_get_object(builder,"MainWindow"));
+//    GList * Individus = g_object_get_data(G_OBJECT(window),DATA_KEY_LIST_INDIVIDU);
+//    reset_StatVirus_Stats(stat);
+//    if(stat)
+//    {
+//        calculate_StatVirus(Individus,stat);
+//    }
+//    return stat;
+//}
 
 void afficher_StatVirus(GList * Statv)
 {
@@ -276,8 +275,8 @@ void afficher_Stats(Stats * stat)
     if(stat)
     {
         printf("\nTotal Population      : %d",stat->totalPopulation);
-        printf("\nCurrent Population    : %d",stat->currentPopulation);
-        printf("\nTotal Deaths          : %d",(stat->totalPopulation - stat->currentPopulation));
+        printf("\nCurrent Population    : %d",(stat->totalPopulation - stat->deaths));
+        printf("\nTotal deaths          : %d",stat->deaths);
         afficher_StatVirus(stat->virusInfection);
     }
 }
@@ -359,7 +358,6 @@ void calculate_Stats_Individu(GList * indiviusList, Individu * indiv, Stats * st
     if(stat)
     {
         stat->totalPopulation++;
-        stat->currentPopulation = sum_GList(indiviusList);
         calculate_StatVirus_Individu(indiv,stat);
     }
 }
@@ -370,20 +368,20 @@ void show_Stats(gpointer builder, Stats * stat)
     GtkAdjustment * adjustDeaths = GTK_ADJUSTMENT(gtk_builder_get_object(builder,"adjustDeaths"));
     GtkWidget * label = GTK_WIDGET(gtk_builder_get_object(builder,"TotalpopulationLabel"));
 
-    gchar * population;
-    sprintf(population, "%d", stat->totalPopulation);
+//    gchar population[20];
+//    sprintf(population, "%d", stat->totalPopulation);
 //    printf("\nTotal Population = %s",population);
 
 
     gtk_adjustment_set_value(adjustCurrPop,((gdouble)
-            (((gdouble)stat->currentPopulation/(gdouble)stat->totalPopulation)*100))
+            (((gdouble) (stat->totalPopulation - stat->deaths) / (gdouble)stat->totalPopulation) * 100))
     );
 
     gtk_adjustment_set_value(adjustDeaths,((gdouble)
-            (((gdouble)(stat->totalPopulation - stat->currentPopulation)/(gdouble)stat->totalPopulation)*100))
+            (((gdouble)stat->deaths / (gdouble)stat->totalPopulation) * 100))
     );
 
-    gtk_label_set_text(GTK_LABEL(label),population);
+    gtk_label_set_text(GTK_LABEL(label), g_strdup_printf("%d", stat->totalPopulation));
     gtk_widget_show(label);
 
 }

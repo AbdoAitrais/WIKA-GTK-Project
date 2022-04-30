@@ -109,7 +109,7 @@ int main(int argc, char *argv [])
     gtk_widget_show_all (fenetre_principale);
 
     /// RUN ENV MOVEMENTS
-    g_timeout_add(PLAY_SPEED, iterateIndividusList, fenetre_principale);
+    g_timeout_add(PLAY_SPEED, iterateIndividusList, builder);
 
     gtk_main();
 

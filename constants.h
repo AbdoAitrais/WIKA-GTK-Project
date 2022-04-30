@@ -10,7 +10,8 @@
 /// key of individu list in window storage
 #define DATA_KEY_LIST_INDIVIDU "ListIndividus"
 #define DATA_KEY_LIST_VIRUS "listVirus"
-#define DATA_STATS "stats"
+#define DATA_KEY_STATS "stats"
+#define BUILDER_ID_MAIN_WINDOW "MainWindow"
 
 
 #define DEFAULT_MAX_ROWS 70

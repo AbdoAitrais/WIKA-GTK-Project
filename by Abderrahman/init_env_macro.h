@@ -111,12 +111,12 @@ gboolean add_individu (GtkWidget *widget, GdkEvent *event, gpointer builder) {
     inserer_data_GObject(G_OBJECT(window),DATA_KEY_LIST_INDIVIDU,image);
     afficher_individu(indiv);// juste pour savoir est-ce que les calcules ont bien fait
 
-    Stats * stat = ((Stats *) g_object_get_data(builder,DATA_STATS));
+    Stats * stat = ((Stats *) g_object_get_data(builder, DATA_KEY_STATS));
     calculate_Stats_Individu(g_object_get_data(G_OBJECT(window),DATA_KEY_LIST_INDIVIDU),indiv,stat);
-    g_object_set_data(builder,DATA_STATS,stat);
+    //g_object_set_data(builder, DATA_KEY_STATS, stat);
     //Stats * stat = calculate_stats(builder);
-    afficher_Stats(((Stats *) g_object_get_data(builder,DATA_STATS)));
-    show_Stats(builder,((Stats *) g_object_get_data(builder,DATA_STATS)));
+    afficher_Stats(stat);
+    show_Stats(builder,stat);
 
 
 
