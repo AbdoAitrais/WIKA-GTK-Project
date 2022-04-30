@@ -4,7 +4,7 @@
 
 #ifndef MAIN_C_GOBJECT_UTILS_H
 #define MAIN_C_GOBJECT_UTILS_H
-#include <gtk/gtk.h>
+#include "structures.h"
 
 void inserer_data_GObject(GObject * object,gchar * key,gpointer data)
 {
@@ -16,6 +16,10 @@ void inserer_data_GObject(GObject * object,gchar * key,gpointer data)
 
 }
 
+gint macro_find_compareVirusByName(gpointer virus, gpointer nom) {
+    Virus *v = virus;
+    return g_ascii_strcasecmp(v->nom, nom);
+}
 
 
 #endif //MAIN_C_GOBJECT_UTILS_H
