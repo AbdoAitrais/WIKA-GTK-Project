@@ -51,6 +51,7 @@
 
 
 gboolean PLAY_MODE = TRUE;
+gboolean ADD_INDIVIDU_MODE = TRUE;
 guint PLAY_SPEED = 600;
 
 

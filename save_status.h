@@ -206,7 +206,7 @@ static GList *test_sample_indiv_list() {
 }
 
 
-static EnvInfo *macro_initEnvInfo() {
+EnvInfo *macro_initEnvInfo() {
     EnvInfo *envInfo = g_malloc(sizeof(EnvInfo));
     envInfo->virus = NULL;
     envInfo->indivs = NULL;

@@ -70,12 +70,24 @@ GtkWidget *macro_createGrid(GridProps props) {
     return((GtkWidget *)Grid);
 }
 
-gboolean add_individu (GtkWidget *widget,GdkEvent *event,gpointer builder)
-{
 
-    if (gtk_bin_get_child((GTK_BIN(widget)))) {
-        g_printerr("\nAlready has child\n");
+
+gboolean add_individu (GtkWidget *widget, GdkEvent *event, gpointer builder) {
+    if (!ADD_INDIVIDU_MODE)
         return FALSE;
+
+    GtkWidget *img;
+    if ((img = gtk_bin_get_child((GTK_BIN(widget))))) {
+        g_printerr("\n***************\n");
+
+        g_printerr("\nAlready has child\n");
+
+        Individu *individu = (Individu *) g_object_get_data(G_OBJECT(img), DATA_KEY_INDIVIDU);
+        afficher_individu(individu);
+
+        g_printerr("\n***************\n");
+
+        return TRUE;
     }
 
     GtkWidget *image = gtk_image_new_from_file ("person.png");
@@ -92,7 +104,7 @@ gboolean add_individu (GtkWidget *widget,GdkEvent *event,gpointer builder)
     /** added by ismail **/
     Individu *indiv = lire_Indiv(builder);
     indiv->hp = calculerHPdeIndividu(*indiv);
-    indiv->abc = -0.01;
+    indiv->abc = -0.1;
     /** added by ismail **/
 
     g_object_set_data((GObject *) image,DATA_KEY_INDIVIDU,indiv);
@@ -107,8 +119,7 @@ gboolean add_individu (GtkWidget *widget,GdkEvent *event,gpointer builder)
     show_Stats(builder,((Stats *) g_object_get_data(builder,DATA_STATS)));
 
 
-    //TODO :: Instead of running a timeout fro the individu add it to the list
-    //g_timeout_add(2000, (GSourceFunc) macro_moveGrid, image);
+
     return FALSE;
 }
 

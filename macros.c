@@ -212,13 +212,12 @@ static void contaminate_indivCercleSingleVrs(gpointer *virus, gpointer *img) {
 
 void iterateSingleIndividu(gpointer data, gpointer user_data) {
 
-    G_STATIC_ASSERT_EXPR(GTK_IS_IMAGE(data));
 
     if (PLAY_MODE) {
         macro_moveGrid(data);
 
         Individu *individu = (Individu *) g_object_get_data(G_OBJECT(data), DATA_KEY_INDIVIDU);
-        individu->hp -= individu->abc;
+        individu->hp += individu->abc;
         g_list_foreach(individu->virusList, (GFunc) contaminate_indivCercleSingleVrs, data);
         if (individu->hp <= 0)
                 gtk_image_set_from_icon_name(data, "computer",

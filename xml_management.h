@@ -7,8 +7,6 @@
 
 #include <libxml2/libxml/parser.h>
 #include <libxml2/libxml/tree.h>
-#include <gtk/gtk.h>
-#include "constants.h"
 #include "by Abderrahman/structures.h"
 
 
