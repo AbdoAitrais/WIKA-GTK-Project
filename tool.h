@@ -16,15 +16,13 @@ typedef struct {
 
 void pause_game(GtkWidget *btn, maStr *info) {
     if (info->check == 0) {
-        PLAY_MODE = FALSE;
-        g_source_remove(info->id);
-        PLAY_MODE = FALSE;
-        info->check = 1;
+//        PLAY_MODE = FALSE;
+//        g_source_remove(info->id);
+//        info->check = 1;
 
         //gtk_widget_set_sensitive(btn,FALSE);
     }
-
-
+    PLAY_MODE = FALSE;
 }
 
 void start_game(GtkWidget *btn, maStr *info) {
@@ -64,12 +62,12 @@ void limit_speed() {
 void decreaseSpeed(GtkWidget *btn, maStr *info) {
 
     gtk_widget_set_sensitive(btn, TRUE);
-    if (info->speed > 0) {
+    if (/*info->speed*/PLAY_SPEED > 0) {
         info->speed = (info->speed - ((gint) 100));
 
-
-        pause_game(btn, info);
-        start_game(btn, info);
+        PLAY_SPEED -= 100;
+//        pause_game(btn, info);
+//        start_game(btn, info);
     } else {
         limit_speed();
         g_print("\n limit of speed\n");
@@ -78,11 +76,10 @@ void decreaseSpeed(GtkWidget *btn, maStr *info) {
 }
 
 void increaseSpeed(GtkWidget *btn, maStr *info) {
-    info->speed = (info->speed + ((gint) 100));
-    pause_game(btn, info);
-    start_game(btn, info);
-
-
+//    info->speed = (info->speed + ((gint) 100));
+//    pause_game(btn, info);
+//    start_game(btn, info);
+    PLAY_SPEED += 100;
 }
 
 

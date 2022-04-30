@@ -165,7 +165,7 @@ static void macro_contaminateSingleIndiv(Individu *individu, Virus *virus) {
 }
 
 static void contaminate_indivCercleSingleVrs(gpointer *virus, gpointer *img) {
-    guint i, j;
+    gint i, j;
     guint left, top;
     GtkWidget *imgBox = gtk_widget_get_parent(GTK_WIDGET(img)),
             *grid = gtk_widget_get_parent(GTK_WIDGET(imgBox));
@@ -175,23 +175,33 @@ static void contaminate_indivCercleSingleVrs(gpointer *virus, gpointer *img) {
                             &left, "top-attach", &top, NULL);
 
     guint leftBorder = left - (((Virus *) virus)->cercleDeContam),
-            rightBorder, topBorder, bottomBorder;
+            rightBorder = left + (((Virus *) virus)->cercleDeContam),
+            topBorder = top + (((Virus *) virus)->cercleDeContam),
+            bottomBorder = top - (((Virus *) virus)->cercleDeContam);
     {
         if (leftBorder < 0)
             leftBorder = 0;
-        if (rightBorder > DEFAULT_MAX_ROWS)
-            rightBorder = DEFAULT_MAX_ROWS;
-        if (topBorder > 0)
-            topBorder = 0;
-        if (bottomBorder > DEFAULT_MAX_COLS)
-            bottomBorder = DEFAULT_MAX_COLS;
+        if (rightBorder > DEFAULT_MAX_ROWS-1)
+            rightBorder = DEFAULT_MAX_ROWS-1;
+        if (bottomBorder < 0)
+            bottomBorder = 0;
+        if (topBorder > DEFAULT_MAX_COLS-1)
+            topBorder = DEFAULT_MAX_COLS-1;
     }
 
     for (i = leftBorder; i < rightBorder; i++) {
-        for (j = topBorder; j < bottomBorder; j++) {
+        for (j = bottomBorder; j < topBorder; j++) {
             if (i == left && j == top)
                 continue;
-            GtkWidget *box = (GtkWidget *) gtk_grid_get_child_at(GTK_GRID(grid), i, j);
+            g_assert(GTK_IS_GRID(grid));
+
+            GtkWidget *box = (GtkWidget *) gtk_grid_get_child_at(GTK_GRID(grid), (gint)i, (gint)j);
+            g_printerr("\n***********************");
+            g_printerr("\n type of the box : %s", g_type_name_from_instance(&((GObject *)box)->g_type_instance));
+            g_printerr("\n***********************\n");
+            g_assert(GTK_IS_EVENT_BOX(box));
+            g_assert(GTK_IS_BIN(box));
+
             GtkWidget *image = ((GtkWidget *) gtk_bin_get_child(GTK_BIN(box)));
             if (image) {
                 Individu *individu = (Individu *) g_object_get_data(G_OBJECT(image), DATA_KEY_INDIVIDU);
@@ -212,6 +222,7 @@ void iterateSingleIndividu(gpointer data, gpointer user_data) {
         macro_moveGrid(data);
 
         Individu *individu = (Individu *) g_object_get_data(G_OBJECT(data), DATA_KEY_INDIVIDU);
+        individu->hp -= individu->abc;
         g_list_foreach(individu->virusList, (GFunc) contaminate_indivCercleSingleVrs, data);
         if (individu->hp <= 0)
                 gtk_image_set_from_icon_name(data, "computer",
@@ -226,12 +237,9 @@ gboolean iterateIndividusList(gpointer data) {
 
     g_list_foreach(pers, iterateSingleIndividu, NULL);
 
-/*
-    if (PLAY_MODE)
-        g_timeout_add(600, iterateIndividusList, data);
+    g_timeout_add(PLAY_SPEED, iterateIndividusList, data);
 
     return FALSE;
-    */
 }
 
 
