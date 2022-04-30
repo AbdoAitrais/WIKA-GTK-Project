@@ -2,7 +2,7 @@
 #include <stdlib.h>
 
 #include <gtk/gtk.h>
-#include "macros.c"
+//#include "macros.c"
 #include "by Abderrahman/UI_individu_macros.h"
 #include "by Abderrahman/init_env_macro.h"
 #include "tool.h"
