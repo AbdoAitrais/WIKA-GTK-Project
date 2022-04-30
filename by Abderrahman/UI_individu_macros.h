@@ -146,7 +146,7 @@ Individu *lire_Indiv(gpointer builder) {
     Individu *individu = (Individu *) g_malloc(sizeof(Individu));
     GtkRadioButton *radioButton = GTK_RADIO_BUTTON(gtk_builder_get_object(builder, "radioButtonHomme"));
     GSList *radioGrp = gtk_radio_button_get_group(radioButton);
-    gchar *genre = (gchar *) g_malloc(sizeof(gchar));
+    gchar *genre;
     GtkWidget *comboBoxGen = GTK_WIDGET(gtk_builder_get_object(builder, "comboBoxGenitiques"));
     GtkWidget *comboBoxTens = GTK_WIDGET(gtk_builder_get_object(builder, "comboBoxTension"));
     GtkWidget *comboBoxDiab = GTK_WIDGET(gtk_builder_get_object(builder, "comboBoxDiabete"));

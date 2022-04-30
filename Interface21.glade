@@ -481,6 +481,7 @@
                                 <property name="margin-right">5</property>
                                 <property name="margin-start">5</property>
                                 <property name="margin-end">5</property>
+                                <property name="active">0</property>
                                 <property name="has-entry">True</property>
                                 <items>
                                   <item id="faible" translatable="yes">GENETIQUEMENT_FAIBLE</item>
@@ -509,6 +510,7 @@
                                 <property name="margin-right">5</property>
                                 <property name="margin-start">5</property>
                                 <property name="margin-end">5</property>
+                                <property name="active">0</property>
                                 <property name="has-entry">True</property>
                                 <items>
                                   <item id="tensionNormal" translatable="yes">ARTERIELLE_NORMAL</item>
@@ -536,6 +538,7 @@
                                 <property name="margin-right">5</property>
                                 <property name="margin-start">5</property>
                                 <property name="margin-end">5</property>
+                                <property name="active">0</property>
                                 <property name="has-entry">True</property>
                                 <items>
                                   <item id="diabeteNormal" translatable="yes">DIABETE_NORMAL</item>
@@ -563,6 +566,7 @@
                                 <property name="margin-right">5</property>
                                 <property name="margin-start">5</property>
                                 <property name="margin-end">5</property>
+                                <property name="active">0</property>
                                 <property name="has-entry">True</property>
                                 <items>
                                   <item id="cardiacNormal" translatable="yes">CARDIAQUE_NORMAL</item>
@@ -590,6 +594,7 @@
                                 <property name="margin-right">5</property>
                                 <property name="margin-start">5</property>
                                 <property name="margin-end">5</property>
+                                <property name="active">0</property>
                                 <property name="has-entry">True</property>
                                 <items>
                                   <item id="poumonsSein" translatable="yes">POUMONS_SEIN</item>
@@ -680,6 +685,7 @@
                                 <property name="margin-right">5</property>
                                 <property name="margin-start">5</property>
                                 <property name="margin-end">5</property>
+                                <property name="active">2</property>
                                 <property name="has-entry">True</property>
                                 <items>
                                   <item id="12" translatable="yes">inférieur à 12 ans</item>
