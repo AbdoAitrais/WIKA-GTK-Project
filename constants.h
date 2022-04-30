@@ -49,6 +49,7 @@
 
 
 gboolean PLAY_MODE = TRUE;
+guint PLAY_SPEED = 600;
 int SEQUENCE_ID_VALUE = 0;
 
 

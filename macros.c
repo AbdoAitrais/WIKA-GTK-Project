@@ -10,8 +10,7 @@
 
 /*********** project functions ****************/
 
-void loadCSS(GtkWidget *window)
-{
+void loadCSS(GtkWidget *window) {
     GFile *css_gFile = g_file_new_for_path("style.css");
     GtkCssProvider *cssProvider = gtk_css_provider_new();
 
@@ -22,8 +21,7 @@ void loadCSS(GtkWidget *window)
                                               GTK_STYLE_PROVIDER_PRIORITY_USER);
 }
 
-void set_css(gpointer builder)
-{
+void set_css(gpointer builder) {
     GtkWidget *fenetre_principale = NULL;
     GtkWidget *menu = NULL;
     GtkWidget *stack = NULL;
@@ -41,21 +39,20 @@ void set_css(gpointer builder)
     GtkWidget *button = NULL;
 
 
-    fenetre_principale = GTK_WIDGET(gtk_builder_get_object (builder, "MainWindow"));
-    menu = GTK_WIDGET(gtk_builder_get_object (builder, "MenuBar"));
+    fenetre_principale = GTK_WIDGET(gtk_builder_get_object(builder, "MainWindow"));
+    menu = GTK_WIDGET(gtk_builder_get_object(builder, "MenuBar"));
 
-    button = GTK_WIDGET(gtk_builder_get_object (builder, "subutton"));
-    stack = GTK_WIDGET(gtk_builder_get_object (builder, "stack"));
-    switcher = GTK_WIDGET(gtk_builder_get_object (builder, "switch"));
-    comboBox1 = GTK_WIDGET(gtk_builder_get_object (builder, "comboBoxGenitiques"));
-    comboBox2 = GTK_WIDGET(gtk_builder_get_object (builder, "comboBoxTension"));
-    comboBox3 = GTK_WIDGET(gtk_builder_get_object (builder, "comboBoxDiabete"));
-    comboBox4 = GTK_WIDGET(gtk_builder_get_object (builder, "comboBoxCardiaque"));
-    comboBox5 = GTK_WIDGET(gtk_builder_get_object (builder, "comboBoxPoumons"));
-    scale1 = GTK_WIDGET(gtk_builder_get_object (builder, "scale1"));
-    scale2 = GTK_WIDGET(gtk_builder_get_object (builder, "scale2"));
-    textView1 = GTK_WIDGET(gtk_builder_get_object (builder, "TextView"));
-
+    button = GTK_WIDGET(gtk_builder_get_object(builder, "subutton"));
+    stack = GTK_WIDGET(gtk_builder_get_object(builder, "stack"));
+    switcher = GTK_WIDGET(gtk_builder_get_object(builder, "switch"));
+    comboBox1 = GTK_WIDGET(gtk_builder_get_object(builder, "comboBoxGenitiques"));
+    comboBox2 = GTK_WIDGET(gtk_builder_get_object(builder, "comboBoxTension"));
+    comboBox3 = GTK_WIDGET(gtk_builder_get_object(builder, "comboBoxDiabete"));
+    comboBox4 = GTK_WIDGET(gtk_builder_get_object(builder, "comboBoxCardiaque"));
+    comboBox5 = GTK_WIDGET(gtk_builder_get_object(builder, "comboBoxPoumons"));
+    scale1 = GTK_WIDGET(gtk_builder_get_object(builder, "scale1"));
+    scale2 = GTK_WIDGET(gtk_builder_get_object(builder, "scale2"));
+    textView1 = GTK_WIDGET(gtk_builder_get_object(builder, "TextView"));
 
 
     loadCSS(fenetre_principale);
@@ -155,8 +152,6 @@ gboolean macro_moveGrid(GtkImage *image) {
 }
 
 
-
-
 Individu *lire_Indiv(gpointer builder);
 
 
@@ -170,16 +165,16 @@ static void macro_contaminateSingleIndiv(Individu *individu, Virus *virus) {
 }
 
 static void contaminate_indivCercleSingleVrs(gpointer *virus, gpointer *img) {
-    guint i,j;
+    guint i, j;
     guint left, top;
     GtkWidget *imgBox = gtk_widget_get_parent(GTK_WIDGET(img)),
-                *grid = gtk_widget_get_parent(GTK_WIDGET(imgBox));
+            *grid = gtk_widget_get_parent(GTK_WIDGET(imgBox));
 
     gtk_container_child_get(GTK_CONTAINER(grid),
                             GTK_WIDGET(imgBox), "left-attach",
                             &left, "top-attach", &top, NULL);
 
-    guint leftBorder = left - (((Virus*)virus)->cercleDeContam),
+    guint leftBorder = left - (((Virus *) virus)->cercleDeContam),
             rightBorder, topBorder, bottomBorder;
     {
         if (leftBorder < 0)
@@ -192,15 +187,14 @@ static void contaminate_indivCercleSingleVrs(gpointer *virus, gpointer *img) {
             bottomBorder = DEFAULT_MAX_COLS;
     }
 
-    for(i = leftBorder; i < rightBorder; i++) {
-        for(j = topBorder; j < bottomBorder; j++) {
-            if (i == left  && j == top)
+    for (i = leftBorder; i < rightBorder; i++) {
+        for (j = topBorder; j < bottomBorder; j++) {
+            if (i == left && j == top)
                 continue;
-            GtkWidget *box = (GtkWidget*)gtk_grid_get_child_at(GTK_GRID(grid),i,j);
-            GtkWidget *image = ((GtkWidget*)gtk_bin_get_child(GTK_BIN(box)));
-            if(image)
-            {
-                Individu* individu = (Individu*)g_object_get_data(G_OBJECT(image),DATA_KEY_INDIVIDU);
+            GtkWidget *box = (GtkWidget *) gtk_grid_get_child_at(GTK_GRID(grid), i, j);
+            GtkWidget *image = ((GtkWidget *) gtk_bin_get_child(GTK_BIN(box)));
+            if (image) {
+                Individu *individu = (Individu *) g_object_get_data(G_OBJECT(image), DATA_KEY_INDIVIDU);
 
                 macro_contaminateSingleIndiv(individu, (Virus *) virus);
 
@@ -210,7 +204,6 @@ static void contaminate_indivCercleSingleVrs(gpointer *virus, gpointer *img) {
 }
 
 
-
 void iterateSingleIndividu(gpointer data, gpointer user_data) {
 
     G_STATIC_ASSERT_EXPR(GTK_IS_IMAGE(data));
@@ -218,7 +211,7 @@ void iterateSingleIndividu(gpointer data, gpointer user_data) {
     if (PLAY_MODE)
         macro_moveGrid(data);
 
-    Individu *individu = (Individu*)g_object_get_data(G_OBJECT(data),DATA_KEY_INDIVIDU);
+    Individu *individu = (Individu *) g_object_get_data(G_OBJECT(data), DATA_KEY_INDIVIDU);
     g_list_foreach(individu->virusList, (GFunc) contaminate_indivCercleSingleVrs, data);
 
 }
