@@ -35,7 +35,7 @@ void LaGenetique(Individu P,float* val)
     switch(P.health.genetic)
     {
         case GENETIQUEMENT_FAIBLE:
-            *val+=0.3;
+            *val+=9;
             break;
         case GENETIQUEMENT_FRAGILE:
             *val+=0.4;
@@ -107,7 +107,7 @@ void LaPoumons(Individu P,float* val)
 }
 
 
-float etatSanteIndivdu(Individu P)
+float calculerHPdeIndividu(Individu P)
 {
     float etat = 0.0;
     AgePerson(P,&etat);
@@ -119,11 +119,48 @@ float etatSanteIndivdu(Individu P)
     return ((float)etat);
 }
 
+int categorieDeVirus(Virus *V)
+{
+    if(V->prctMortel >=1     &&  V->prctMortel < 25) return (int)1;
+    if(V->prctMortel >=25    &&  V->prctMortel < 50) return (int)2;
+    if(V->prctMortel >=50    &&  V->prctMortel < 75) return (int)3;
+    if(V->prctMortel >=75    &&  V->prctMortel < 99) return (int)4;
+    if(V->prctMortel == 100) return (int)5;
+}
 
-int includeCercle(GtkGrid* grid, Coord pos, Virus virus)
+float calculeLechampABC(Virus *V)
+{
+    //int cas = categorieDeVirus(V);
+    switch(categorieDeVirus(V))
+    {
+        case 1: return  (float)  (-0.2);
+        case 2: return  (float) (-0.38);
+        case 3: return  (float) (-0.56);
+        case 4: return  (float) (-0.74);
+        case 5: return  (float)(-6.0);
+    }
+    return ((float)(-0.1));/// layomkin asslan
+}
+
+int VirusExiste(Individu *P,Virus *V)
+{
+    GList *temp = P->VirusList;
+    while(temp)
+    {
+        if( !compare_virus(temp->data,V->nom))
+            return (int)1;
+        temp = temp->next;
+    }
+    return (int)0;
+}
+
+
+
+void contaminationDesIndividus(GtkGrid* grid, Coord pos, Virus virus)
 {
     int i,j;
-    /// on parcourt la cercle de contamination de première ligne jusqu'à le dernière
+    float x = (float)calculeLechampABC(&virus);
+    ///On parcourt la cercle de contamination de première ligne jusqu'à le dernière
     for(i = (pos.x - virus.cercleDeContam); i < (pos.x + virus.cercleDeContam); i++)
     {
         /// if it is out of the table(grid)
@@ -134,11 +171,21 @@ int includeCercle(GtkGrid* grid, Coord pos, Virus virus)
         {
             if( j< 0 || j >= DEFAULT_MAX_COLS)/// if it is out of the table(grid)
                 continue;
-
-            GtkWidget* image = gtk_grid_get_child_at(grid,i,j);
-            Individu* individu = (Individu*)g_object_get_data(G_OBJECT(image),DATA_KEY_INDIVIDU);
-            if(individu)
-                return 0;
+            GtkWidget *box = (GtkWidget*)gtk_grid_get_child_at(grid,i,j);
+            GtkWidget* image = ((GtkWidget*)gtk_bin_get_child(box));
+            if(image)
+            {
+                Individu* individu = (Individu*)g_object_get_data(G_OBJECT(image),DATA_KEY_INDIVIDU);
+                if( !VirusExiste(individu,&virus))
+                {
+                    /// set le virus au l'individu
+                    individu->VirusList = g_list_append(individu->VirusList,&virus);
+                    individu->abc += x;
+                    individu->hp -=individu->abc;
+                    if(individu->hp <=0)
+                        gtk_widget_hide(image);/// just to know it is the one until we decide how we kill a individu
+                }
+            }
         }
     }
 }

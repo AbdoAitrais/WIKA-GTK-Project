@@ -9,6 +9,7 @@
 #include "gobject_utils.h"
 #include "structures.h"
 #include "UI_individu_macros.h"
+#include "../by ismail/contaminate_utils.h"
 #include "Statistics.h"
 
 typedef struct {
@@ -72,11 +73,11 @@ GtkWidget *macro_createGrid(GridProps props) {
 gboolean add_individu (GtkWidget *widget,GdkEvent *event,gpointer builder)
 {
 
-
     if (gtk_bin_get_child((GTK_BIN(widget)))) {
         g_printerr("\nAlready has child\n");
         return FALSE;
     }
+
     GtkWidget *image = gtk_image_new_from_file ("person.png");
     GtkWidget *window = GTK_WIDGET(gtk_builder_get_object (builder, "MainWindow"));
     gtk_container_add(GTK_CONTAINER (widget),image);
@@ -87,11 +88,14 @@ gboolean add_individu (GtkWidget *widget,GdkEvent *event,gpointer builder)
                             GTK_WIDGET(widget), "left-attach",
                             &left, "top-attach", &top, NULL);
     g_print("\nadded image  top = %d, left = %d.\n", top, left);
-
-    Individu * indiv = lire_Indiv(builder);
-
+    /**added by ismail **/
+    Individu *indiv = lire_Indiv(builder);
+    indiv->hp = calculerHPdeIndividu(*indiv);
+    indiv->abc = -0.01;
+    //**added by ismail**/
     g_object_set_data((GObject *) image,DATA_KEY_INDIVIDU,indiv);
     inserer_data_GObject(G_OBJECT(window),DATA_KEY_LIST_INDIVIDU,image);
+    afficher_individu(indiv);// juste pour savoir est-ce que les calcules ont bien fait
 
     calculate_stats(builder,((Stats *) g_object_get_data(builder,DATA_STATS)));
     //Stats * stat = calculate_stats(builder);

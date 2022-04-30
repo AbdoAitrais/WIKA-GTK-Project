@@ -5,7 +5,8 @@
 #include "macros.c"
 #include "by Abderrahman/UI_individu_macros.h"
 #include "by Abderrahman/init_env_macro.h"
-#include "by Abderrahman/Statistics.h"
+#include "tool.h"
+
 
 
 void set_default_visruses(gpointer builder)
@@ -24,12 +25,21 @@ int main(int argc, char *argv [])
     GtkWidget *fenetre_principale = NULL;
     GtkWidget *button = NULL;
 
-    GtkBuilder *builder = NULL;
 
+    GtkBuilder *builder = NULL;
     GError *error = NULL;
     gchar *filename = NULL;
-
-
+    //added
+    GtkWidget *playButton = NULL;
+     GtkWidget *pauseButton = NULL;
+     GtkWidget *AboutButton= NULL;
+     GtkWidget *decButton= NULL;
+     GtkWidget *incButton= NULL;
+     GtkWidget *quit= NULL;
+     GtkWidget *rest= NULL;
+      maStr *info=(maStr*)malloc(sizeof(maStr));
+      info->check=1;
+      info->speed=455;
 
     /** Initialisation de la librairie Gtk. */
     gtk_init(&argc, &argv);
@@ -64,6 +74,18 @@ int main(int argc, char *argv [])
     /** button for signal **/
     button = GTK_WIDGET(gtk_builder_get_object (builder, "subutton"));
 
+    /** toolbar btn */
+    playButton = GTK_WIDGET(gtk_builder_get_object (builder, "play"));
+    pauseButton = GTK_WIDGET(gtk_builder_get_object (builder, "pause"));
+    decButton = GTK_WIDGET(gtk_builder_get_object (builder, "decreaseVT"));
+    incButton = GTK_WIDGET(gtk_builder_get_object (builder, "increaseVT"));
+    AboutButton = GTK_WIDGET(gtk_builder_get_object (builder, "about"));
+    g_signal_connect (GTK_TOOL_BUTTON(AboutButton), "clicked", (GCallback)about_game, NULL);
+    quit = GTK_WIDGET(gtk_builder_get_object (builder, "quit"));
+    g_signal_connect (GTK_TOOL_BUTTON(quit), "clicked", (GCallback)quit_game, NULL);
+    mvToolBar(playButton,pauseButton,decButton,incButton,info);
+
+
 
     set_css(builder);
 
@@ -87,7 +109,7 @@ int main(int argc, char *argv [])
     gtk_widget_show_all (fenetre_principale);
 
     /// RUN ENV MOVEMENTS
-    g_timeout_add(1000, iterateIndividusList, fenetre_principale);
+    //g_timeout_add(1000, iterateIndividusList, fenetre_principale);
 
     gtk_main();
 
