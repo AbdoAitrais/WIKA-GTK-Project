@@ -188,17 +188,20 @@ Individu *lire_Indiv(gpointer builder) {
 
 
 void afficher_virus(Virus *vir) {
-    printf("Le nom = %s\n", vir->nom);
-    printf("Le pourcentage de contamination = %f\n", vir->prctContam);
-    printf("Le taux de mortalite = %f\n", vir->prctMortel);
-    printf("Le cercle de contamination = %d\n", vir->cercleDeContam);
-    printf("la valeur associé à le virus est  = %.2f\n", vir->damage);
+
+    g_print("Le nom = %s\n", vir->nom);
+    g_print("Le pourcentage de contamination = %f\n", vir->prctContam);
+    g_print("Le taux de mortalite = %f\n", vir->prctMortel);
+    g_print("Le cercle de contamination = %d\n", vir->cercleDeContam);
+    g_print("la valeur associé à le virus est  = %.2f\n", vir->damage);
 }
 
 
 void afficher_VirusList(GList *VirusList) {
     GList *crt = VirusList;
+    int i = 1;
     while (crt) {
+
         afficher_virus((Virus *) crt->data);
         crt = crt->next;
     }

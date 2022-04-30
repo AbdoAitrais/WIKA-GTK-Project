@@ -140,7 +140,7 @@ gint VirusExiste(Individu *individu, Virus *virus) {
 }
 
 
-void contaminationDesIndividus(GtkGrid *grid, Coord pos, Virus *virus) {
+/*void contaminationDesIndividus(GtkGrid *grid, Coord pos, Virus *virus) {
     guint i, j;
     float x = (float) calculeVirusDamageField(virus);
     ///On parcourt la cercle de contamination de première ligne jusqu'à le dernière
@@ -168,6 +168,6 @@ void contaminationDesIndividus(GtkGrid *grid, Coord pos, Virus *virus) {
             }
         }
     }
-}
+}*/
 
 #endif //MAIN_C_CONTAMINATE_UTILS_H
