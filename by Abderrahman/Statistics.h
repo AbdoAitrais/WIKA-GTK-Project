@@ -329,7 +329,7 @@ void add_TextView_to_stack(gpointer builder,gchar * text)
 
 void calculate_StatVirus_Individu(Individu * individu,Stats * stat)
 {
-    GList *crtvirus = individu->VirusList;
+    GList *crtvirus = individu->virusList;
 
     while(crtvirus)
     {
