@@ -206,7 +206,6 @@ Individu *lire_Indiv(gpointer builder)
 
 void afficher_virus(Virus *vir)
 {
-    printf("L'id = %d\n",vir->Id);
     printf("Le nom = %s\n",vir->nom);
     printf("Le pourcentage de contamination = %f\n",vir->prctContam);
     printf("Le taux de mortalite = %f\n",vir->prctMortel);
@@ -247,10 +246,9 @@ void inserer_virus(gpointer builder,Virus *virus)
     }
 }
 
-void remplir_virus(gpointer builder,gint Id,const gchar *nom,gfloat prctContam,gfloat prctMortel,guint cercleDeContam)
+void remplir_virus(gpointer builder,const gchar *nom,gfloat prctContam,gfloat prctMortel,guint cercleDeContam)
 {
     Virus *virus = (Virus*)g_malloc(sizeof(Virus));
-    virus->Id = Id;
     virus->nom = g_strdup(nom);
     virus->prctContam = prctContam;
     virus->prctMortel = prctMortel;
@@ -269,7 +267,7 @@ void enregistrer_virus(GtkButton *button, gpointer builder)
     GtkAdjustment *adjust3 = GTK_ADJUSTMENT(gtk_builder_get_object (builder, "adjust3"));
     GtkWidget *entryNomVirus = GTK_WIDGET(gtk_builder_get_object (builder, "entryNomVirus"));
 
-    remplir_virus(builder, ++SEQUENCE_ID_VALUE, gtk_entry_get_text(GTK_ENTRY(entryNomVirus)),
+    remplir_virus(builder,gtk_entry_get_text(GTK_ENTRY(entryNomVirus)),
                   ((gfloat)gtk_adjustment_get_value (GTK_ADJUSTMENT(adjust1))),
                   ((gfloat)gtk_adjustment_get_value(GTK_ADJUSTMENT(adjust2))),
                   ((gint)gtk_adjustment_get_value (GTK_ADJUSTMENT(adjust3)))
