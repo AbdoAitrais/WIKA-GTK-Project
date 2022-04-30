@@ -35,7 +35,7 @@ void LaGenetique(Individu P,float* val)
     switch(P.health.genetic)
     {
         case GENETIQUEMENT_FAIBLE:
-            *val+=9;
+            *val+=0.2;
             break;
         case GENETIQUEMENT_FRAGILE:
             *val+=0.4;
@@ -52,10 +52,10 @@ void LaTension(Individu P,float *val)
     switch(P.health.tension)
     {
         case ARTERIELLE_NORMAL:
-            *val+=0.5;
+            *val+=0.2;
             break;
         case ARTERIELLE_HYPERTENDU:
-            *val+=0.7;
+            *val+=0.6;
             break;
         case ARTERIELLE_HYPERTENSION_FORTE:
             *val++;
@@ -66,10 +66,10 @@ void LaDiabete(Individu P,float* val)
     switch(P.health.diabete)
     {
         case DIABETE_NORMAL:
-            *val+=0.5;
+            *val+=0.3;
             break;
         case DIABETE_MODERE:
-            *val+=0.8;
+            *val+=0.7;
             break;
         case DIABETE_AVANCE:
             *val++;
@@ -80,10 +80,10 @@ void LaCardiaque(Individu P,float* val)
     switch(P.health.cardiac)
     {
         case CARDIAQUE_NORMAL:
-            *val++;
+            *val+=0.6;
             break;
         case CARDIAQUE_MALADE:
-            *val+=0.4;
+            *val+=0.3;
             break;
         case CARDIAQUE_SEVERE:
             *val+=0.1;
@@ -96,13 +96,13 @@ void LaPoumons(Individu P,float* val)
     switch(P.health.poumons)
     {
         case POUMONS_SEIN:
-            *val++;
+            *val +=0.5;
             break;
         case POUMONS_MALADE:
-            *val+=0.5;
+            *val+=0.2;
             break;
         case POUMONS_GRAVE:
-            *val+=0.2;
+            *val+=0.05;
     }
 }
 
@@ -118,7 +118,7 @@ float calculerHPdeIndividu(Individu P)
     LaTension(P,&etat);
     return ((float)etat);
 }
-
+// divise les catégories de virus en 5 selon leurs taux de mortalités
 int categorieDeVirus(Virus *V)
 {
     if(V->prctMortel >=1     &&  V->prctMortel < 25) return (int)1;
@@ -127,7 +127,7 @@ int categorieDeVirus(Virus *V)
     if(V->prctMortel >=75    &&  V->prctMortel < 99) return (int)4;
     if(V->prctMortel == 100) return (int)5;
 }
-
+/// association à chaque catégorie un réel
 float calculeLechampABC(Virus *V)
 {
     //int cas = categorieDeVirus(V);
