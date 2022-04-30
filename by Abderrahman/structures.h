@@ -16,6 +16,7 @@ typedef struct cel {
     gfloat prctContam;// le pourcentage de contamination de virus
     gfloat prctMortel; // le pourcentage de mortalite de virus
     guint cercleDeContam;// le rayon ou bien la cercle de contamination
+    float val;// la valeur  à calculer à partir de champ prctMortel
 } Virus;
 
 typedef struct {
@@ -93,6 +94,8 @@ typedef struct {
     Coord pos;//les coordonnées où se présente le Individu
     Sante health;// l'état sanitaire associé à le Individu
     GList *VirusList;// liste des virus qui a le Individu
+    float hp;// 
+    float abc;/// c'est la valeur pour decrementer le hp selon les virus associés à l'individu
 } Individu;// peut être animal,personne...
 
 #endif //MAIN_C_STRUCTURES_H
