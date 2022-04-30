@@ -132,7 +132,7 @@ gfloat calculeVirusDamageField(Virus *v) {
 //        case 4: return  (float) (-0.74);
 //        case 5: return  (float)(-6.0);
 //    }
-    return ((gfloat) ((v->prctMortel / 100.0) * -1.0));/// layomkin asslan
+    return ((gfloat) ((v->prctMortel / 10.0) * -1.0));/// layomkin asslan
 }
 
 gint VirusExiste(Individu *individu, Virus *virus) {
