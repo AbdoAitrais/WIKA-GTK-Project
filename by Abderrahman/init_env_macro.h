@@ -9,6 +9,7 @@
 #include "gobject_utils.h"
 #include "structures.h"
 #include "UI_individu_macros.h"
+#include "Statistics.h"
 
 typedef struct {
     gint	 baselinerow;	       /*The row to align the to the baseline
@@ -91,6 +92,10 @@ gboolean add_individu (GtkWidget *widget,GdkEvent *event,gpointer builder)
 
     g_object_set_data((GObject *) image,DATA_KEY_INDIVIDU,indiv);
     inserer_data_GObject(G_OBJECT(window),DATA_KEY_LIST_INDIVIDU,image);
+
+    //calculate_stats(builder,((Stats *) g_object_get_data(builder,DATA_STATS)));
+    Stats * stat = calculate_stats(builder);
+    afficher_Stats(stat);
 
 
     //TODO :: Instead of running a timeout fro the individu add it to the list

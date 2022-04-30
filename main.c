@@ -5,7 +5,7 @@
 #include "macros.c"
 #include "by Abderrahman/UI_individu_macros.h"
 #include "by Abderrahman/init_env_macro.h"
-
+#include "by Abderrahman/Statistics.h"
 
 
 void set_default_visruses(gpointer builder)
@@ -24,10 +24,12 @@ int main(int argc, char *argv [])
     GtkWidget *fenetre_principale = NULL;
     GtkWidget *button = NULL;
 
-
     GtkBuilder *builder = NULL;
+
     GError *error = NULL;
     gchar *filename = NULL;
+
+
 
     /** Initialisation de la librairie Gtk. */
     gtk_init(&argc, &argv);
@@ -50,6 +52,8 @@ int main(int argc, char *argv [])
         g_error_free (error);
         return code;
     }
+
+
 
     /** Récupération du pointeur de la fenêtre principale */
     fenetre_principale = GTK_WIDGET(gtk_builder_get_object (builder, "MainWindow"));

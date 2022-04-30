@@ -16,4 +16,6 @@ void inserer_data_GObject(GObject * object,gchar * key,gpointer data)
 
 }
 
+
+
 #endif //MAIN_C_GOBJECT_UTILS_H

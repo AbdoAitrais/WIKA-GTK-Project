@@ -16,6 +16,7 @@ typedef struct cel {
     gfloat prctContam;// le pourcentage de contamination de virus
     gfloat prctMortel; // le pourcentage de mortalite de virus
     guint cercleDeContam;// le rayon ou bien la cercle de contamination
+
 } Virus;
 
 typedef struct {
