@@ -358,11 +358,36 @@ void calculate_Stats_Individu(GList * indiviusList, Individu * indiv, Stats * st
 {
     if(stat)
     {
-        stat->totalPopulation = sum_GList(indiviusList);
-        stat->currentPopulation++;
+        stat->totalPopulation++;
+        stat->currentPopulation = sum_GList(indiviusList);
         calculate_StatVirus_Individu(indiv,stat);
     }
 }
 
+void show_Stats(gpointer builder, Stats * stat)
+{
+    GtkAdjustment * adjustCurrPop = GTK_ADJUSTMENT(gtk_builder_get_object(builder,"adjustCurrentPopulation"));
+    GtkAdjustment * adjustDeaths = GTK_ADJUSTMENT(gtk_builder_get_object(builder,"adjustDeaths"));
+    GtkWidget * textViewTotalPop = GTK_WIDGET(gtk_builder_get_object(builder,"TextViewTotalPopulation"));
+    TextBufferProps * tbp = set_TextBufferProps("grey",NULL,20,PANGO_STYLE_NORMAL);
+    gchar * population = (gchar *) g_malloc(sizeof(gchar));
+    //sprintf(population, "%d", stat->totalPopulation);
+    printf("\nTotal Population = %s",population);
+    TextViewProps * tvp = set_TextViewProps(10,10,10,10,FALSE,
+                                            GTK_JUSTIFY_LEFT,FALSE,
+                                            population ,*tbp);
+
+    gtk_adjustment_set_value(adjustCurrPop,((gdouble)
+            (((gdouble)stat->currentPopulation/(gdouble)stat->totalPopulation)*100))
+    );
+
+    gtk_adjustment_set_value(adjustDeaths,((gdouble)
+            (((gdouble)(stat->totalPopulation - stat->currentPopulation)/(gdouble)stat->totalPopulation)*100))
+    );
+
+    macro_ApplyTextView(GTK_TEXT_VIEW(textViewTotalPop),*tvp);
+
+
+}
 
 #endif //MAIN_C_STATISTICS_H
