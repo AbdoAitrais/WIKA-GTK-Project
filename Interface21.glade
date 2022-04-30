@@ -25,13 +25,11 @@
     <property name="page-increment">10</property>
   </object>
   <object class="GtkAdjustment" id="adjustCurrentPopulation">
-    <property name="lower">1</property>
     <property name="upper">100</property>
     <property name="step-increment">1</property>
     <property name="page-increment">10</property>
   </object>
   <object class="GtkAdjustment" id="adjustDeaths">
-    <property name="lower">1</property>
     <property name="upper">100</property>
     <property name="step-increment">1</property>
     <property name="page-increment">10</property>
@@ -943,21 +941,16 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkTextView" id="TextViewTotalPopulation">
-                                <property name="height-request">40</property>
+                              <object class="GtkLabel" id="TotalpopulationLabel">
                                 <property name="visible">True</property>
-                                <property name="can-focus">True</property>
-                                <property name="margin-start">5</property>
-                                <property name="margin-end">5</property>
-                                <property name="left-margin">10</property>
-                                <property name="right-margin">10</property>
-                                <property name="top-margin">5</property>
-                                <property name="bottom-margin">5</property>
-                                <property name="buffer">TextBuffTotalPopulation</property>
+                                <property name="can-focus">False</property>
+                                <property name="label" translatable="yes">0</property>
+                                <property name="xalign">0.11999999731779099</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
-                                <property name="fill">True</property>
+                                <property name="fill">False</property>
+                                <property name="padding">6</property>
                                 <property name="position">5</property>
                               </packing>
                             </child>
