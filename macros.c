@@ -181,11 +181,11 @@ gboolean iterateIndividusList(gpointer data) {
 
     g_list_foreach(pers, iterateSingleIndividu, NULL);
 
-
+/*
     if (PLAY_MODE)
         g_timeout_add(600, iterateIndividusList, data);
 
-    return FALSE;
+    return FALSE;*/
 }
 
 
