@@ -127,7 +127,7 @@ typedef struct{
 
 typedef struct{
     guint currentPopulation;
-    guint deaths;
+    guint totalPopulation;
     GList * virusInfection;
 }Stats;
 
@@ -232,7 +232,7 @@ Stats * init_Stats()
     }
     stat->virusInfection = NULL;
     stat->currentPopulation = 0;
-    stat->deaths = 0;
+    stat->totalPopulation = 0;
 
     return ((Stats *) stat);
 }
@@ -266,7 +266,7 @@ void afficher_StatVirus(GList * Statv)
     while(crt)
     {
 
-        printf("\n%s : %d",((StatVirus *) crt->data)->virusName,((StatVirus *) crt->data)->infected);
+        printf("\n      %s      : %d",((StatVirus *) crt->data)->virusName,((StatVirus *) crt->data)->infected);
         crt = crt->next;
     }
 }
@@ -275,8 +275,9 @@ void afficher_Stats(Stats * stat)
 {
     if(stat)
     {
-
-        printf("\nCurrent Population : %d",stat->currentPopulation);
+        printf("\nTotal Population      : %d",stat->totalPopulation);
+        printf("\nCurrent Population    : %d",stat->currentPopulation);
+        printf("\nTotal Deaths          : %d",(stat->totalPopulation - stat->currentPopulation));
         afficher_StatVirus(stat->virusInfection);
     }
 }
@@ -323,5 +324,45 @@ void add_TextView_to_stack(gpointer builder,gchar * text)
     TextViewProps * tvp = set_TextViewProps(10,10,10,10,FALSE,
                                             GTK_JUSTIFY_LEFT,FALSE,text,*tbp);
 }
+
+/***************** Second Thoughts ******************/
+
+void calculate_StatVirus_Individu(Individu * individu,Stats * stat)
+{
+    GList *crtvirus = individu->VirusList;
+
+    while(crtvirus)
+    {
+
+            if(crtvirus->data)
+            {
+                StatVirus * sVirus = get_StatVirus_fromString(((Virus *) crtvirus->data)->nom,stat);
+                if(sVirus)
+                {
+                    sVirus->infected++;
+                }
+                else
+                {
+
+                    StatVirus * sv = init_StatVirus(((Virus *) crtvirus->data)->nom);
+                    sv->infected++;
+                    stat->virusInfection = g_list_append(stat->virusInfection,sv);
+                }
+            }
+
+        crtvirus = crtvirus->next;
+    }
+}
+
+void calculate_Stats_Individu(GList * indiviusList, Individu * indiv, Stats * stat)
+{
+    if(stat)
+    {
+        stat->totalPopulation = sum_GList(indiviusList);
+        stat->currentPopulation++;
+        calculate_StatVirus_Individu(indiv,stat);
+    }
+}
+
 
 #endif //MAIN_C_STATISTICS_H

@@ -11,8 +11,7 @@
 
 
 typedef struct cel {
-    gint Id;//Indentifiant du virus(peut être coleur par exemple rgb Ox......) // it can be gchar* too choose one
-    const gchar *nom;// le nom associé à le virus
+    const gchar *nom;//Indentifiant du virus le nom associé à le virus
     gfloat prctContam;// le pourcentage de contamination de virus
     gfloat prctMortel; // le pourcentage de mortalite de virus
     guint cercleDeContam;// le rayon ou bien la cercle de contamination
