@@ -82,7 +82,7 @@ GtkWidget* choixImage(Individu* indiv)
         if(indiv->categorie == 4)
             image = gtk_image_new_from_file("../pic/haj2.png");
         else if(indiv->categorie == 0)
-                image = gtk_image_new_from_file("../pic/babyB3.png");
+            image = gtk_image_new_from_file("../pic/babyB3.png");
         else
             image = gtk_image_new_from_file("../pic/nta2.png");
     }
@@ -94,27 +94,84 @@ GtkWidget* choixImage(Individu* indiv)
             else if(indiv->categorie == 0)
                 image = gtk_image_new_from_file("../pic/babyG2.png");
             else
-            image = gtk_image_new_from_file("../pic/nti2.png");
+                image = gtk_image_new_from_file("../pic/nti2.png");
     }
     return (GtkWidget*)image;
 
 }
 
+//Individu * get_Individu_from_Interface(GtkEventBox * eventBox)
+//{
+//    GtkWidget * image = gtk_bin_get_child(GTK_BIN(eventBox));
+//    return ((Individu *) g_object_get_data(G_OBJECT(image),DATA_KEY_INDIVIDU));
+//}
+//
+//gboolean show_Individu (GtkWidget *eventBox, GdkEvent *event, gpointer builder)
+//{
+//    //afficher_individu(get_Individu_from_Interface(GTK_EVENT_BOX(eventBox)));
+//    gchar msg[100];
+//    Individu * individu = get_Individu_from_Interface(GTK_EVENT_BOX(eventBox));
+//    g_strdup_printf(msg,"individu gender = %d\nindividu genetic = %d\n",individu->gender,individu->health.genetic);
+//    macro_dialog(msg);
+//    return TRUE;
+//}
+
+void get_virusName_from_Virus(gpointer virus, gpointer virusName)
+{
+    gchar name[20];
+    sprintf(((gchar *) name),"%s\n",((Virus *)virus)->nom);
+    strcat(virusName,name);
+}
+
+void concatinate_virusName(GList * virusList,gchar * virusesNames)
+{
+    g_list_foreach(virusList,get_virusName_from_Virus,virusesNames);
+}
 
 
+void show_Individu_to_Interface(Individu * individu)
+{
+    gchar msg[500];
+    gchar virusList[200];
+    sprintf(msg,
+                "Infos d'individu\n"
+                "gender = %d\n"
+                "genetic = %d\n"
+                "tension = %d\n"
+                "diabete = %d\n"
+                "cardiaque = %d\n"
+                "poumons = %d\n"
+                "categorie = %d\n"
+                "hp = %.2f\n"
+                ,individu->gender,individu->health.genetic,individu->health.tension,individu->health.diabete,
+                individu->health.cardiac,individu->health.poumons,individu->categorie,individu->hp
+                );
+    if(individu->virusList)
+    {
+        sprintf(virusList,"Liste des virus :\n");
+        concatinate_virusName(individu->virusList,virusList);
+        strcat(msg,virusList);
+    }
+
+
+    macro_dialog(msg);
+}
 
 gboolean add_individu (GtkWidget *widget, GdkEvent *event, gpointer builder) {
     if (!ADD_INDIVIDU_MODE)
         return FALSE;
 
     GtkWidget *img;
-    if ((img = gtk_bin_get_child((GTK_BIN(widget))))) {
-        g_print("\n***************\n");
+    if ((img = gtk_bin_get_child((GTK_BIN(widget)))))
+    {
 
-        g_print("\nAlready has child\n");
+        //g_print("\n***************\n");
+
+        //g_print("\nAlready has child\n");
 
         Individu *individu = (Individu *) g_object_get_data(G_OBJECT(img), DATA_KEY_INDIVIDU);
-        afficher_individu(individu);
+        //afficher_individu(individu);
+        show_Individu_to_Interface(individu);
 
         g_printerr("\n***************\n");
 
@@ -126,7 +183,8 @@ gboolean add_individu (GtkWidget *widget, GdkEvent *event, gpointer builder) {
      /** added by ismail **/
     Individu *indiv = lire_Indiv(builder);
     indiv->hp = calculerHPdeIndividu(*indiv);
-    indiv->abc = -0.1;
+    //indiv->damageTaken = -0.1;
+    calculate_damageTaken_per_Individu(indiv);
     /** added by ismail **/
     GtkWidget *image = ((GtkWidget*)choixImage(indiv));
     gtk_container_add(GTK_CONTAINER (widget),image);
@@ -141,7 +199,7 @@ gboolean add_individu (GtkWidget *widget, GdkEvent *event, gpointer builder) {
 
     g_object_set_data((GObject *) image,DATA_KEY_INDIVIDU,indiv);
     inserer_data_GObject(G_OBJECT(window),DATA_KEY_LIST_INDIVIDU,image);
-    afficher_individu(indiv);// juste pour savoir est-ce que les calcules ont bien fait
+    //afficher_individu(indiv);// juste pour savoir est-ce que les calcules sont bien fait
 
     Stats * stat = ((Stats *) g_object_get_data(builder, DATA_KEY_STATS));
     calculate_Stats_Individu(g_object_get_data(G_OBJECT(window),DATA_KEY_LIST_INDIVIDU),indiv,stat);
@@ -161,6 +219,7 @@ void create_backgroundBox(GtkGrid *grid,GtkBuilder *builder)
         for (int j = 0; j < DEFAULT_MAX_COLS; ++j) {
             GtkWidget *box = gtk_event_box_new();
             g_signal_connect (box, "button-press-event", (GCallback)add_individu, builder);
+            //g_signal_connect (box, "button-press-event", (GCallback)show_Individu, builder);
 
             gtk_grid_attach(GTK_GRID(grid), GTK_WIDGET(box), j, i, 1, 1);
             gtk_style_context_add_class(gtk_widget_get_style_context(box), "box");

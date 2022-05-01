@@ -88,13 +88,13 @@ typedef enum {
 typedef struct {
 
     Genre gender;// le sexe de Individu
-    ///gint age;//l'âge de Individu
+
     Age categorie;//la categorie associé à le Individu selon son âge
     Coord pos;//les coordonnées où se présente le Individu
     Sante health;// l'état sanitaire associé à le Individu
     GList *virusList;// liste des virus qui a le Individu
-    gfloat hp;//
-    gfloat abc;/// c'est la valeur pour decrementer le hp selon les virus associés à l'individu
+    gfloat hp;// health points
+    gfloat damageTaken;// c'est la valeur pour decrementer le hp selon les virus associés à l'individu
 } Individu;// peut être animal,personne...
 
 #endif //MAIN_C_STRUCTURES_H

@@ -158,8 +158,8 @@ static void macro_contaminateSingleIndiv(Individu *individu, Virus *virus) {
     gint result = g_list_index(individu->virusList, virus);
     if (result == -1) {
         individu->virusList = g_list_append(individu->virusList, virus);
-        ///TODO :: Update abc value
-        individu->abc += virus->damage;
+        ///TODO :: Update damageTaken value
+        individu->damageTaken += virus->damage;
     }
 }
 
@@ -229,7 +229,7 @@ void iterateSingleIndividu(gpointer data, gpointer builder) {
             macro_moveGrid(data);
 
 
-            individu->hp += individu->abc;
+            individu->hp += individu->damageTaken;
             g_list_foreach(individu->virusList, (GFunc) contaminate_indivCercleSingleVrs, data);
         }
 

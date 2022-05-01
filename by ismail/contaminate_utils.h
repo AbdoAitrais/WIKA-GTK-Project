@@ -15,13 +15,13 @@ void AgePerson(Individu P, double *val) {
             *val += 0.5;
             break;
         case AGE_TEENS :
-            *val += 0.3;
+            *val ++;
             break;
         case AGE_YOUTH :
-            *val += 0.7;
+            *val += 0.8;
             break;
         case AGE_ADULT :
-            *val++;
+            *val += 0.4;
             break;
         case AGE_OLD :
             *val += 0.1;
@@ -50,26 +50,26 @@ void LaGenetique(Individu P, double *val) {
 void LaTension(Individu P, double *val) {
     switch (P.health.tension) {
         case ARTERIELLE_NORMAL:
-            *val += 0.2;
+            *val ++;
             break;
         case ARTERIELLE_HYPERTENDU:
-            *val += 0.6;
+            *val += 0.5;
             break;
         case ARTERIELLE_HYPERTENSION_FORTE:
-            *val++;
+            *val += 0.1;
     }
 }
 
 void LaDiabete(Individu P, double *val) {
     switch (P.health.diabete) {
         case DIABETE_NORMAL:
-            *val += 0.3;
+            *val += 0.5;
             break;
         case DIABETE_MODERE:
             *val += 0.7;
             break;
         case DIABETE_AVANCE:
-            *val++;
+            *val += 0.1;
     }
 }
 
@@ -113,13 +113,13 @@ float calculerHPdeIndividu(Individu P) {
 }
 
 // divise les catégories de virus en 5 selon leurs taux de mortalités
-gint categorieDeVirus(Virus *V) {
-    if (V->prctMortel >= 1 && V->prctMortel < 25) return (int) 1;
-    if (V->prctMortel >= 25 && V->prctMortel < 50) return (int) 2;
-    if (V->prctMortel >= 50 && V->prctMortel < 75) return (int) 3;
-    if (V->prctMortel >= 75 && V->prctMortel < 99) return (int) 4;
-    if (V->prctMortel == 100) return (int) 5;
-}
+//gint categorieDeVirus(Virus *V) {
+//    if (V->prctMortel >= 1 && V->prctMortel < 25) return (int) 1;
+//    if (V->prctMortel >= 25 && V->prctMortel < 50) return (int) 2;
+//    if (V->prctMortel >= 50 && V->prctMortel < 75) return (int) 3;
+//    if (V->prctMortel >= 75 && V->prctMortel < 99) return (int) 4;
+//    if (V->prctMortel == 100) return (int) 5;
+//}
 
 /// association à chaque catégorie un réel
 gfloat calculeVirusDamageField(Virus *v) {
@@ -132,20 +132,31 @@ gfloat calculeVirusDamageField(Virus *v) {
 //        case 4: return  (float) (-0.74);
 //        case 5: return  (float)(-6.0);
 //    }
-    return ((gfloat) ((v->prctMortel / 10.0) * -1.0));/// layomkin asslan
+    return ((gfloat) ((v->prctMortel / 100.0) * -1.0));
 }
 
 gint VirusExiste(Individu *individu, Virus *virus) {
     return g_list_find_custom(individu->virusList, virus->nom, (GCompareFunc) macro_find_compareVirusByName) ? 1 : 0;
 }
 
+void calcule_Virus_DamageTaken(gpointer virus,gpointer indiv) {
+
+    ((Individu *) indiv)->damageTaken += ((gfloat) ((((Virus *) virus)->prctMortel / 100.0) * -1.0));
+}
+
+void calculate_damageTaken_per_Individu(Individu * indiv)
+{
+    GList * virusList = indiv->virusList;
+    indiv->damageTaken = ((gfloat) 0.0);//initialization
+    g_list_foreach(virusList,calcule_Virus_DamageTaken,indiv);
+}
 
 /*void contaminationDesIndividus(GtkGrid *grid, Coord pos, Virus *virus) {
     guint i, j;
     float x = (float) calculeVirusDamageField(virus);
     ///On parcourt la cercle de contamination de première ligne jusqu'à le dernière
     for (i = (pos.x - virus->cercleDeContam); i < (pos.x + virus->cercleDeContam); i++) {
-        /// if it is out of the table(grid)
+        //        /// if it is out of the table(grid)
         if (i < 0 || i >= DEFAULT_MAX_ROWS)
             continue;
         ///on parcourt la cercle de contamination de premier colonne jusqu'à la dernière
@@ -159,10 +170,10 @@ gint VirusExiste(Individu *individu, Virus *virus) {
                 if (VirusExiste(individu, virus)) {
                     /// set le virus au l'individu
                     individu->virusList = g_list_append(individu->virusList, virus);
-                    individu->abc += x;
-                    //individu->hp -=individu->abc;
+                    individu->damageTaken += x;
+                    //individu->hp -=individu->damageTaken;
                     if (individu->hp <= 0)
-                        gtk_image_set_from_icon_name(image, "computer",
+                        gtk_image_set_from_icon_name(GTK_IMAGE(image), "computer",
                                                      GTK_ICON_SIZE_BUTTON);/// just to know it is the one until we decide how we kill a individu
                 }
             }
