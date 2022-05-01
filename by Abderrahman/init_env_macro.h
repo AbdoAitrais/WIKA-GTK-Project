@@ -80,21 +80,21 @@ GtkWidget* choixImage(Individu* indiv)
     if(indiv->gender == 1)
     {
         if(indiv->categorie == 4)
-            image = gtk_image_new_from_file("../pic/haj2.png");
+            image = gtk_image_new_from_file("../pic/haj.png");
         else if(indiv->categorie == 0)
-            image = gtk_image_new_from_file("../pic/babyB3.png");
+            image = gtk_image_new_from_file("../pic/babyB.png");
         else
-            image = gtk_image_new_from_file("../pic/nta2.png");
+            image = gtk_image_new_from_file("../pic/nta.png");
     }
     else
     {
 
             if(indiv->categorie == 4)
-                image = gtk_image_new_from_file("../pic/haja2.png");
+                image = gtk_image_new_from_file("../pic/haja.png");
             else if(indiv->categorie == 0)
-                image = gtk_image_new_from_file("../pic/babyG2.png");
+                image = gtk_image_new_from_file("../pic/babyG.png");
             else
-                image = gtk_image_new_from_file("../pic/nti2.png");
+                image = gtk_image_new_from_file("../pic/nti.png");
     }
     return (GtkWidget*)image;
 
@@ -129,27 +129,27 @@ void concatinate_virusName(GList * virusList,gchar * virusesNames)
 }
 
 
-void show_Individu_to_Interface(Individu * individu)
+void show_Individu_to_Interface(Individu * indiv)
 {
     gchar msg[500];
     gchar virusList[200];
     sprintf(msg,
                 "Infos d'individu\n"
-                "gender = %d\n"
-                "genetic = %d\n"
-                "tension = %d\n"
-                "diabete = %d\n"
-                "cardiaque = %d\n"
-                "poumons = %d\n"
-                "categorie = %d\n"
+                "gender = %s\n"
+                "genetic = %s\n"
+                "tension = %s\n"
+                "diabete = %s\n"
+                "cardiaque = %s\n"
+                "poumons = %s\n"
+                "categorie = %s\n"
                 "hp = %.2f\n"
-                ,individu->gender,individu->health.genetic,individu->health.tension,individu->health.diabete,
-                individu->health.cardiac,individu->health.poumons,individu->categorie,individu->hp
+                ,(gchar*)associerGender(indiv),(gchar*)associerGenetique(indiv),(gchar*)associerTension(indiv),(gchar*)associerDiabete(indiv),
+                (gchar*)associerCardiaque(indiv),(gchar*)associerPoumons(indiv),(gchar*)associerAge(indiv),indiv->hp
                 );
-    if(individu->virusList)
+    if(indiv->virusList)
     {
         sprintf(virusList,"Liste des virus :\n");
-        concatinate_virusName(individu->virusList,virusList);
+        concatinate_virusName(indiv->virusList,virusList);
         strcat(msg,virusList);
     }
 
@@ -195,11 +195,11 @@ gboolean add_individu (GtkWidget *widget, GdkEvent *event, gpointer builder) {
                             &left, "top-attach", &top, NULL);
     g_print("\nadded image  top = %d, left = %d.\n", top, left);
 
-   
+
 
     g_object_set_data((GObject *) image,DATA_KEY_INDIVIDU,indiv);
     inserer_data_GObject(G_OBJECT(window),DATA_KEY_LIST_INDIVIDU,image);
-    //afficher_individu(indiv);// juste pour savoir est-ce que les calcules sont bien fait
+   // afficher_individu(indiv);// juste pour savoir est-ce que les calcules sont bien fait
 
     Stats * stat = ((Stats *) g_object_get_data(builder, DATA_KEY_STATS));
     calculate_Stats_Individu(g_object_get_data(G_OBJECT(window),DATA_KEY_LIST_INDIVIDU),indiv,stat);
