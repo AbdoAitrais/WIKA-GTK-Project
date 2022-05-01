@@ -70,6 +70,37 @@ GtkWidget *macro_createGrid(GridProps props) {
     return((GtkWidget *)Grid);
 }
 
+/**
+        Added by ismail
+**/
+
+GtkWidget* choixImage(Individu* indiv)
+{
+    GtkWidget* image;
+    if(indiv->gender == 1)
+    {
+        if(indiv->categorie == 4)
+            image = gtk_image_new_from_file("../pic/haj.png");
+        else if(indiv->categorie == 0)
+                image = gtk_image_new_from_file("../pic/babyB.png");
+        else
+            image = gtk_image_new_from_file("../pic/nta.png");
+    }
+    else
+    {
+
+            if(indiv->categorie == 4)
+                image = gtk_image_new_from_file("../pic/haja.png");
+            else if(indiv->categorie == 0)
+                image = gtk_image_new_from_file("../pic/babyG.png");
+            else
+            image = gtk_image_new_from_file("../pic/nti.png");
+    }
+    return (GtkWidget*)image;
+
+}
+
+
 
 
 gboolean add_individu (GtkWidget *widget, GdkEvent *event, gpointer builder) {
@@ -90,11 +121,15 @@ gboolean add_individu (GtkWidget *widget, GdkEvent *event, gpointer builder) {
         return TRUE;
     }
 
-    GtkWidget *image = gtk_image_new_from_file ("person.png");
+    //GtkWidget *image = gtk_image_new_from_file ("person.png");
     GtkWidget *window = GTK_WIDGET(gtk_builder_get_object (builder, "MainWindow"));
-
+     /** added by ismail **/
+    Individu *indiv = lire_Indiv(builder);
+    indiv->hp = calculerHPdeIndividu(*indiv);
+    indiv->abc = -0.1;
+    /** added by ismail **/
+    GtkWidget *image = ((GtkWidget*)choixImage(indiv));
     gtk_container_add(GTK_CONTAINER (widget),image);
-
     gtk_widget_show(image);
     gint left, top;
     gtk_container_child_get(GTK_CONTAINER(gtk_widget_get_parent(GTK_WIDGET(widget))),
@@ -102,11 +137,7 @@ gboolean add_individu (GtkWidget *widget, GdkEvent *event, gpointer builder) {
                             &left, "top-attach", &top, NULL);
     g_print("\nadded image  top = %d, left = %d.\n", top, left);
 
-    /** added by ismail **/
-    Individu *indiv = lire_Indiv(builder);
-    indiv->hp = calculerHPdeIndividu(*indiv);
-    indiv->abc = -0.1;
-    /** added by ismail **/
+   
 
     g_object_set_data((GObject *) image,DATA_KEY_INDIVIDU,indiv);
     inserer_data_GObject(G_OBJECT(window),DATA_KEY_LIST_INDIVIDU,image);
