@@ -9,6 +9,7 @@
 #include "../constants.h"
 #include "gobject_utils.h"
 #include "../by ismail/contaminate_utils.h"
+#include "dialog_macro.h"
 
 /************* Individu ***************/
 
@@ -142,6 +143,8 @@ GList *get_selected_checkButtons_fromButtonList(GList *buttonList, gpointer buil
 //    return ((GList *) virusList);
 //}
 
+
+
 Individu *lire_Indiv(gpointer builder) {
     Individu *individu = (Individu *) g_malloc(sizeof(Individu));
     GtkRadioButton *radioButton = GTK_RADIO_BUTTON(gtk_builder_get_object(builder, "radioButtonHomme"));
@@ -241,7 +244,18 @@ void enregistrer_virus(GtkButton *button, gpointer builder) {
     GtkAdjustment *adjust2 = GTK_ADJUSTMENT(gtk_builder_get_object(builder, "adjust2"));
     GtkAdjustment *adjust3 = GTK_ADJUSTMENT(gtk_builder_get_object(builder, "adjust3"));
     GtkWidget *entryNomVirus = GTK_WIDGET(gtk_builder_get_object(builder, "entryNomVirus"));
+    gchar * virusName = g_strdup(gtk_entry_get_text(GTK_ENTRY(entryNomVirus)));
 
+    if( (!g_strcmp0(virusName,"")) || (strlen(virusName) > 15) )
+    {
+        macro_dialog("Invalid virus name !");
+        return ;
+    }
+    if(get_virus_fromString(virusName, builder))
+    {
+        macro_dialog("Virus Already Exists !");
+        return ;
+    }
     remplir_virus(builder, gtk_entry_get_text(GTK_ENTRY(entryNomVirus)),
                   ((gfloat) gtk_adjustment_get_value(GTK_ADJUSTMENT(adjust1))),
                   ((gfloat) gtk_adjustment_get_value(GTK_ADJUSTMENT(adjust2))),
