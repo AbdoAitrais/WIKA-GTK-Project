@@ -102,15 +102,15 @@ gchar* associerAge(Individu* indiv)
     switch(indiv->categorie)
     {
         case AGE_KIDS:
-            return (gchar*)(" enfant");
+            return (gchar*)(" Enfant");
         case AGE_TEENS:
-            return (gchar*)(" adolescent");
+            return (gchar*)(" Adolescent");
         case AGE_YOUTH:
             return (gchar*)(" Jeune");
         case AGE_ADULT:
             return (gchar*)(" Adulte");
         case AGE_OLD:
-            return (gchar*)(" vieux");
+            return (gchar*)(" Vieux");
 
     }
 }
