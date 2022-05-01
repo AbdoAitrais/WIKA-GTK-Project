@@ -477,8 +477,6 @@
                               <object class="GtkComboBoxText" id="comboBoxGenitiques">
                                 <property name="visible">True</property>
                                 <property name="can-focus">False</property>
-                                <property name="margin-left">5</property>
-                                <property name="margin-right">5</property>
                                 <property name="margin-start">5</property>
                                 <property name="margin-end">5</property>
                                 <property name="active">0</property>
@@ -506,8 +504,6 @@
                               <object class="GtkComboBoxText" id="comboBoxTension">
                                 <property name="visible">True</property>
                                 <property name="can-focus">False</property>
-                                <property name="margin-left">5</property>
-                                <property name="margin-right">5</property>
                                 <property name="margin-start">5</property>
                                 <property name="margin-end">5</property>
                                 <property name="active">0</property>
@@ -534,8 +530,6 @@
                               <object class="GtkComboBoxText" id="comboBoxDiabete">
                                 <property name="visible">True</property>
                                 <property name="can-focus">False</property>
-                                <property name="margin-left">5</property>
-                                <property name="margin-right">5</property>
                                 <property name="margin-start">5</property>
                                 <property name="margin-end">5</property>
                                 <property name="active">0</property>
@@ -562,8 +556,6 @@
                               <object class="GtkComboBoxText" id="comboBoxCardiaque">
                                 <property name="visible">True</property>
                                 <property name="can-focus">False</property>
-                                <property name="margin-left">5</property>
-                                <property name="margin-right">5</property>
                                 <property name="margin-start">5</property>
                                 <property name="margin-end">5</property>
                                 <property name="active">0</property>
@@ -590,8 +582,6 @@
                               <object class="GtkComboBoxText" id="comboBoxPoumons">
                                 <property name="visible">True</property>
                                 <property name="can-focus">False</property>
-                                <property name="margin-left">5</property>
-                                <property name="margin-right">5</property>
                                 <property name="margin-start">5</property>
                                 <property name="margin-end">5</property>
                                 <property name="active">0</property>
@@ -632,8 +622,6 @@
                               <object class="GtkScrolledWindow" id="scrolledWindVirus">
                                 <property name="visible">True</property>
                                 <property name="can-focus">True</property>
-                                <property name="margin-left">5</property>
-                                <property name="margin-right">5</property>
                                 <property name="margin-start">5</property>
                                 <property name="margin-end">5</property>
                                 <property name="shadow-type">in</property>
@@ -681,8 +669,6 @@
                               <object class="GtkComboBoxText" id="comboBoxAge">
                                 <property name="visible">True</property>
                                 <property name="can-focus">False</property>
-                                <property name="margin-left">5</property>
-                                <property name="margin-right">5</property>
                                 <property name="margin-start">5</property>
                                 <property name="margin-end">5</property>
                                 <property name="active">2</property>
@@ -958,6 +944,51 @@
                                 <property name="fill">False</property>
                                 <property name="padding">6</property>
                                 <property name="position">5</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkLabel" id="VirusInfect">
+                                <property name="visible">True</property>
+                                <property name="can-focus">False</property>
+                                <property name="label" translatable="yes">Virus Infections :</property>
+                                <property name="xalign">0.11999999731779099</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">False</property>
+                                <property name="padding">6</property>
+                                <property name="position">6</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkScrolledWindow" id="scrolledWindVirusInfect">
+                                <property name="visible">True</property>
+                                <property name="can-focus">True</property>
+                                <property name="margin-start">5</property>
+                                <property name="margin-end">5</property>
+                                <property name="shadow-type">in</property>
+                                <property name="min-content-height">100</property>
+                                <child>
+                                  <object class="GtkViewport" id="ViewPortVirusInfect">
+                                    <property name="visible">True</property>
+                                    <property name="can-focus">False</property>
+                                    <child>
+                                      <object class="GtkBox" id="BoxVirusInfect">
+                                        <property name="visible">True</property>
+                                        <property name="can-focus">False</property>
+                                        <property name="orientation">vertical</property>
+                                        <child>
+                                          <placeholder/>
+                                        </child>
+                                      </object>
+                                    </child>
+                                  </object>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">7</property>
                               </packing>
                             </child>
                           </object>

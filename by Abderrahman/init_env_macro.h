@@ -101,6 +101,7 @@ gboolean add_individu (GtkWidget *widget, GdkEvent *event, gpointer builder) {
                             GTK_WIDGET(widget), "left-attach",
                             &left, "top-attach", &top, NULL);
     g_print("\nadded image  top = %d, left = %d.\n", top, left);
+
     /** added by ismail **/
     Individu *indiv = lire_Indiv(builder);
     indiv->hp = calculerHPdeIndividu(*indiv);

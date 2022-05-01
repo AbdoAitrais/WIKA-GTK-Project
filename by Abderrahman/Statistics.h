@@ -4,6 +4,7 @@
 
 #ifndef MAIN_C_STATISTICS_H
 #define MAIN_C_STATISTICS_H
+
 #include <stdlib.h>
 #include <gtk/gtk.h>
 
@@ -25,27 +26,25 @@ typedef struct {
     PangoWeight weight;///poids de la police.
 
 
-}TextBufferProps;
+} TextBufferProps;
 
-void macro_ApplyTextBuffer(GtkTextBuffer *buffer,TextBufferProps tbprops)
-{
-    if(tbprops.gap > 0)
-        gtk_text_buffer_create_tag(buffer,"gap","pixels_above_lines",tbprops.gap,NULL);
-    if(tbprops.lmarg > 0)
-        gtk_text_buffer_create_tag(buffer,"lmarg","left_margin",tbprops.lmarg,NULL);
-    if(tbprops.color_fg)
-        gtk_text_buffer_create_tag(buffer,"color_fg","foreground",tbprops.color_fg,NULL);
-    if(tbprops.color_bg)
-        gtk_text_buffer_create_tag(buffer,"color_bg","background",tbprops.color_bg,NULL);
-    if(tbprops.style)
-        gtk_text_buffer_create_tag(buffer,"style","style",tbprops.style,NULL);
-    if(tbprops.weight)
-        gtk_text_buffer_create_tag(buffer,"weight","weight",tbprops.weight,NULL);
+void macro_ApplyTextBuffer(GtkTextBuffer *buffer, TextBufferProps tbprops) {
+    if (tbprops.gap > 0)
+        gtk_text_buffer_create_tag(buffer, "gap", "pixels_above_lines", tbprops.gap, NULL);
+    if (tbprops.lmarg > 0)
+        gtk_text_buffer_create_tag(buffer, "lmarg", "left_margin", tbprops.lmarg, NULL);
+    if (tbprops.color_fg)
+        gtk_text_buffer_create_tag(buffer, "color_fg", "foreground", tbprops.color_fg, NULL);
+    if (tbprops.color_bg)
+        gtk_text_buffer_create_tag(buffer, "color_bg", "background", tbprops.color_bg, NULL);
+    if (tbprops.style)
+        gtk_text_buffer_create_tag(buffer, "style", "style", tbprops.style, NULL);
+    if (tbprops.weight)
+        gtk_text_buffer_create_tag(buffer, "weight", "weight", tbprops.weight, NULL);
 
 }
 
-typedef struct
-{
+typedef struct {
     gint left;     /// margin gauche
     gint right;       /// margin droit
     gint bottom;    /// margin du bas
@@ -71,48 +70,44 @@ typedef struct {
     TextBufferProps bufferprops;///les proprietés du buffer
     char *text;///Le texte à afficher
 
-}TextViewProps;
+} TextViewProps;
 
 
+void macro_ApplyTextView(GtkTextView *textv, TextViewProps tvprops) {
 
 
-
-void macro_ApplyTextView(GtkTextView *textv,TextViewProps tvprops)
-{
-
-
-    if(!tvprops.cursor_visible)
-        gtk_text_view_set_cursor_visible(textv,tvprops.cursor_visible);
-    if(tvprops.monospace)
-        gtk_text_view_set_monospace(textv,tvprops.monospace);
-    if(tvprops.overwrite)
-        gtk_text_view_set_overwrite(textv,tvprops.overwrite);
-    if(tvprops.justification)
-        gtk_text_view_set_justification(textv,tvprops.justification);
-    if(tvprops.wrap_mode)
-        gtk_text_view_set_wrap_mode(textv,tvprops.wrap_mode);
-    if(tvprops.marge.bottom > 0)
-        gtk_text_view_set_bottom_margin(textv,tvprops.marge.bottom);
-    if(tvprops.marge.top > 0)
-        gtk_text_view_set_top_margin(textv,tvprops.marge.top);
-    if(tvprops.marge.left > 0)
-        gtk_text_view_set_left_margin(textv,tvprops.marge.left);
-    if(tvprops.marge.right > 0)
-        gtk_text_view_set_right_margin(textv,tvprops.marge.right);
-    if(!tvprops.editable )
-        gtk_text_view_set_editable(textv,tvprops.editable);
+    if (!tvprops.cursor_visible)
+        gtk_text_view_set_cursor_visible(textv, tvprops.cursor_visible);
+    if (tvprops.monospace)
+        gtk_text_view_set_monospace(textv, tvprops.monospace);
+    if (tvprops.overwrite)
+        gtk_text_view_set_overwrite(textv, tvprops.overwrite);
+    if (tvprops.justification)
+        gtk_text_view_set_justification(textv, tvprops.justification);
+    if (tvprops.wrap_mode)
+        gtk_text_view_set_wrap_mode(textv, tvprops.wrap_mode);
+    if (tvprops.marge.bottom > 0)
+        gtk_text_view_set_bottom_margin(textv, tvprops.marge.bottom);
+    if (tvprops.marge.top > 0)
+        gtk_text_view_set_top_margin(textv, tvprops.marge.top);
+    if (tvprops.marge.left > 0)
+        gtk_text_view_set_left_margin(textv, tvprops.marge.left);
+    if (tvprops.marge.right > 0)
+        gtk_text_view_set_right_margin(textv, tvprops.marge.right);
+    if (!tvprops.editable)
+        gtk_text_view_set_editable(textv, tvprops.editable);
 }
-GtkWidget *macro_createTextView(TextViewProps tvprops)
-{
+
+GtkWidget *macro_createTextView(TextViewProps tvprops) {
     GtkTextIter iter;
     GtkWidget *textv = gtk_text_view_new();
     GtkTextBuffer *buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(textv));
-    macro_ApplyTextView(GTK_TEXT_VIEW(textv),tvprops);
-    macro_ApplyTextBuffer(GTK_TEXT_BUFFER(buffer),tvprops.bufferprops);
-    gtk_text_buffer_get_iter_at_offset (buffer,&iter,0);
+    macro_ApplyTextView(GTK_TEXT_VIEW(textv), tvprops);
+    macro_ApplyTextBuffer(GTK_TEXT_BUFFER(buffer), tvprops.bufferprops);
+    gtk_text_buffer_get_iter_at_offset(buffer, &iter, 0);
 
-    gtk_text_buffer_insert_with_tags_by_name(buffer,&iter,tvprops.text,-
-            1,"color_bg", "color_fg","weight","style","lmarg","gap",NULL);
+    gtk_text_buffer_insert_with_tags_by_name(buffer, &iter, tvprops.text, -
+            1, "color_bg", "color_fg", "weight", "style", "lmarg", "gap", NULL);
 
 
     return textv;
@@ -120,23 +115,22 @@ GtkWidget *macro_createTextView(TextViewProps tvprops)
 
 /************ Statistics Structures *************/
 
-typedef struct{
-    const gchar * virusName;
+typedef struct {
+    const gchar *virusName;
     guint infected;
-}StatVirus;
+} StatVirus;
 
-typedef struct{
+typedef struct {
     guint deaths;
     guint totalPopulation;
-    GList * virusInfection;
-}Stats;
+    GList *virusInfection;
+} Stats;
 
-guint sum_GList(GList * individus)
-{
+guint sum_GList(GList *individus) {
     guint sum = 0;
-    GList * crt = individus;
+    GList *crt = individus;
 
-    while (crt){
+    while (crt) {
         sum++;
         crt = crt->next;
     }
@@ -149,32 +143,27 @@ guint sum_GList(GList * individus)
 //
 //}
 
-gint compare_StatVirus(gpointer virus,gpointer nom)
-{
-    gchar * name = nom;
-    StatVirus * v = virus;
-    return g_strcmp0(v->virusName,name);
+gint compare_StatVirus(gpointer virus, gpointer nom) {
+    gchar *name = nom;
+    StatVirus *v = virus;
+    return g_strcmp0(v->virusName, name);
 }
 
-StatVirus * get_StatVirus_fromString(const gchar *nom,Stats * stat)
-{
-    GList * elem = NULL;
-    if(stat->virusInfection)
-    {
+StatVirus *get_StatVirus_fromString(const gchar *nom, Stats *stat) {
+    GList *elem = NULL;
+    if (stat->virusInfection) {
         elem = g_list_find_custom(
-                stat->virusInfection,nom,(GCompareFunc)compare_StatVirus
+                stat->virusInfection, nom, (GCompareFunc) compare_StatVirus
         );
     }
 
 
-    return elem?((StatVirus *)elem->data):NULL;
+    return elem ? ((StatVirus *) elem->data) : NULL;
 }
 
-StatVirus * init_StatVirus(const gchar * nom)
-{
-    StatVirus * sv = (StatVirus *) g_malloc(sizeof(StatVirus));
-    if(!sv)
-    {
+StatVirus *init_StatVirus(const gchar *nom) {
+    StatVirus *sv = (StatVirus *) g_malloc(sizeof(StatVirus));
+    if (!sv) {
         g_printerr("StatVirus Allocation problem !");
         exit(0);
     }
@@ -183,28 +172,21 @@ StatVirus * init_StatVirus(const gchar * nom)
     return ((StatVirus *) sv);
 }
 
-void calculate_StatVirus(GList * individus,Stats * stat)
-{
+void calculate_StatVirus(GList *individus, Stats *stat) {
     GList *crtIndividu = individus;
-    while(crtIndividu)
-    {
-        GList * crtvirus = ((Individu *) g_object_get_data(G_OBJECT(crtIndividu->data),DATA_KEY_INDIVIDU))->virusList;
+    while (crtIndividu) {
+        GList *crtvirus = ((Individu *) g_object_get_data(G_OBJECT(crtIndividu->data), DATA_KEY_INDIVIDU))->virusList;
 
-        while (crtvirus)
-        {
-            if(crtvirus->data)
-            {
-                StatVirus * sVirus = get_StatVirus_fromString(((Virus *) crtvirus->data)->nom,stat);
-                if(sVirus)
-                {
+        while (crtvirus) {
+            if (crtvirus->data) {
+                StatVirus *sVirus = get_StatVirus_fromString(((Virus *) crtvirus->data)->nom, stat);
+                if (sVirus) {
                     sVirus->infected++;
-                }
-                else
-                {
+                } else {
 
-                    StatVirus * sv = init_StatVirus(((Virus *) crtvirus->data)->nom);
+                    StatVirus *sv = init_StatVirus(((Virus *) crtvirus->data)->nom);
                     sv->infected++;
-                    stat->virusInfection = g_list_append(stat->virusInfection,sv);
+                    stat->virusInfection = g_list_append(stat->virusInfection, sv);
                 }
             }
 
@@ -214,19 +196,15 @@ void calculate_StatVirus(GList * individus,Stats * stat)
     }
 }
 
-void reset_StatVirus_Stats(Stats * stat)
-{
+void reset_StatVirus_Stats(Stats *stat) {
     g_list_free(stat->virusInfection);
     stat->virusInfection = NULL;
 }
 
 
-
-Stats * init_Stats()
-{
-    Stats * stat = (Stats *) g_malloc(sizeof(Stats));
-    if(!stat)
-    {
+Stats *init_Stats() {
+    Stats *stat = (Stats *) g_malloc(sizeof(Stats));
+    if (!stat) {
         g_printerr("StatVirus Allocation problem !");
         exit(0);
     }
@@ -237,10 +215,9 @@ Stats * init_Stats()
     return ((Stats *) stat);
 }
 
-void init_save_Stats(gpointer builder)
-{
-    Stats * stat = init_Stats();
-    if(g_object_get_data(builder, DATA_KEY_STATS))
+void init_save_Stats(gpointer builder) {
+    Stats *stat = init_Stats();
+    if (g_object_get_data(builder, DATA_KEY_STATS))
         return;
     g_object_set_data(builder, DATA_KEY_STATS, stat);
 }
@@ -257,33 +234,28 @@ void init_save_Stats(gpointer builder)
 //    return stat;
 //}
 
-void afficher_StatVirus(GList * Statv)
-{
-    GList * crt = Statv;
+void afficher_StatVirus(GList *Statv) {
+    GList *crt = Statv;
 
     printf("\nVirus Infections :");
-    while(crt)
-    {
+    while (crt) {
 
-        printf("\n      %s      : %d",((StatVirus *) crt->data)->virusName,((StatVirus *) crt->data)->infected);
+        printf("\n      %s      : %d", ((StatVirus *) crt->data)->virusName, ((StatVirus *) crt->data)->infected);
         crt = crt->next;
     }
 }
 
-void afficher_Stats(Stats * stat)
-{
-    if(stat)
-    {
-        printf("\nTotal Population      : %d",stat->totalPopulation);
-        printf("\nCurrent Population    : %d",(stat->totalPopulation - stat->deaths));
-        printf("\nTotal deaths          : %d",stat->deaths);
+void afficher_Stats(Stats *stat) {
+    if (stat) {
+        printf("\nTotal Population      : %d", stat->totalPopulation);
+        printf("\nCurrent Population    : %d", (stat->totalPopulation - stat->deaths));
+        printf("\nTotal deaths          : %d", stat->deaths);
         afficher_StatVirus(stat->virusInfection);
     }
 }
 
-TextBufferProps * set_TextBufferProps(const gchar * color_bg,const gchar *color_fg,gint weight,PangoStyle style)
-{
-    TextBufferProps * tbp = (TextBufferProps *) g_malloc(sizeof(TextBufferProps));
+TextBufferProps *set_TextBufferProps(const gchar *color_bg, const gchar *color_fg, gint weight, PangoStyle style) {
+    TextBufferProps *tbp = (TextBufferProps *) g_malloc(sizeof(TextBufferProps));
 
     tbp->color_bg = g_strdup(color_bg);
     tbp->color_fg = g_strdup(color_fg);
@@ -291,15 +263,13 @@ TextBufferProps * set_TextBufferProps(const gchar * color_bg,const gchar *color_
     tbp->style = style;
 
 
-
     return ((TextBufferProps *) tbp);
 }
 
-TextViewProps * set_TextViewProps(gint margeLeft,gint margeRight,gint margeTop,gint margeBot,gboolean edit,
-                                  GtkJustification justify,gboolean cursor_visible,gchar * text,
-                                  TextBufferProps bufferprops)
-{
-    TextViewProps * tvp = (TextViewProps *) g_malloc(sizeof(TextViewProps));
+TextViewProps *set_TextViewProps(gint margeLeft, gint margeRight, gint margeTop, gint margeBot, gboolean edit,
+                                 GtkJustification justify, gboolean cursor_visible, gchar *text,
+                                 TextBufferProps bufferprops) {
+    TextViewProps *tvp = (TextViewProps *) g_malloc(sizeof(TextViewProps));
 
     tvp->marge.left = margeLeft;
     tvp->marge.right = margeRight;
@@ -316,73 +286,108 @@ TextViewProps * set_TextViewProps(gint margeLeft,gint margeRight,gint margeTop,g
     return ((TextViewProps *) tvp);
 }
 
-void add_TextView_to_stack(gpointer builder,gchar * text)
-{
-    GtkWidget * box = GTK_WIDGET(gtk_builder_get_object(builder,"GrandSonBoxStats"));
-    TextBufferProps * tbp = set_TextBufferProps("grey",NULL,20,PANGO_STYLE_NORMAL);
-    TextViewProps * tvp = set_TextViewProps(10,10,10,10,FALSE,
-                                            GTK_JUSTIFY_LEFT,FALSE,text,*tbp);
+void add_TextView_to_stack(gpointer builder, gchar *text) {
+    GtkWidget *box = GTK_WIDGET(gtk_builder_get_object(builder, "GrandSonBoxStats"));
+    TextBufferProps *tbp = set_TextBufferProps("grey", NULL, 20, PANGO_STYLE_NORMAL);
+    TextViewProps *tvp = set_TextViewProps(10, 10, 10, 10, FALSE,
+                                           GTK_JUSTIFY_LEFT, FALSE, text, *tbp);
 }
 
 /***************** Second Thoughts ******************/
 
-void calculate_StatVirus_Individu(Individu * individu,Stats * stat)
-{
+void calculate_StatVirus_Individu(Individu *individu, Stats *stat) {
     GList *crtvirus = individu->virusList;
 
-    while(crtvirus)
-    {
+    while (crtvirus) {
 
-            if(crtvirus->data)
-            {
-                StatVirus * sVirus = get_StatVirus_fromString(((Virus *) crtvirus->data)->nom,stat);
-                if(sVirus)
-                {
-                    sVirus->infected++;
-                }
-                else
-                {
-
-                    StatVirus * sv = init_StatVirus(((Virus *) crtvirus->data)->nom);
-                    sv->infected++;
-                    stat->virusInfection = g_list_append(stat->virusInfection,sv);
-                }
+        if (crtvirus->data) {
+            StatVirus *sVirus = get_StatVirus_fromString(((Virus *) crtvirus->data)->nom, stat);
+            if (sVirus) {
+                sVirus->infected++;
+            } else {
+                StatVirus *sv = init_StatVirus(((Virus *) crtvirus->data)->nom);
+                sv->infected++;
+                stat->virusInfection = g_list_append(stat->virusInfection, sv);
             }
-
+        }
         crtvirus = crtvirus->next;
     }
 }
 
-void calculate_Stats_Individu(GList * indiviusList, Individu * indiv, Stats * stat)
-{
-    if(stat)
-    {
+void calculate_Stats_Individu(GList *indiviusList, Individu *indiv, Stats *stat) {
+    if (stat) {
         stat->totalPopulation++;
-        calculate_StatVirus_Individu(indiv,stat);
+        calculate_StatVirus_Individu(indiv, stat);
     }
 }
 
-void show_Stats(gpointer builder, Stats * stat)
+void split_part_of_string(const gchar * src,gchar * dest,gchar splitChar)
 {
-    GtkAdjustment * adjustCurrPop = GTK_ADJUSTMENT(gtk_builder_get_object(builder,"adjustCurrentPopulation"));
-    GtkAdjustment * adjustDeaths = GTK_ADJUSTMENT(gtk_builder_get_object(builder,"adjustDeaths"));
-    GtkWidget * label = GTK_WIDGET(gtk_builder_get_object(builder,"TotalpopulationLabel"));
+    int i = 0;
+    while (src[i] != splitChar)
+    {
+        dest[i] = src[i];
+        i++;
+    }
+    dest[i] = '\0';
+}
+
+gint macro_find_compareLabel(gpointer label, gpointer virusLabe) {
+    GtkWidget *crtLabel = label;
+    gchar dest1[25];
+    gchar dest2[25];
+    split_part_of_string(gtk_label_get_label(GTK_LABEL(crtLabel)),dest1,':');
+    split_part_of_string(virusLabe,dest2,':');
+    return g_ascii_strcasecmp(dest1, dest2);
+}
+
+GtkWidget * virus_exists_in_BoxVirusInfect(GList *virusLabelList, gchar *newLabel) {
+    GList * element = g_list_find_custom(virusLabelList, newLabel, (GCompareFunc) macro_find_compareLabel);
+    return element ? ((GtkWidget *) element->data) : NULL;
+}
+
+void show_StatVirus(gpointer virusStat, gpointer box) {
+    StatVirus *vs = virusStat;
+    GtkWidget *label = NULL;
+    GList *virusLabelList = gtk_container_get_children(GTK_CONTAINER(box));
+    if (!virus_exists_in_BoxVirusInfect(virusLabelList, g_strdup_printf("%s : %d", vs->virusName, vs->infected))) {
+        label = gtk_label_new(g_strdup_printf("%s : %d", vs->virusName, vs->infected));
+        gtk_box_pack_start(GTK_BOX(box), label, TRUE, TRUE, 5);
+        gtk_widget_show(label);
+    } else {
+        label = virus_exists_in_BoxVirusInfect(virusLabelList, g_strdup_printf("%s : %d", vs->virusName, vs->infected));
+        gtk_label_set_text(GTK_LABEL(label),g_strdup_printf("%s : %d", vs->virusName, vs->infected));
+    }
+
+}
+
+void show_box_StatVirus(GtkWidget *box, GList *virusStat) {
+    g_list_foreach(virusStat, show_StatVirus, box);
+}
+
+void show_Stats(gpointer builder, Stats *stat) {
+    GtkAdjustment *adjustCurrPop = GTK_ADJUSTMENT(gtk_builder_get_object(builder, "adjustCurrentPopulation"));
+    GtkAdjustment *adjustDeaths = GTK_ADJUSTMENT(gtk_builder_get_object(builder, "adjustDeaths"));
+    GtkWidget *label = GTK_WIDGET(gtk_builder_get_object(builder, "TotalpopulationLabel"));
+    GtkWidget *box = GTK_WIDGET(gtk_builder_get_object(builder, "BoxVirusInfect"));
 
 //    gchar population[20];
 //    sprintf(population, "%d", stat->totalPopulation);
 //    printf("\nTotal Population = %s",population);
 
 
-    gtk_adjustment_set_value(adjustCurrPop,((gdouble)
-            (((gdouble) (stat->totalPopulation - stat->deaths) / (gdouble)stat->totalPopulation) * 100))
+    gtk_adjustment_set_value(adjustCurrPop, ((gdouble)
+            (((gdouble) (stat->totalPopulation - stat->deaths) / (gdouble) stat->totalPopulation) * 100))
     );
 
-    gtk_adjustment_set_value(adjustDeaths,((gdouble)
-            (((gdouble)stat->deaths / (gdouble)stat->totalPopulation) * 100))
+    gtk_adjustment_set_value(adjustDeaths, ((gdouble)
+            (((gdouble) stat->deaths / (gdouble) stat->totalPopulation) * 100))
     );
 
     gtk_label_set_text(GTK_LABEL(label), g_strdup_printf("%d", stat->totalPopulation));
     gtk_widget_show(label);
+
+    show_box_StatVirus(box, stat->virusInfection);
 
 }
 
