@@ -80,21 +80,21 @@ GtkWidget* choixImage(Individu* indiv)
     if(indiv->gender == 1)
     {
         if(indiv->categorie == 4)
-            image = gtk_image_new_from_file("../pic/haj.png");
+            image = gtk_image_new_from_file("../pic/haj2.png");
         else if(indiv->categorie == 0)
-                image = gtk_image_new_from_file("../pic/babyB.png");
+                image = gtk_image_new_from_file("../pic/babyB3.png");
         else
-            image = gtk_image_new_from_file("../pic/nta.png");
+            image = gtk_image_new_from_file("../pic/nta2.png");
     }
     else
     {
 
             if(indiv->categorie == 4)
-                image = gtk_image_new_from_file("../pic/haja.png");
+                image = gtk_image_new_from_file("../pic/haja2.png");
             else if(indiv->categorie == 0)
-                image = gtk_image_new_from_file("../pic/babyG.png");
+                image = gtk_image_new_from_file("../pic/babyG2.png");
             else
-            image = gtk_image_new_from_file("../pic/nti.png");
+            image = gtk_image_new_from_file("../pic/nti2.png");
     }
     return (GtkWidget*)image;
 
