@@ -219,8 +219,8 @@ void iterateSingleIndividu(gpointer data, gpointer builder) {
         if (individu->hp == -99) {
 
         } else if (individu->hp <= 0) {
-            gtk_image_set_from_icon_name(data, "computer",
-                                         GTK_ICON_SIZE_BUTTON);
+
+            gtk_image_set_from_resource(data, "pic/9ber.png");
             stat->deaths++;
             show_Stats(builder,stat);
             individu->hp = -99;

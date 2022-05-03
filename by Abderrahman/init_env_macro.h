@@ -153,7 +153,6 @@ void show_Individu_to_Interface(Individu * indiv)
         strcat(msg,virusList);
     }
 
-
     macro_dialog(msg);
 }
 
@@ -165,15 +164,13 @@ gboolean add_individu (GtkWidget *widget, GdkEvent *event, gpointer builder) {
     if ((img = gtk_bin_get_child((GTK_BIN(widget)))))
     {
 
-        //g_print("\n***************\n");
 
-        //g_print("\nAlready has child\n");
 
         Individu *individu = (Individu *) g_object_get_data(G_OBJECT(img), DATA_KEY_INDIVIDU);
         //afficher_individu(individu);
         show_Individu_to_Interface(individu);
 
-        g_printerr("\n***************\n");
+
 
         return TRUE;
     }

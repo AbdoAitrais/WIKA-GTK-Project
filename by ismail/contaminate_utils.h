@@ -15,7 +15,7 @@ void AgePerson(Individu P, double *val) {
             *val += 0.5;
             break;
         case AGE_TEENS :
-            *val ++;
+            *val += 1.0;
             break;
         case AGE_YOUTH :
             *val += 0.8;
@@ -43,14 +43,14 @@ void LaGenetique(Individu P, double *val) {
             *val += 0.6;
             break;
         case GENETIQUEMENT_FORT:
-            *val++;
+            *val += 1.0;
     }
 }
 
 void LaTension(Individu P, double *val) {
     switch (P.health.tension) {
         case ARTERIELLE_NORMAL:
-            *val ++;
+            *val += 1.0;
             break;
         case ARTERIELLE_HYPERTENDU:
             *val += 0.5;
@@ -66,7 +66,7 @@ void LaDiabete(Individu P, double *val) {
             *val += 0.5;
             break;
         case DIABETE_MODERE:
-            *val += 0.7;
+            *val += 0.9;
             break;
         case DIABETE_AVANCE:
             *val += 0.1;

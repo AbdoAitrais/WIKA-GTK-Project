@@ -27,11 +27,11 @@
     background: url("grass.png");*/
 }
 
-.main-env, #grid {
-    background: url("background1.jpg");
-    background-size: cover;
-    background-repeat: no-repeat;
-}
+/*.main-env, #grid {*/
+/*    background: url("background1.jpg");*/
+/*    background-size: cover;*/
+/*    background-repeat: no-repeat;*/
+/*}*/
 
 .propsBox {
     background-color: aliceblue;
@@ -60,3 +60,11 @@
     background-color: #222;
     border-color: black;
 }
+
+.dead{
+    /*filter: hue-rotate(130deg);*/
+    /*opacity: 0.5;*/
+    background-color: black;
+}
+
+
