@@ -9,7 +9,7 @@
 #include "../constants.h"
 #include "../by Abderrahman/gobject_utils.h"
 #include "../by Abderrahman/show_functions.h"
-
+#include "../by Abderrahman/tableauManip.h"
 
 
 void AgePerson(Individu P, double *val) {
@@ -116,29 +116,45 @@ void calculate_damageTaken_per_Individu(Individu * indiv)
 }
 
 
+//void damage_to_Virus(Individu * indiv)
+//{
+//    GList * crt = indiv->virusList;
+//    GList * elemSupp = NULL;
+//    while (crt)
+//    {
+//        elemSupp = crt;
+//        if(((Virus *) crt->data)->virusLife <= 0)
+//        {
+//            indiv->virusList = g_list_remove(indiv->virusList, elemSupp->data);
+//            calculate_damageTaken_per_Individu(indiv);
+//        }
+//        else
+//        {
+//            ((Virus *) crt->data)->virusLife-- ;
+//            g_print("\n\nLa vie du virus = %d",((Virus *) crt->data)->virusLife);
+//        }
+//        crt = crt->next;
+//    }
+//}
+
 void damage_to_Virus(Individu * indiv)
 {
+    int i;
     GList * crt = indiv->virusList;
-//    GList * elemSupp = NULL;
-    while (crt)
+    GList * elemSupp = NULL;
+    for (i = 0; i < indiv->virusesLifes.nbrElem; i++)
     {
-        if(((Virus *) crt->data)->virusLife <= 0)
+        elemSupp = crt;
+        if(indiv->virusesLifes.tab[i] <= 0)
         {
-//            elemSupp = crt;
-            if(crt->next)
-            {
-                crt = crt->next;
-                indiv->virusList = g_list_remove(indiv->virusList, crt->prev->data);
-                calculate_damageTaken_per_Individu(indiv);
-                //show_Individu_to_Interface(indiv);
-                continue;
-            }
-            indiv->virusList = g_list_remove(indiv->virusList, crt->data);
+            suppPosition_TListe(&indiv->virusesLifes,i + 1);
+            indiv->virusList = g_list_remove(indiv->virusList, elemSupp->data);
             calculate_damageTaken_per_Individu(indiv);
-            //show_Individu_to_Interface(indiv);
-            return;
         }
-        ((Virus *) crt->data)->virusLife-- ;
+        else
+            indiv->virusesLifes.tab[i]--;
+        if(!crt)
+            break;
         crt = crt->next;
     }
 }
@@ -170,9 +186,10 @@ gint VirusExiste(Individu *individu, Virus *virus) {
 
 
 static void macro_contaminateSingleIndiv(Individu *individu, Virus *virus) {
-    gint result = g_list_index(individu->virusList, virus);
-    if (result == -1) {
+
+    if (!VirusExiste(individu, virus)) {
         individu->virusList = g_list_append(individu->virusList, virus);
+        inserer_TListe(&individu->virusesLifes,virus->virusLife);
         ///TODO :: Update damageTaken value
         individu->damageTaken += virus->damage;
     }

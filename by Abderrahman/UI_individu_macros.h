@@ -10,7 +10,7 @@
 #include "gobject_utils.h"
 #include "../by ismail/contaminate_utils.h"
 #include "dialog_macro.h"
-
+#include "tableauManip.h"
 
 
 
@@ -153,10 +153,20 @@ GList *get_selected_checkButtons_fromButtonList(GList *buttonList, gpointer buil
 //    return ((GList *) virusList);
 //}
 
-
+void remplir_tableau_virusesLifes(Individu * indiv)
+{
+    GList * crt = indiv->virusList;
+    while(crt)
+    {
+        inserer_TListe(&indiv->virusesLifes,((Virus *) crt->data)->virusLife);
+        crt = crt->next;
+    }
+}
 
 Individu *lire_Indiv(gpointer builder) {
     Individu *individu = (Individu *) g_malloc(sizeof(Individu));
+
+
     GtkRadioButton *radioButton = GTK_RADIO_BUTTON(gtk_builder_get_object(builder, "radioButtonHomme"));
     GSList *radioGrp = gtk_radio_button_get_group(radioButton);
     gchar *genre;
@@ -190,6 +200,9 @@ Individu *lire_Indiv(gpointer builder) {
     individu->virusList = get_selected_checkButtons_fromButtonList(
             gtk_container_get_children(GTK_CONTAINER(buttonBox)), builder
     );
+    individu->virusesLifes.nbrElem = 0;
+    remplir_tableau_virusesLifes(individu);
+
     individu->categorie = get_age_fromString(
             gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(comboBoxAge))
     );

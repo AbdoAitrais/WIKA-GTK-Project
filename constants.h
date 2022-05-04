@@ -16,6 +16,7 @@
 
 #define DEFAULT_MAX_ROWS 70
 #define DEFAULT_MAX_COLS 40
+#define DEFAULT_MAX_ARRAY 100
 
 #define DEFAULT_SAVE_FILE_NAME "status.wika"
 

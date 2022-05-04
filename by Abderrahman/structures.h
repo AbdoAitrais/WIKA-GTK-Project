@@ -5,7 +5,7 @@
 #ifndef MAIN_C_STRUCTURES_H
 #define MAIN_C_STRUCTURES_H
 #include <gtk/gtk.h>
-
+#include "../constants.h"
 
 /********** structures ************/
 
@@ -85,6 +85,13 @@ typedef enum {
 } Age2;
 
 // si vous voulez faire deux entites (personne,animal) mais je pense c'est pas le peine
+
+typedef struct
+{
+    gint tab[DEFAULT_MAX_ARRAY]; // le tableau de la liste
+    gint nbrElem;// le nombre d'element du tableau
+}Maliste;// definition de la structure
+
 typedef struct {
 
     Genre gender;// le sexe de Individu
@@ -95,6 +102,15 @@ typedef struct {
     GList *virusList;// liste des virus qui a le Individu
     gfloat hp;// health points
     gfloat damageTaken;// c'est la valeur pour decrementer le hp selon les virus associés à l'individu
+    Maliste virusesLifes;
 } Individu;// peut être animal,personne...
 
 #endif //MAIN_C_STRUCTURES_H
+
+
+
+
+
+
+
+
