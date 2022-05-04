@@ -8,6 +8,9 @@
 #include "../by Abderrahman/UI_individu_macros.h"
 #include "../constants.h"
 #include "../by Abderrahman/gobject_utils.h"
+#include "../by Abderrahman/show_functions.h"
+
+
 
 void AgePerson(Individu P, double *val) {
     switch (P.categorie) {
@@ -100,6 +103,45 @@ void LaPoumons(Individu P, double *val) {
     }
 }
 
+void calcule_Virus_DamageTaken(gpointer virus,gpointer indiv) {
+
+    ((Individu *) indiv)->damageTaken += ((gfloat) ((((Virus *) virus)->prctMortel / 100.0) * -1.0));
+}
+
+void calculate_damageTaken_per_Individu(Individu * indiv)
+{
+    GList * virusList = indiv->virusList;
+    indiv->damageTaken = ((gfloat) 0.0);//initialization
+    g_list_foreach(virusList,calcule_Virus_DamageTaken,indiv);
+}
+
+
+void damage_to_Virus(Individu * indiv)
+{
+    GList * crt = indiv->virusList;
+//    GList * elemSupp = NULL;
+    while (crt)
+    {
+        if(((Virus *) crt->data)->virusLife <= 0)
+        {
+//            elemSupp = crt;
+            if(crt->next)
+            {
+                crt = crt->next;
+                indiv->virusList = g_list_remove(indiv->virusList, crt->prev->data);
+                calculate_damageTaken_per_Individu(indiv);
+                //show_Individu_to_Interface(indiv);
+                continue;
+            }
+            indiv->virusList = g_list_remove(indiv->virusList, crt->data);
+            calculate_damageTaken_per_Individu(indiv);
+            //show_Individu_to_Interface(indiv);
+            return;
+        }
+        ((Virus *) crt->data)->virusLife-- ;
+        crt = crt->next;
+    }
+}
 
 float calculerHPdeIndividu(Individu P) {
     double etat = 0.0;
@@ -112,26 +154,10 @@ float calculerHPdeIndividu(Individu P) {
     return ((float) etat);
 }
 
-// divise les catégories de virus en 5 selon leurs taux de mortalités
-//gint categorieDeVirus(Virus *V) {
-//    if (V->prctMortel >= 1 && V->prctMortel < 25) return (int) 1;
-//    if (V->prctMortel >= 25 && V->prctMortel < 50) return (int) 2;
-//    if (V->prctMortel >= 50 && V->prctMortel < 75) return (int) 3;
-//    if (V->prctMortel >= 75 && V->prctMortel < 99) return (int) 4;
-//    if (V->prctMortel == 100) return (int) 5;
-//}
 
 /// association à chaque catégorie un réel
 gfloat calculeVirusDamageField(Virus *v) {
-    //int cas = categorieDeVirus(V);
-//    switch(categorieDeVirus(v))
-//    {
-//        case 1: return  (float)  (-0.2);
-//        case 2: return  (float) (-0.38);
-//        case 3: return  (float) (-0.56);
-//        case 4: return  (float) (-0.74);
-//        case 5: return  (float)(-6.0);
-//    }
+
     return ((gfloat) ((v->prctMortel / 100.0) * -1.0));
 }
 
@@ -139,17 +165,64 @@ gint VirusExiste(Individu *individu, Virus *virus) {
     return g_list_find_custom(individu->virusList, virus->nom, (GCompareFunc) macro_find_compareVirusByName) ? 1 : 0;
 }
 
-void calcule_Virus_DamageTaken(gpointer virus,gpointer indiv) {
 
-    ((Individu *) indiv)->damageTaken += ((gfloat) ((((Virus *) virus)->prctMortel / 100.0) * -1.0));
+
+
+
+static void macro_contaminateSingleIndiv(Individu *individu, Virus *virus) {
+    gint result = g_list_index(individu->virusList, virus);
+    if (result == -1) {
+        individu->virusList = g_list_append(individu->virusList, virus);
+        ///TODO :: Update damageTaken value
+        individu->damageTaken += virus->damage;
+    }
 }
 
-void calculate_damageTaken_per_Individu(Individu * indiv)
-{
-    GList * virusList = indiv->virusList;
-    indiv->damageTaken = ((gfloat) 0.0);//initialization
-    g_list_foreach(virusList,calcule_Virus_DamageTaken,indiv);
+static void contaminate_indivCercleSingleVrs(gpointer *virus, gpointer *img) {
+    gint i, j;
+    guint left, top;
+    GtkWidget *imgBox = gtk_widget_get_parent(GTK_WIDGET(img)),
+            *grid = gtk_widget_get_parent(GTK_WIDGET(imgBox));
+
+    gtk_container_child_get(GTK_CONTAINER(grid),
+                            GTK_WIDGET(imgBox), "left-attach",
+                            &left, "top-attach", &top, NULL);
+
+    guint leftBorder = left - (((Virus *) virus)->cercleDeContam),
+            rightBorder = left + (((Virus *) virus)->cercleDeContam),
+            topBorder = top + (((Virus *) virus)->cercleDeContam),
+            bottomBorder = top - (((Virus *) virus)->cercleDeContam);
+    {
+        if (leftBorder < 0)
+            leftBorder = 0;
+        if (rightBorder > DEFAULT_MAX_ROWS - 1)
+            rightBorder = DEFAULT_MAX_ROWS - 1;
+        if (bottomBorder < 0)
+            bottomBorder = 0;
+        if (topBorder > DEFAULT_MAX_COLS - 1)
+            topBorder = DEFAULT_MAX_COLS - 1;
+    }
+
+    for (i = leftBorder; i < rightBorder; i++) {
+        for (j = bottomBorder; j < topBorder; j++) {
+            if (i == left && j == top)
+                continue;
+            g_assert(GTK_IS_GRID(grid));
+
+            GtkWidget *box = (GtkWidget *) gtk_grid_get_child_at(GTK_GRID(grid), (gint) i, (gint) j);
+
+            GtkWidget *image = ((GtkWidget *) gtk_bin_get_child(GTK_BIN(box)));
+            if (image) {
+
+                Individu *individu = (Individu *) g_object_get_data(G_OBJECT(image), DATA_KEY_INDIVIDU);
+                macro_contaminateSingleIndiv(individu, (Virus *) virus);
+
+
+            }
+        }
+    }
 }
+
 
 /*void contaminationDesIndividus(GtkGrid *grid, Coord pos, Virus *virus) {
     guint i, j;

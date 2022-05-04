@@ -34,6 +34,13 @@
     <property name="step-increment">1</property>
     <property name="page-increment">10</property>
   </object>
+  <object class="GtkAdjustment" id="adjustVirusLife">
+    <property name="lower">1</property>
+    <property name="upper">5</property>
+    <property name="value">1</property>
+    <property name="step-increment">1</property>
+    <property name="page-increment">10</property>
+  </object>
   <object class="GtkWindow" id="MainWindow">
     <property name="can-focus">False</property>
     <child>
@@ -709,35 +716,6 @@
                             <property name="orientation">vertical</property>
                             <property name="spacing">12</property>
                             <child>
-                              <object class="GtkLabel" id="label6">
-                                <property name="visible">True</property>
-                                <property name="can-focus">False</property>
-                                <property name="label" translatable="yes">Pourcent Contam :</property>
-                                <property name="width-chars">10</property>
-                              </object>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="fill">True</property>
-                                <property name="position">0</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkScale" id="scale1">
-                                <property name="width-request">100</property>
-                                <property name="visible">True</property>
-                                <property name="can-focus">True</property>
-                                <property name="margin-start">5</property>
-                                <property name="margin-end">5</property>
-                                <property name="adjustment">adjust1</property>
-                                <property name="round-digits">1</property>
-                              </object>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="fill">True</property>
-                                <property name="position">1</property>
-                              </packing>
-                            </child>
-                            <child>
                               <object class="GtkLabel" id="label8">
                                 <property name="visible">True</property>
                                 <property name="can-focus">False</property>
@@ -747,7 +725,7 @@
                               <packing>
                                 <property name="expand">False</property>
                                 <property name="fill">True</property>
-                                <property name="position">2</property>
+                                <property name="position">0</property>
                               </packing>
                             </child>
                             <child>
@@ -759,6 +737,37 @@
                                 <property name="margin-end">5</property>
                                 <property name="adjustment">adjust2</property>
                                 <property name="round-digits">1</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">1</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkLabel" id="label6">
+                                <property name="visible">True</property>
+                                <property name="can-focus">False</property>
+                                <property name="label" translatable="yes">Temps de vie Virus :</property>
+                                <property name="width-chars">10</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">2</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkSpinButton" id="spinButtonVirusLife">
+                                <property name="width-request">100</property>
+                                <property name="visible">True</property>
+                                <property name="can-focus">True</property>
+                                <property name="margin-start">5</property>
+                                <property name="margin-end">5</property>
+                                <property name="text" translatable="yes">1</property>
+                                <property name="input-purpose">digits</property>
+                                <property name="adjustment">adjustVirusLife</property>
+                                <property name="value">5</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>

@@ -32,9 +32,6 @@ void set_css(gpointer builder) {
     GtkWidget *comboBox4 = NULL;
     GtkWidget *comboBox5 = NULL;
 
-    GtkWidget *textView1 = NULL;
-
-    GtkWidget *scale1 = NULL;
     GtkWidget *scale2 = NULL;
     GtkWidget *button = NULL;
 
@@ -50,7 +47,6 @@ void set_css(gpointer builder) {
     comboBox3 = GTK_WIDGET(gtk_builder_get_object(builder, "comboBoxDiabete"));
     comboBox4 = GTK_WIDGET(gtk_builder_get_object(builder, "comboBoxCardiaque"));
     comboBox5 = GTK_WIDGET(gtk_builder_get_object(builder, "comboBoxPoumons"));
-    scale1 = GTK_WIDGET(gtk_builder_get_object(builder, "scale1"));
     scale2 = GTK_WIDGET(gtk_builder_get_object(builder, "scale2"));
 
 
@@ -66,7 +62,6 @@ void set_css(gpointer builder) {
     gtk_style_context_add_class(gtk_widget_get_style_context(comboBox4), "comboBox");
     gtk_style_context_add_class(gtk_widget_get_style_context(comboBox5), "comboBox");
 
-    gtk_style_context_add_class(gtk_widget_get_style_context(scale1), "scale");
     gtk_style_context_add_class(gtk_widget_get_style_context(scale2), "scale");
 
 
@@ -154,59 +149,6 @@ gboolean macro_moveGrid(GtkImage *image) {
 Individu *lire_Indiv(gpointer builder);
 
 
-static void macro_contaminateSingleIndiv(Individu *individu, Virus *virus) {
-    gint result = g_list_index(individu->virusList, virus);
-    if (result == -1) {
-        individu->virusList = g_list_append(individu->virusList, virus);
-        ///TODO :: Update damageTaken value
-        individu->damageTaken += virus->damage;
-    }
-}
-
-static void contaminate_indivCercleSingleVrs(gpointer *virus, gpointer *img) {
-    gint i, j;
-    guint left, top;
-    GtkWidget *imgBox = gtk_widget_get_parent(GTK_WIDGET(img)),
-            *grid = gtk_widget_get_parent(GTK_WIDGET(imgBox));
-
-    gtk_container_child_get(GTK_CONTAINER(grid),
-                            GTK_WIDGET(imgBox), "left-attach",
-                            &left, "top-attach", &top, NULL);
-
-    guint leftBorder = left - (((Virus *) virus)->cercleDeContam),
-            rightBorder = left + (((Virus *) virus)->cercleDeContam),
-            topBorder = top + (((Virus *) virus)->cercleDeContam),
-            bottomBorder = top - (((Virus *) virus)->cercleDeContam);
-    {
-        if (leftBorder < 0)
-            leftBorder = 0;
-        if (rightBorder > DEFAULT_MAX_ROWS - 1)
-            rightBorder = DEFAULT_MAX_ROWS - 1;
-        if (bottomBorder < 0)
-            bottomBorder = 0;
-        if (topBorder > DEFAULT_MAX_COLS - 1)
-            topBorder = DEFAULT_MAX_COLS - 1;
-    }
-
-    for (i = leftBorder; i < rightBorder; i++) {
-        for (j = bottomBorder; j < topBorder; j++) {
-            if (i == left && j == top)
-                continue;
-            g_assert(GTK_IS_GRID(grid));
-
-            GtkWidget *box = (GtkWidget *) gtk_grid_get_child_at(GTK_GRID(grid), (gint) i, (gint) j);
-
-            GtkWidget *image = ((GtkWidget *) gtk_bin_get_child(GTK_BIN(box)));
-            if (image) {
-
-                Individu *individu = (Individu *) g_object_get_data(G_OBJECT(image), DATA_KEY_INDIVIDU);
-                macro_contaminateSingleIndiv(individu, (Virus *) virus);
-
-
-            }
-        }
-    }
-}
 
 
 void iterateSingleIndividu(gpointer data, gpointer builder) {
@@ -216,20 +158,22 @@ void iterateSingleIndividu(gpointer data, gpointer builder) {
     if (PLAY_MODE) {
         Individu *individu = (Individu *) g_object_get_data(G_OBJECT(data), DATA_KEY_INDIVIDU);
 
-        if (individu->hp == -99) {
+        if ((individu->hp <= 0) && (individu->hp != -99)) {
+            GError * err = NULL;
 
-        } else if (individu->hp <= 0) {
+            GdkPixbuf * gdkPixbuf = gdk_pixbuf_new_from_file("../pic/9ber50.png",&err);
+            gtk_image_set_from_pixbuf(data,gdkPixbuf);
 
-            gtk_image_set_from_resource(data, "pic/9ber.png");
             stat->deaths++;
             show_Stats(builder,stat);
             individu->hp = -99;
 
-        } else {
+        } else if (individu->hp > 0){
             macro_moveGrid(data);
 
-
             individu->hp += individu->damageTaken;
+            damage_to_Virus(individu);
+
             g_list_foreach(individu->virusList, (GFunc) contaminate_indivCercleSingleVrs, data);
         }
 

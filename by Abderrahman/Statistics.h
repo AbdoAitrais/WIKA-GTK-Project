@@ -247,10 +247,12 @@ void afficher_StatVirus(GList *Statv) {
 
 void afficher_Stats(Stats *stat) {
     if (stat) {
+        printf("********** Showing Stats **********\n\n");
         printf("\nTotal Population      : %d", stat->totalPopulation);
         printf("\nCurrent Population    : %d", (stat->totalPopulation - stat->deaths));
         printf("\nTotal deaths          : %d", stat->deaths);
         afficher_StatVirus(stat->virusInfection);
+        printf("\n\n***********************************");
     }
 }
 

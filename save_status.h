@@ -28,7 +28,7 @@ static void macro_save_single_virus_node(gpointer virus_data, gpointer virussND)
     sprintf(buffer, "%u", virus->cercleDeContam);
     xmlNewProp(virusND, BAD_CAST ATTR_VIRUS_SPREAD_CIRCLE, BAD_CAST buffer);
 
-    sprintf(buffer, "%f", virus->prctContam);
+    sprintf(buffer, "%d", virus->virusLife);
     xmlNewProp(virusND, BAD_CAST ATTR_VIRUS_SPREAD, BAD_CAST buffer);
 
     sprintf(buffer, "%f", virus->prctMortel);
@@ -168,7 +168,7 @@ static GList *test_sample_virus_list() {
     GList *list = NULL;
 
     virus->prctMortel = 15.5;
-    virus->prctContam = 52.5;
+    virus->virusLife = 1;
     virus->cercleDeContam = 10;
 //    virus->Id = 11155;
     virus->nom = "premier virus";
@@ -235,7 +235,7 @@ static Virus *macro_parseVirus(xmlNode *node) {
 //    virus->Id = g_ascii_strtoll(property, NULL, 0);
 
     property = (gchar *) xmlGetProp(node, (const xmlChar *) ATTR_VIRUS_SPREAD);
-    virus->prctContam = g_ascii_strtod(property, NULL);
+    virus->virusLife = g_ascii_strtod(property, NULL);
 
     property = (gchar *) xmlGetProp(node, (const xmlChar *) ATTR_VIRUS_SPREAD_CIRCLE);
     virus->cercleDeContam = g_ascii_strtoull(property, NULL, 0);

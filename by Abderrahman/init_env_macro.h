@@ -80,21 +80,21 @@ GtkWidget* choixImage(Individu* indiv)
     if(indiv->gender == 1)
     {
         if(indiv->categorie == 4)
-            image = gtk_image_new_from_file("../pic/haj.png");
+            image = gtk_image_new_from_file("../pic/haj2.png");
         else if(indiv->categorie == 0)
-            image = gtk_image_new_from_file("../pic/babyB.png");
+            image = gtk_image_new_from_file("../pic/babyB3.png");
         else
-            image = gtk_image_new_from_file("../pic/nta.png");
+            image = gtk_image_new_from_file("../pic/nta2.png");
     }
     else
     {
 
             if(indiv->categorie == 4)
-                image = gtk_image_new_from_file("../pic/haja.png");
+                image = gtk_image_new_from_file("../pic/haja2.png");
             else if(indiv->categorie == 0)
-                image = gtk_image_new_from_file("../pic/babyG.png");
+                image = gtk_image_new_from_file("../pic/babyG3.png");
             else
-                image = gtk_image_new_from_file("../pic/nti.png");
+                image = gtk_image_new_from_file("../pic/nti2.png");
     }
     return (GtkWidget*)image;
 
@@ -116,45 +116,12 @@ GtkWidget* choixImage(Individu* indiv)
 //    return TRUE;
 //}
 
-void get_virusName_from_Virus(gpointer virus, gpointer virusName)
-{
-    gchar name[20];
-    sprintf(((gchar *) name),"%s\n",((Virus *)virus)->nom);
-    strcat(virusName,name);
-}
-
-void concatinate_virusName(GList * virusList,gchar * virusesNames)
-{
-    g_list_foreach(virusList,get_virusName_from_Virus,virusesNames);
-}
 
 
-void show_Individu_to_Interface(Individu * indiv)
-{
-    gchar msg[500];
-    gchar virusList[200];
-    sprintf(msg,
-                "Infos d'individu\n"
-                "gender = %s\n"
-                "genetic = %s\n"
-                "tension = %s\n"
-                "diabete = %s\n"
-                "cardiaque = %s\n"
-                "poumons = %s\n"
-                "categorie = %s\n"
-                "hp = %.2f\n"
-                ,(gchar*)associerGender(indiv),(gchar*)associerGenetique(indiv),(gchar*)associerTension(indiv),(gchar*)associerDiabete(indiv),
-                (gchar*)associerCardiaque(indiv),(gchar*)associerPoumons(indiv),(gchar*)associerAge(indiv),indiv->hp
-                );
-    if(indiv->virusList)
-    {
-        sprintf(virusList,"Liste des virus :\n");
-        concatinate_virusName(indiv->virusList,virusList);
-        strcat(msg,virusList);
-    }
 
-    macro_dialog(msg);
-}
+
+
+
 
 gboolean add_individu (GtkWidget *widget, GdkEvent *event, gpointer builder) {
     if (!ADD_INDIVIDU_MODE)
