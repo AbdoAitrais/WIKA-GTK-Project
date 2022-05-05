@@ -24,11 +24,18 @@
 #define TAG_ROOT                    "env"
 #define TAG_LIST_PERSONS            "persons"
 #define TAG_LIST_VIRUS              "viruss"
+#define TAG_LIST_STATISTICS         "statistics"
 #define TAG_PERSON                  "person"
 #define TAG_PERSON_SANTE            "sante"
 #define TAG_VIRUS                   "virus"
 #define TAG_DIMENSION               "dimension"
 #define TAG_SANTE                   "sante"
+#define TAG_STAT_VIRUS              "statVirus"
+
+
+#define ATTR_STATISTICS_DEATHS      "deaths"
+#define ATTR_STATISTICS_POP_TOTAL   "total"
+#define ATTR_STAT_VIRUS_INFECTED    "infected"
 
 
 #define ATTR_DIMENSION_ROWS         "rows"
@@ -55,8 +62,6 @@
 gboolean PLAY_MODE = TRUE;
 gboolean ADD_INDIVIDU_MODE = TRUE;
 guint PLAY_SPEED = 600;
-
-
 
 
 #endif //MAIN_C_CONSTANTS_H

@@ -25,6 +25,8 @@ typedef struct {
     /// environnement dimension
     guint cols, rows;
 
+    Stats *stats;
+
 } EnvInfo;
 
 
