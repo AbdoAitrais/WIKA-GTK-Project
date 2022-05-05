@@ -64,7 +64,6 @@ static xmlNode *trans_SanteToXmlNode(Sante sante) {
     xmlNewProp(santeND, BAD_CAST ATTR_PERSON_TENSION, BAD_CAST buffer);
 
     return santeND;
-
 }
 
 static void macro_save_single_pers_node(gpointer pers_data, gpointer personsND) {
