@@ -22,4 +22,13 @@ gint macro_find_compareVirusByName(gpointer virus, gpointer nom) {
 }
 
 
+GtkBuilder *getBuilder() {
+    static GtkBuilder *builder;
+    if (!builder) {
+        builder = gtk_builder_new();
+    }
+    return builder;
+}
+
+
 #endif //MAIN_C_GOBJECT_UTILS_H

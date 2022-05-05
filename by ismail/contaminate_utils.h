@@ -6,7 +6,6 @@
 #define MAIN_C_CONTAMINATE_UTILS_H
 
 #include "../by Abderrahman/UI_individu_macros.h"
-#include "../constants.h"
 #include "../by Abderrahman/gobject_utils.h"
 #include "../by Abderrahman/show_functions.h"
 #include "../by Abderrahman/tableauManip.h"
@@ -31,7 +30,6 @@ void AgePerson(Individu P, double *val) {
         default:
             *val = 0.0;
     }
-
 }
 
 void LaGenetique(Individu P, double *val) {
@@ -115,27 +113,6 @@ void calculate_damageTaken_per_Individu(Individu * indiv)
     g_list_foreach(virusList,calcule_Virus_DamageTaken,indiv);
 }
 
-
-//void damage_to_Virus(Individu * indiv)
-//{
-//    GList * crt = indiv->virusList;
-//    GList * elemSupp = NULL;
-//    while (crt)
-//    {
-//        elemSupp = crt;
-//        if(((Virus *) crt->data)->virusLife <= 0)
-//        {
-//            indiv->virusList = g_list_remove(indiv->virusList, elemSupp->data);
-//            calculate_damageTaken_per_Individu(indiv);
-//        }
-//        else
-//        {
-//            ((Virus *) crt->data)->virusLife-- ;
-//            g_print("\n\nLa vie du virus = %d",((Virus *) crt->data)->virusLife);
-//        }
-//        crt = crt->next;
-//    }
-//}
 
 void damage_to_Virus(Individu * indiv)
 {
@@ -240,35 +217,5 @@ static void contaminate_indivCercleSingleVrs(gpointer *virus, gpointer *img) {
     }
 }
 
-
-/*void contaminationDesIndividus(GtkGrid *grid, Coord pos, Virus *virus) {
-    guint i, j;
-    float x = (float) calculeVirusDamageField(virus);
-    ///On parcourt la cercle de contamination de première ligne jusqu'à le dernière
-    for (i = (pos.x - virus->cercleDeContam); i < (pos.x + virus->cercleDeContam); i++) {
-        //        /// if it is out of the table(grid)
-        if (i < 0 || i >= DEFAULT_MAX_ROWS)
-            continue;
-        ///on parcourt la cercle de contamination de premier colonne jusqu'à la dernière
-        for (j = (pos.y - virus->cercleDeContam); j < (pos.y + virus->cercleDeContam); j++) {
-            if (j < 0 || j >= DEFAULT_MAX_COLS)/// if it is out of the table(grid)
-                continue;
-            GtkWidget *box = gtk_grid_get_child_at(grid, i, j);
-            GtkWidget *image = gtk_bin_get_child(GTK_BIN(box));
-            if (image) {
-                Individu *individu = (Individu *) g_object_get_data(G_OBJECT(image), DATA_KEY_INDIVIDU);
-                if (VirusExiste(individu, virus)) {
-                    /// set le virus au l'individu
-                    individu->virusList = g_list_append(individu->virusList, virus);
-                    individu->damageTaken += x;
-                    //individu->hp -=individu->damageTaken;
-                    if (individu->hp <= 0)
-                        gtk_image_set_from_icon_name(GTK_IMAGE(image), "computer",
-                                                     GTK_ICON_SIZE_BUTTON);/// just to know it is the one until we decide how we kill a individu
-                }
-            }
-        }
-    }
-}*/
 
 #endif //MAIN_C_CONTAMINATE_UTILS_H

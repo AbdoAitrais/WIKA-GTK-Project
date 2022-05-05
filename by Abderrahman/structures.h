@@ -8,8 +8,6 @@
 #include "../constants.h"
 
 /********** structures ************/
-
-
 typedef struct {
     const gchar *nom;//Indentifiant du virus le nom associé à le virus
     guint virusLife;// le pourcentage de contamination de virus
@@ -76,14 +74,6 @@ typedef enum {
     AGE_OLD
 } Age;
 
-typedef enum {
-    AGE_INF12,
-    AGE_BETWEEN1225,
-    AGE_BETWEEN2540,
-    AGE_BETWEEN4065,
-    AGE_SUP65
-} Age2;
-
 // si vous voulez faire deux entites (personne,animal) mais je pense c'est pas le peine
 
 typedef struct
@@ -104,6 +94,21 @@ typedef struct {
     gfloat damageTaken;// c'est la valeur pour decrementer le hp selon les virus associés à l'individu
     Maliste virusesLifes;
 } Individu;// peut être animal,personne...
+
+
+
+/************ Statistics Structures *************/
+
+typedef struct {
+    const gchar *virusName;
+    guint infected;
+} StatVirus;
+
+typedef struct {
+    guint deaths;
+    guint totalPopulation;
+    GList *virusInfection;
+} Stats;
 
 #endif //MAIN_C_STRUCTURES_H
 

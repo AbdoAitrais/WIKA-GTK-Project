@@ -5,8 +5,6 @@
 #ifndef MAIN_C_UI_INDIVIDU_MACROS_H
 #define MAIN_C_UI_INDIVIDU_MACROS_H
 
-#include "structures.h"
-#include "../constants.h"
 #include "gobject_utils.h"
 #include "../by ismail/contaminate_utils.h"
 #include "dialog_macro.h"
@@ -249,7 +247,9 @@ void inserer_virus(gpointer builder, Virus *virus) {
     }
 }
 
-void remplir_virus(gpointer builder, const gchar *nom, guint virusLife, gfloat prctMortel, guint cercleDeContam) {
+void remplir_virus(gpointer builder, const gchar *nom,
+                   guint virusLife, gfloat prctMortel,
+                   guint cercleDeContam) {
     Virus *virus = (Virus *) g_malloc(sizeof(Virus));
     virus->nom = g_strdup(nom);
     virus->virusLife = virusLife;
@@ -269,7 +269,7 @@ void enregistrer_virus(GtkButton *button, gpointer builder) {
     GtkWidget *entryNomVirus = GTK_WIDGET(gtk_builder_get_object(builder, "entryNomVirus"));
     gchar * virusName = g_strdup(gtk_entry_get_text(GTK_ENTRY(entryNomVirus)));
 
-    if( (!g_strcmp0(virusName,"")) || (strlen(virusName) > 15) )
+    if( (!g_strcmp0(virusName,"")) || (strlen(virusName) > 15))
     {
         macro_dialog("Invalid virus name !");
         return ;

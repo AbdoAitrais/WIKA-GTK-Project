@@ -113,18 +113,7 @@ GtkWidget *macro_createTextView(TextViewProps tvprops) {
     return textv;
 }
 
-/************ Statistics Structures *************/
 
-typedef struct {
-    const gchar *virusName;
-    guint infected;
-} StatVirus;
-
-typedef struct {
-    guint deaths;
-    guint totalPopulation;
-    GList *virusInfection;
-} Stats;
 
 guint sum_GList(GList *individus) {
     guint sum = 0;

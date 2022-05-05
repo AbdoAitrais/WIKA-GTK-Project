@@ -45,7 +45,7 @@ int main(int argc, char *argv [])
     gtk_init(&argc, &argv);
 
     /**Ouverture du fichier Glade de la fenêtre principale */
-    builder = gtk_builder_new();
+    builder = getBuilder();
 
     /** Création du chemin complet pour accéder au fichier test.glade. */
     /** g_build_filename(); construit le chemin complet en fonction du système */
