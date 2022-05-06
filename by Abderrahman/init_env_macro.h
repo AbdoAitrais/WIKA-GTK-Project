@@ -82,7 +82,7 @@ GtkWidget* choixImage(Individu* indiv)
         if(indiv->categorie == 4)
             image = gtk_image_new_from_file("../pic/haj2.png");
         else if(indiv->categorie == 0)
-            image = gtk_image_new_from_file("../pic/babyB3.png");
+            image = gtk_image_new_from_file("../pic/littleB.png");
         else
             image = gtk_image_new_from_file("../pic/nta2.png");
     }
@@ -92,7 +92,7 @@ GtkWidget* choixImage(Individu* indiv)
             if(indiv->categorie == 4)
                 image = gtk_image_new_from_file("../pic/haja2.png");
             else if(indiv->categorie == 0)
-                image = gtk_image_new_from_file("../pic/babyG3.png");
+                image = gtk_image_new_from_file("../pic/littleG.png");
             else
                 image = gtk_image_new_from_file("../pic/nti2.png");
     }
