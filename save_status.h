@@ -64,7 +64,6 @@ static xmlNode *trans_SanteToXmlNode(Sante sante) {
     xmlNewProp(santeND, BAD_CAST ATTR_PERSON_TENSION, BAD_CAST buffer);
 
     return santeND;
-
 }
 
 static void macro_save_single_pers_node(gpointer pers_data, gpointer personsND) {
@@ -103,10 +102,26 @@ static void macro_save_single_pers_node(gpointer pers_data, gpointer personsND) 
 
 }
 
+static void macro_save_single_virus_infec_node(gpointer virus_data, gpointer statsND) {
+    StatVirus *statVirus = virus_data;
+    xmlNode *virusNd = NULL;
+    gchar buffer[256];
+
+    /// attach single person to persons' list node
+    virusNd = xmlNewChild(statsND, NULL, BAD_CAST TAG_STAT_VIRUS, statVirus->virusName);
+
+    sprintf(buffer, "%u", statVirus->infected);
+    xmlNewProp(virusNd, BAD_CAST ATTR_STAT_VIRUS_INFECTED, BAD_CAST buffer);
+}
+
 
 int macro_saveStatus(const gchar *file, EnvInfo envInfo) {
     xmlDocPtr doc = NULL;       /* document pointer */
-    xmlNodePtr root_node = NULL, persons = NULL, virus = NULL, coord = NULL;/* node pointers */
+    xmlNodePtr root_node = NULL,
+            persons = NULL,
+            virus = NULL,
+            coord = NULL,
+            statistics = NULL;/* node pointers */
     char buff[256];
 
 
@@ -152,6 +167,30 @@ int macro_saveStatus(const gchar *file, EnvInfo envInfo) {
                    persons);
 
 
+    if (!envInfo.stats)
+        goto save_and_clean;
+
+    //create statistic node
+    statistics = xmlNewNode(NULL, BAD_CAST TAG_LIST_STATISTICS);
+    xmlAddChild(root_node, statistics);
+    /// save statistics info
+    sprintf(buff, "%u", envInfo.stats->deaths);
+    xmlNewProp(statistics,
+               BAD_CAST ATTR_STATISTICS_DEATHS,
+               BAD_CAST buff);
+    sprintf(buff, "%u", envInfo.stats->totalPopulation);
+    xmlNewProp(statistics,
+               BAD_CAST ATTR_STATISTICS_POP_TOTAL,
+               BAD_CAST buff);
+    //save virus' statistics
+    g_list_foreach(envInfo.stats->virusInfection,
+                   macro_save_single_virus_infec_node,
+                   statistics);
+
+
+
+
+    save_and_clean:
 
     /// Dumping document to given file or status.kass
     xmlSaveFormatFileEnc(file ? file : DEFAULT_SAVE_FILE_NAME, doc, "UTF-8", 1);
@@ -258,8 +297,6 @@ static GList *macro_parseViruss(xmlNode *node) {
             viruss = g_list_append(viruss, macro_parseVirus(curNode));
     return ((GList *) viruss);
 }
-
-
 
 
 static GList *macro_appendIndivVirus(GList *indiv_viruss, GList *viruss, xmlNode *node) {
