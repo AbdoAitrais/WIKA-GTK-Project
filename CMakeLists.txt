@@ -29,23 +29,24 @@ ADD_DEFINITIONS(${GTK3_CFLAGS_OTHER})
 
 # Ajoute un éxecutable à partir du main.c
 add_executable(TestProjectGtk
-#        "lib/constants.h"
-#        "lib/structures.h"
-#        "lib/gobject_utils.h"
-#        "lib/init_env_macro.h"
-#        "lib/tableauManip.h"
-#        "lib/contaminate_utils.h"
-#        "lib/dialog_macro.h"
-#        "lib/enum_utils.h"
-#        "lib/show_functions.h"
-#        "lib/Statistics.h"
-#        "lib/UI_individu_macros.h"
-#        "lib/save_status.h"
-#        "lib/tool.h"
-#        "lib/xml_management.h"
-#        main.c
-#        lib/library.c lib/library.h
-        testMain.c)
+        "lib/constants.h"
+        "lib/structures.h"
+        "lib/gobject_utils.h"
+        "lib/init_env_macro.h"
+        "lib/tableauManip.h"
+        "lib/contaminate_utils.h"
+        "lib/dialog_macro.h"
+        "lib/enum_utils.h"
+        "lib/show_functions.h"
+        "lib/Statistics.h"
+        "lib/UI_individu_macros.h"
+        "lib/save_status.h"
+        "lib/tool.h"
+        "lib/xml_management.h"
+        main.c
+        lib/library.c lib/library.h
+#        testMain.c
+        )
 
 # Lie à l'éxecutable la librairie GTK+
 TARGET_LINK_LIBRARIES(TestProjectGtk ${GTK3_LIBRARIES})
