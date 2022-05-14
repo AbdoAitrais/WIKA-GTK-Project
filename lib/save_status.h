@@ -72,23 +72,33 @@ static void macro_save_single_pers_node(gpointer pers_data, gpointer personsND) 
     gchar buffer[256];
 
     /// attach single person to persons' list node
-    persNd = xmlNewChild(personsND, NULL, BAD_CAST TAG_PERSON,
+    persNd = xmlNewChild(personsND,
+                         NULL,
+                         BAD_CAST TAG_PERSON,
                          NULL);
 
     sprintf(buffer, "%d", individu->pos.x);
-    xmlNewProp(persNd, BAD_CAST ATTR_PERSON_X, BAD_CAST buffer);
+    xmlNewProp(persNd,
+               BAD_CAST ATTR_PERSON_X,
+               BAD_CAST buffer);
 
     sprintf(buffer, "%d", individu->pos.y);
-    xmlNewProp(persNd, BAD_CAST ATTR_PERSON_Y, BAD_CAST buffer);
+    xmlNewProp(persNd,
+               BAD_CAST ATTR_PERSON_Y,
+               BAD_CAST buffer);
 
     /// TODO :: replace enum int with string
     sprintf(buffer, "%d", individu->categorie);
-    xmlNewProp(persNd, BAD_CAST ATTR_PERSON_AGE, BAD_CAST buffer);
+    xmlNewProp(persNd,
+               BAD_CAST ATTR_PERSON_AGE,
+               BAD_CAST buffer);
 
 
     /// TODO :: replace enum int with string
     sprintf(buffer, "%d", individu->gender);
-    xmlNewProp(persNd, BAD_CAST ATTR_PERSON_GENRE, BAD_CAST buffer);
+    xmlNewProp(persNd,
+               BAD_CAST ATTR_PERSON_GENRE,
+               BAD_CAST buffer);
 
 
     /// add sante tag to person
@@ -99,6 +109,23 @@ static void macro_save_single_pers_node(gpointer pers_data, gpointer personsND) 
                                  BAD_CAST TAG_LIST_VIRUS,
                                  NULL);
     g_list_foreach(individu->virusList, macro_save_single_virus_node, virus);
+
+
+    /// save virus' life
+    xmlNode *virusLife = xmlNewChild(persNd, NULL,
+                                     BAD_CAST TAG_LIST_VIRUS_LIFE,
+                                     NULL);
+
+
+    int i;
+    for (i = 0; i < individu->virusesLifes.nbrElem; i++) {
+        sprintf(buffer, "%d", individu->virusesLifes.tab[i]);
+        xmlNewChild(virusLife, NULL,
+                    BAD_CAST TAG_STAT_VIRUS,
+                    BAD_CAST buffer
+        );
+    }
+
 
 }
 
@@ -188,8 +215,6 @@ int macro_saveStatus(const gchar *file, EnvInfo envInfo) {
                    statistics);
 
 
-
-
     save_and_clean:
 
     /// Dumping document to given file or status.kass
@@ -201,15 +226,30 @@ int macro_saveStatus(const gchar *file, EnvInfo envInfo) {
     return (0);
 }
 
+static void *test_sample_stats_list(Stats *stats) {
+    stats->totalPopulation = 20;
+    stats->deaths = 10;
+
+    StatVirus *virus = (StatVirus *) g_malloc(sizeof(StatVirus));
+    virus->infected = 10;
+    virus->virusName = "hello virus";
+
+    GList *list = NULL;
+    list = g_list_append(list, virus);
+    list = g_list_append(list, virus);
+    list = g_list_append(list, virus);
+    list = g_list_append(list, virus);
+
+    stats->virusInfection = list;
+}
 
 static GList *test_sample_virus_list() {
     Virus *virus = (Virus *) g_malloc(sizeof(Virus));
     GList *list = NULL;
 
-    virus->prctMortel = 15.5;
+    virus->prctMortel = 15.5f;
     virus->virusLife = 1;
     virus->cercleDeContam = 10;
-//    virus->Id = 11155;
     virus->nom = "premier virus";
 
 
@@ -220,6 +260,14 @@ static GList *test_sample_virus_list() {
     return list;
 }
 
+
+static void test_sample_virus_life_list(Maliste *lifes) {
+    int i;
+    lifes->nbrElem = 20;
+    for (i = 0; i < lifes->nbrElem; i++) {
+        lifes->tab[i] = i * i + i + 1;
+    }
+}
 
 static GList *test_sample_indiv_list() {
     Individu *individu = (Individu *) g_malloc(sizeof(Individu));
@@ -235,6 +283,7 @@ static GList *test_sample_indiv_list() {
     individu->health.tension = ARTERIELLE_HYPERTENSION_FORTE;
     individu->health.poumons = POUMONS_SEIN;
     individu->virusList = test_sample_virus_list();
+    test_sample_virus_life_list(&(individu->virusesLifes));
 
 
     list = g_list_append(list, individu);
@@ -251,6 +300,13 @@ EnvInfo *macro_initEnvInfo() {
     envInfo->indivs = NULL;
     envInfo->cols = DEFAULT_MAX_COLS;
     envInfo->rows = DEFAULT_MAX_ROWS;
+
+    envInfo->stats = (Stats *) g_malloc(sizeof(Stats));
+    envInfo->stats->virusInfection = NULL;
+    envInfo->stats->totalPopulation = 0;
+    envInfo->stats->deaths = 0;
+
+
     return envInfo;
 }
 
@@ -269,9 +325,6 @@ static Virus *macro_parseVirus(xmlNode *node) {
 
     const gchar *property = (gchar *) xmlGetProp(node, (const xmlChar *) ATTR_VIRUS_MORTALITY);
     virus->prctMortel = g_ascii_strtod(property, NULL);
-
-//    property = (gchar *) xmlGetProp(node, (const xmlChar *) ATTR_VIRUS_ID);
-//    virus->Id = g_ascii_strtoll(property, NULL, 0);
 
     property = (gchar *) xmlGetProp(node, (const xmlChar *) ATTR_VIRUS_SPREAD);
     virus->virusLife = g_ascii_strtod(property, NULL);
@@ -301,7 +354,6 @@ static GList *macro_parseViruss(xmlNode *node) {
 
 static GList *macro_appendIndivVirus(GList *indiv_viruss, GList *viruss, xmlNode *node) {
     const gchar *nom = (gchar *) xmlNodeGetContent(node);
-
     GList *virus = g_list_find_custom(viruss, nom, (GCompareFunc) macro_find_compareVirusByName);
 
     if (virus)
@@ -348,6 +400,20 @@ static void macro_parseIndividusSante(xmlNode *node, Sante *sante) {
 
 }
 
+static void macro_parseIndividusVirussLifes(xmlNode *node,
+                                            Maliste *vrLifesList) {
+    int i = 0;
+
+    xmlNode *curNode;
+    for (curNode = node->children; curNode; curNode = curNode->next)
+        if (!xmlStrcasecmp(curNode->name,
+                           (const xmlChar *) TAG_STAT_VIRUS))
+            vrLifesList->tab[i++] = g_ascii_strtoll((gchar *) xmlNodeGetContent(curNode),
+                                                    NULL,
+                                                    0);
+    vrLifesList->nbrElem = i;
+}
+
 static Individu *macro_parseSingleIndiv(xmlNode *node, GList *viruss) {
     Individu *indiv = g_malloc(sizeof(Individu));
     const gchar *property = (gchar *) xmlGetProp(
@@ -371,11 +437,23 @@ static Individu *macro_parseSingleIndiv(xmlNode *node, GList *viruss) {
     indiv->categorie = g_ascii_strtoll(property, NULL, 0);
 
     xmlNode *curNode;
-    for (curNode = node->children; curNode; curNode = curNode->next) {
-        if (!xmlStrcasecmp(curNode->name, (const xmlChar *) TAG_LIST_VIRUS))
-            indiv->virusList = macro_parseIndivViruss(curNode, viruss);
-        else if (!xmlStrcasecmp(curNode->name, (const xmlChar *) TAG_PERSON_SANTE))
-            macro_parseIndividusSante(curNode, &(indiv->health));
+    for (curNode = node->children;
+         curNode;
+         curNode = curNode->next) {
+        if (!xmlStrcasecmp(curNode->name,
+                           (const xmlChar *) TAG_LIST_VIRUS))
+            indiv->virusList =
+                    macro_parseIndivViruss(curNode,
+                                           viruss);
+        else if (!xmlStrcasecmp(curNode->name,
+                                (const xmlChar *) TAG_PERSON_SANTE))
+            macro_parseIndividusSante(curNode,
+                                      &(indiv->health));
+        else if (!xmlStrcasecmp(curNode->name,
+                                (const xmlChar *) TAG_LIST_VIRUS_LIFE))
+            macro_parseIndividusVirussLifes(curNode,
+                                            &(indiv->virusesLifes));
+
     }
 
     return ((Individu *) indiv);
@@ -385,11 +463,44 @@ static Individu *macro_parseSingleIndiv(xmlNode *node, GList *viruss) {
 static void macro_parseIndividus(EnvInfo *envInfo, xmlNode *node) {
     xmlNode *curNode;
     for (curNode = node->children; curNode; curNode = curNode->next)
-        if (!xmlStrcasecmp(curNode->name, (const xmlChar *) TAG_PERSON))
+        if (!xmlStrcasecmp(curNode->name,
+                           (const xmlChar *) TAG_PERSON))
             envInfo->indivs = g_list_append(envInfo->indivs, macro_parseSingleIndiv(curNode, envInfo->virus));
 
 }
 
+static StatVirus *macro_parseSingleVirusStats(xmlNode *node) {
+    StatVirus *virus = g_malloc(sizeof(StatVirus));
+
+    const gchar *property = (gchar *) xmlGetProp(node,
+                                                 (const xmlChar *) ATTR_STAT_VIRUS_INFECTED);
+    virus->infected = g_ascii_strtoull(property, NULL, 0);
+
+    virus->virusName = g_strdup((gchar *) xmlNodeGetContent(node));
+
+    return ((StatVirus *) virus);
+}
+
+static void macro_parseStatistiques(EnvInfo *info, xmlNode *node) {
+    const gchar *property = (gchar *) xmlGetProp(
+            node,
+            (const xmlChar *) ATTR_STATISTICS_DEATHS);
+    info->stats->deaths = g_ascii_strtoull(property, NULL, 0);
+
+    property = (gchar *) xmlGetProp(
+            node,
+            (const xmlChar *) ATTR_STATISTICS_POP_TOTAL);
+    info->stats->totalPopulation = g_ascii_strtoull(property, NULL, 0);
+
+    xmlNode *curNode;
+    GList *viruss = NULL;
+    for (curNode = node->children; curNode; curNode = curNode->next)
+        if (!xmlStrcasecmp(curNode->name,
+                           (const xmlChar *) TAG_STAT_VIRUS))
+            viruss = g_list_append(viruss, macro_parseSingleVirusStats(curNode));
+
+    info->stats->virusInfection = viruss;
+}
 
 /**************************************
  * parse saved status from wika file
@@ -412,14 +523,21 @@ static EnvInfo *macro_parseStatus(const gchar *file) {
 
     xmlNode *curNode;
     for (curNode = root->children; curNode; curNode = curNode->next) {
-        if (!xmlStrcasecmp(curNode->name, (const xmlChar *) TAG_DIMENSION))
+        if (!xmlStrcasecmp(curNode->name,
+                           (const xmlChar *) TAG_DIMENSION))
             macro_parseDimension(envInfo, curNode);
-        else if (!xmlStrcasecmp(curNode->name, (const xmlChar *) TAG_LIST_VIRUS))
+        else if (!xmlStrcasecmp(curNode->name,
+                                (const xmlChar *) TAG_LIST_VIRUS))
             envInfo->virus = macro_parseViruss(curNode);
-        else if (!xmlStrcasecmp(curNode->name, (const xmlChar *) TAG_LIST_PERSONS))
+        else if (!xmlStrcasecmp(curNode->name,
+                                (const xmlChar *) TAG_LIST_PERSONS))
             macro_parseIndividus(envInfo, curNode);
-    }
+        else if (!xmlStrcasecmp(curNode->name,
+                                (const xmlChar *) TAG_LIST_STATISTICS))
+            macro_parseStatistiques(envInfo, curNode);
 
+
+    }
 
     out_of_parsing:
     macro_cleanupXML(root->doc);
@@ -430,22 +548,22 @@ static EnvInfo *macro_parseStatus(const gchar *file) {
 
 void test_save_env() {
 
+    EnvInfo *envInfo = macro_initEnvInfo();
 
-    EnvInfo envInfo;
-
-    envInfo.virus = test_sample_virus_list();
-    envInfo.indivs = test_sample_indiv_list();
-
-    envInfo.rows = 15;
-    envInfo.cols = 15;
+    envInfo->virus = test_sample_virus_list();
+    envInfo->indivs = test_sample_indiv_list();
+    test_sample_stats_list(envInfo->stats);
 
 
-    macro_saveStatus("test.wika", envInfo);
+    envInfo->rows = 15;
+    envInfo->cols = 15;
+
+
+    macro_saveStatus("test.wika", *envInfo);
 }
 
 void test_parse_env() {
     EnvInfo *envInfo = macro_parseStatus("test.wika");
-
     afficher_individu(envInfo->indivs->data);
 }
 

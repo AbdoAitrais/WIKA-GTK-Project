@@ -12,13 +12,6 @@
 
 
 
-
-
-
-
-
-
-
 /************* Individu ***************/
 
 void afficher_VirusList(GList *VirusList);
@@ -34,6 +27,9 @@ void afficher_individu(Individu *indiv) {
         g_print("individu categorie = %d\n", indiv->categorie);
         g_print("individu hp = %.2f\n", indiv->hp);
         afficher_VirusList(indiv->virusList);
+        int i;
+        for (i = 0; i < indiv->virusesLifes.nbrElem; i++)
+            g_print("\nvirus life %d: %d\n", i, indiv->virusesLifes.tab[i]);
     }
 }
 

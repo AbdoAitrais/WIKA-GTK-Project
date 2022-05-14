@@ -24,6 +24,7 @@
 #define TAG_ROOT                    "env"
 #define TAG_LIST_PERSONS            "persons"
 #define TAG_LIST_VIRUS              "viruss"
+#define TAG_LIST_VIRUS_LIFE         "viruss-life"
 #define TAG_LIST_STATISTICS         "statistics"
 #define TAG_PERSON                  "person"
 #define TAG_PERSON_SANTE            "sante"

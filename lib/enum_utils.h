@@ -20,6 +20,8 @@ gchar* associerGender(Individu* indiv)
             return (gchar*)(" Homme");
         case GENRE_FEMALE:
             return (gchar*)(" Femme");
+        case GENRE_UNSPECIFIED:
+            return (gchar*)(" Unknown");
     }
 
 }
