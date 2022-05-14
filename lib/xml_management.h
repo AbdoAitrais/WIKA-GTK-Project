@@ -7,14 +7,9 @@
 
 #include <libxml2/libxml/parser.h>
 #include <libxml2/libxml/tree.h>
-#include "by Abderrahman/structures.h"
+#include "structures.h"
 
 
-
-typedef struct {
-    guint x, y;
-    Individu indiv;
-} IndivInfo;
 
 
 typedef struct {

@@ -8,7 +8,7 @@
 #include <stdlib.h>
 #include <gtk/gtk.h>
 
-#include "../constants.h"
+#include "constants.h"
 #include "structures.h"
 
 

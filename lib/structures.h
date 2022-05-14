@@ -5,7 +5,7 @@
 #ifndef MAIN_C_STRUCTURES_H
 #define MAIN_C_STRUCTURES_H
 #include <gtk/gtk.h>
-#include "../constants.h"
+#include "constants.h"
 
 /********** structures ************/
 typedef struct {
@@ -13,7 +13,7 @@ typedef struct {
     guint virusLife;//le temps de vie du Virus
     gfloat prctMortel; // le pourcentage de mortalite de virus
     guint cercleDeContam;// le rayon ou bien la cercle de contamination
-    float damage;// la valeur  à calculer à partir de champ prctMortel
+    gfloat damage;// la valeur  à calculer à partir de champ prctMortel
 } Virus;
 
 typedef struct {

@@ -7,8 +7,8 @@
 
 
 #include "xml_management.h"
-#include "by Abderrahman/UI_individu_macros.h"
-#include "by Abderrahman/gobject_utils.h"
+#include "UI_individu_macros.h"
+#include "gobject_utils.h"
 
 
 static void macro_save_single_virus_node(gpointer virus_data, gpointer virussND) {

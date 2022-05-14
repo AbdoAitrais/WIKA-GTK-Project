@@ -1,11 +1,7 @@
-#include <stdio.h>
 #include <stdlib.h>
-
-#include <gtk/gtk.h>
-//#include "macros.c"
-#include "by Abderrahman/UI_individu_macros.h"
-#include "by Abderrahman/init_env_macro.h"
-#include "tool.h"
+#include "lib/UI_individu_macros.h"
+#include "lib/init_env_macro.h"
+#include "lib/tool.h"
 
 
 

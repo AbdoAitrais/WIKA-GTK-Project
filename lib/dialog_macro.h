@@ -4,8 +4,6 @@
 
 #ifndef MAIN_C_DIALOG_MACRO_H
 #define MAIN_C_DIALOG_MACRO_H
-#include <gtk/gtk.h>
-
 void macro_dialog(gchar * msg)
 {
     GtkWidget *limit;

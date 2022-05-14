@@ -3,10 +3,13 @@ project(TestProjectGtk C)
 
 set(CMAKE_CXX_STANDARD 14)
 
+set(CMAKE_EXE_LINKER_FLAGS "-static-libgcc -static-libstdc++")
+set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -static-libstdc++ -static-libgcc")
+
 
 find_package(LibXml2 REQUIRED)
 
-add_compile_definitions(parseGtkXML PUBLIC ${LIBXML2_DEFINITIONS})
+add_compile_definitions(TestProjectGtk PUBLIC ${LIBXML2_DEFINITIONS})
 include_directories(PUBLIC ${LIBXML2_INCLUDE_DIRS})
 link_libraries(${LIBXML2_LIBRARIES})
 
@@ -23,13 +26,25 @@ LINK_DIRECTORIES(${GTK3_LIBRARY_DIRS})
 # Instructions pour le compilateur
 ADD_DEFINITIONS(${GTK3_CFLAGS_OTHER})
 
-##Pour linux, va servir à correctement liers les signaux de notre application au code
-#if (UNIX)
-#    set(CMAKE_EXE_LINKER_FLAGS "-Wl,-export-dynamic")
-#endif (UNIX)
 
 # Ajoute un éxecutable à partir du main.c
-add_executable(TestProjectGtk main.c)
+add_executable(TestProjectGtk
+        "lib/constants.h"
+        "lib/structures.h"
+        "lib/gobject_utils.h"
+        "lib/init_env_macro.h"
+        "lib/tableauManip.h"
+        "lib/contaminate_utils.h"
+        "lib/dialog_macro.h"
+        "lib/enum_utils.h"
+        "lib/show_functions.h"
+        "lib/Statistics.h"
+        "lib/UI_individu_macros.h"
+        "lib/save_status.h"
+        "lib/tool.h"
+        "lib/xml_management.h"
+        main.c
+        lib/library.c lib/library.h)
 
 # Lie à l'éxecutable la librairie GTK+
 TARGET_LINK_LIBRARIES(TestProjectGtk ${GTK3_LIBRARIES})

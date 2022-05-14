@@ -6,7 +6,7 @@
 #define MAIN_C_UI_INDIVIDU_MACROS_H
 
 #include "gobject_utils.h"
-#include "../by ismail/contaminate_utils.h"
+#include "contaminate_utils.h"
 #include "dialog_macro.h"
 #include "tableauManip.h"
 
