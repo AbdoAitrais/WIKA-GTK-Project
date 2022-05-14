@@ -10,7 +10,7 @@
 /********** structures ************/
 typedef struct {
     const gchar *nom;//Indentifiant du virus le nom associé à le virus
-    guint virusLife;// le pourcentage de contamination de virus
+    guint virusLife;//le temps de vie du Virus
     gfloat prctMortel; // le pourcentage de mortalite de virus
     guint cercleDeContam;// le rayon ou bien la cercle de contamination
     float damage;// la valeur  à calculer à partir de champ prctMortel

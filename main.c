@@ -27,6 +27,7 @@ int main(int argc, char *argv [])
 
 
     GtkBuilder *builder = NULL;
+
     GError *error = NULL;
     gchar *filename = NULL;
     //added
@@ -37,6 +38,7 @@ int main(int argc, char *argv [])
      GtkWidget *incButton= NULL;
      GtkWidget *quit= NULL;
      GtkWidget *rest= NULL;
+    GtkWidget *msgEntry = NULL;
       maStr *info=(maStr*)malloc(sizeof(maStr));
       info->check=1;
       info->speed=455;
@@ -104,6 +106,9 @@ int main(int argc, char *argv [])
     /** signal to get added virus **/
     g_signal_connect (GTK_BUTTON(button), "clicked", (GCallback)enregistrer_virus, builder);
 
+    /** Signal destroy virus added message **/
+    msgEntry = GTK_WIDGET(gtk_builder_get_object(builder, "entryNomVirus"));
+    g_signal_connect (msgEntry, "button-press-event", (GCallback) destroy_message, builder);
 
     /** Affichage de la fenêtre principale. */
     gtk_widget_show_all (fenetre_principale);

@@ -594,7 +594,7 @@
                                 <property name="active">0</property>
                                 <property name="has-entry">True</property>
                                 <items>
-                                  <item id="poumonsSein" translatable="yes">POUMONS_SEIN</item>
+                                  <item id="poumonsSein" translatable="yes">POUMONS_SAIN</item>
                                   <item id="poumonsMalade" translatable="yes">POUMONS_MALADE</item>
                                   <item id="poumonsGrave" translatable="yes">POUMONS_GRAVE</item>
                                 </items>
@@ -836,6 +836,18 @@
                               </packing>
                             </child>
                             <child>
+                              <object class="GtkLabel" id="labelMessage">
+                                <property name="visible">True</property>
+                                <property name="can-focus">False</property>
+                                <property name="width-chars">7</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">8</property>
+                              </packing>
+                            </child>
+                            <child>
                               <object class="GtkButton" id="subutton">
                                 <property name="label" translatable="yes">Submit</property>
                                 <property name="height-request">-1</property>
@@ -848,7 +860,7 @@
                               <packing>
                                 <property name="expand">False</property>
                                 <property name="fill">True</property>
-                                <property name="position">8</property>
+                                <property name="position">9</property>
                               </packing>
                             </child>
                           </object>

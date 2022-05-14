@@ -216,7 +216,7 @@ void afficher_virus(Virus *vir) {
     g_print("Le pourcentage de contamination = %d\n", vir->virusLife);
     g_print("Le taux de mortalite = %f\n", vir->prctMortel);
     g_print("Le cercle de contamination = %d\n", vir->cercleDeContam);
-    g_print("la valeur associé à le virus est  = %.2f\n", vir->damage);
+    g_print("la valeur associe au virus est  = %.2f\n", vir->damage);/// u cant use é or à ...
 }
 
 
@@ -262,11 +262,14 @@ void remplir_virus(gpointer builder, const gchar *nom,
 
 void enregistrer_virus(GtkButton *button, gpointer builder) {
     Virus *v = (Virus *) g_malloc(sizeof(Virus));
-
+    GList * virusList = g_object_get_data(builder, DATA_KEY_LIST_VIRUS);
     GtkAdjustment *adjustVirusLife = GTK_ADJUSTMENT(gtk_builder_get_object(builder, "adjustVirusLife"));
     GtkAdjustment *adjust2 = GTK_ADJUSTMENT(gtk_builder_get_object(builder, "adjust2"));
     GtkAdjustment *adjust3 = GTK_ADJUSTMENT(gtk_builder_get_object(builder, "adjust3"));
     GtkWidget *entryNomVirus = GTK_WIDGET(gtk_builder_get_object(builder, "entryNomVirus"));
+    ///TODO:: complete message de validation
+    GtkWidget *labelMessage = GTK_WIDGET(gtk_builder_get_object(builder, "labelMessage"));
+
     gchar * virusName = g_strdup(gtk_entry_get_text(GTK_ENTRY(entryNomVirus)));
 
     if( (!g_strcmp0(virusName,"")) || (strlen(virusName) > 15))
@@ -279,6 +282,11 @@ void enregistrer_virus(GtkButton *button, gpointer builder) {
         macro_dialog("Virus Already Exists !");
         return ;
     }
+    if(g_list_length(virusList) >= 20)
+    {
+        macro_dialog("You have reached the maximum number of Viruses !");
+        return ;
+    }
 
     remplir_virus(builder, gtk_entry_get_text(GTK_ENTRY(entryNomVirus)),
                   ((gint) gtk_adjustment_get_value(GTK_ADJUSTMENT(adjustVirusLife))),
@@ -286,8 +294,8 @@ void enregistrer_virus(GtkButton *button, gpointer builder) {
                   ((gint) gtk_adjustment_get_value(GTK_ADJUSTMENT(adjust3)))
     );
 
-    macro_dialog("Virus is successfully added !");
-
+    //macro_dialog("Virus is successfully added !");
+    gtk_label_set_text(GTK_LABEL(labelMessage),g_strdup_printf("Virus added !"));
     //inserer_virus(builder,v);
 
 
@@ -295,5 +303,11 @@ void enregistrer_virus(GtkButton *button, gpointer builder) {
 
 }
 
+gboolean destroy_message (GtkWidget *widget, GdkEvent *event, gpointer builder)
+{
+    GtkWidget *labelMessage = GTK_WIDGET(gtk_builder_get_object(builder, "labelMessage"));
+    gtk_label_set_text(GTK_LABEL(labelMessage),g_strdup_printf(""));
+    return FALSE;
+}
 
 #endif //MAIN_C_UI_INDIVIDU_MACROS_H

@@ -9,7 +9,7 @@
 #include "../by Abderrahman/gobject_utils.h"
 #include "../by Abderrahman/show_functions.h"
 #include "../by Abderrahman/tableauManip.h"
-
+#include "../by Abderrahman/Statistics.h"
 
 void AgePerson(Individu P, double *val) {
     switch (P.categorie) {
@@ -162,13 +162,17 @@ gint VirusExiste(Individu *individu, Virus *virus) {
 
 
 
-static void macro_contaminateSingleIndiv(Individu *individu, Virus *virus) {
+static void macro_contaminateSingleIndiv(gpointer builder, Individu *individu, Virus *virus, Stats * stat) {
 
     if (!VirusExiste(individu, virus)) {
+
         individu->virusList = g_list_append(individu->virusList, virus);
         inserer_TListe(&individu->virusesLifes,virus->virusLife);
         ///TODO :: Update damageTaken value
         individu->damageTaken += virus->damage;
+
+        calculate_StatVirus_Individu(individu,stat);// update stats (add virus)
+        show_Stats(builder,stat);
     }
 }
 
@@ -207,9 +211,11 @@ static void contaminate_indivCercleSingleVrs(gpointer *virus, gpointer *img) {
 
             GtkWidget *image = ((GtkWidget *) gtk_bin_get_child(GTK_BIN(box)));
             if (image) {
-
+                GtkBuilder * builder = getBuilder();
+                Stats * stat = ((Stats *) g_object_get_data((GObject *) builder, DATA_KEY_STATS));
                 Individu *individu = (Individu *) g_object_get_data(G_OBJECT(image), DATA_KEY_INDIVIDU);
-                macro_contaminateSingleIndiv(individu, (Virus *) virus);
+                macro_contaminateSingleIndiv(builder, individu, (Virus *) virus, stat);
+
 
 
             }
