@@ -73,18 +73,18 @@ GtkWidget *choixImage(Individu *indiv) {
     if (indiv->gender == GENRE_MALE) {
         if (indiv->categorie == AGE_OLD)
             image = gtk_image_new_from_file("../pic/haj2.png");
-        else if(indiv->categorie == AGE_KIDS)
+        else if (indiv->categorie == AGE_KIDS)
             image = gtk_image_new_from_file("../pic/babyB3.png");
         else
             image = gtk_image_new_from_file("../pic/nta2.png");
     } else {
 
-            if(indiv->categorie == AGE_OLD)
-                image = gtk_image_new_from_file("../pic/haja2.png");
-            else if(indiv->categorie == AGE_KIDS)
-                image = gtk_image_new_from_file("../pic/littleG.png");
-            else
-                image = gtk_image_new_from_file("../pic/nti2.png");
+        if (indiv->categorie == AGE_OLD)
+            image = gtk_image_new_from_file("../pic/haja2.png");
+        else if (indiv->categorie == AGE_KIDS)
+            image = gtk_image_new_from_file("../pic/littleG.png");
+        else
+            image = gtk_image_new_from_file("../pic/nti2.png");
     }
     return (GtkWidget *) image;
 
@@ -125,7 +125,6 @@ gboolean add_individu(GtkWidget *widget, GdkEvent *event, gpointer builder) {
         show_Individu_to_Interface(individu);
 
 
-
         return TRUE;
     }
 
@@ -147,7 +146,6 @@ gboolean add_individu(GtkWidget *widget, GdkEvent *event, gpointer builder) {
     g_print("\nadded image  top = %d, left = %d.\n", top, left);
 
 
-
     g_object_set_data((GObject *) image, DATA_KEY_INDIVIDU, indiv);
     inserer_data_GObject(G_OBJECT(window), DATA_KEY_LIST_INDIVIDU, image);
     // afficher_individu(indiv);// juste pour savoir est-ce que les calcules sont bien fait
@@ -157,7 +155,6 @@ gboolean add_individu(GtkWidget *widget, GdkEvent *event, gpointer builder) {
 
     afficher_Stats(stat);
     show_Stats(builder, stat);
-
 
 
     return FALSE;
@@ -210,8 +207,11 @@ void create_backgroundBox(GtkGrid *grid, GtkBuilder *builder) {
     }
 }
 
-void init_background(GtkWidget *ViewPort2,gpointer builder)
-{
+void iterate_addSingleVirusToBuilder(gpointer virus_pointer, gpointer builder_pointer) {
+    inserer_virus(builder_pointer, virus_pointer);
+}
+
+void init_background(GtkWidget *ViewPort2, gpointer builder) {
     GtkWidget *grid = NULL;
     GridProps gprops = set_grid_props(TRUE, TRUE, 0, 0);
     grid = macro_createGrid(gprops);
@@ -221,13 +221,13 @@ void init_background(GtkWidget *ViewPort2,gpointer builder)
     GtkWidget *window = gtk_builder_get_object(GTK_BUILDER(builder), BUILDER_ID_MAIN_WINDOW);
     EnvInfo *envInfo = macro_parseStatus("test.wika");
 
+    /// add individus to environnement
     macro_initIndivsList(grid, envInfo->indivs, window);
 
-    g_object_set_data(builder, DATA_KEY_LIST_VIRUS, envInfo->virus);
-
+    /// add viruss to interface and to gobject_data
+    g_list_foreach(envInfo->virus, iterate_addSingleVirusToBuilder, builder);
 
 }
-
 
 
 #endif //MAIN_C_INIT_ENV_MACRO_H
