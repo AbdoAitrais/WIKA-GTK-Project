@@ -286,7 +286,7 @@ gboolean macro_moveGrid(GtkImage *image) {
     gboolean returnVal = TRUE;
 
     GtkEventBox *boxSrc = GTK_EVENT_BOX (gtk_widget_get_parent(GTK_WIDGET(image)));
-    gint top, left;
+    gint top = -1, left = -1;
 
     gtk_container_child_get(GTK_CONTAINER (gtk_widget_get_parent(GTK_WIDGET(boxSrc))),
                             GTK_WIDGET (boxSrc), "left-attach",

@@ -223,6 +223,8 @@ void init_background(GtkWidget *ViewPort2,gpointer builder)
 
     macro_initIndivsList(grid, envInfo->indivs, window);
 
+    g_object_set_data(builder, DATA_KEY_LIST_VIRUS, envInfo->virus);
+
 
 }
 

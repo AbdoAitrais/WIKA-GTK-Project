@@ -274,7 +274,7 @@ static GList *test_sample_virus_list() {
 
 static void test_sample_virus_life_list(Maliste *lifes) {
     int i;
-    lifes->nbrElem = 20;
+    lifes->nbrElem = 4;
     for (i = 0; i < lifes->nbrElem; i++) {
         lifes->tab[i] = i * i + i + 1;
     }
