@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<env>
+  <dimension rows="15" cols="15"/>
+  <viruss>
+    <virus sp-circle="10" spread="1" mortality="15.500000">premier virus</virus>
+    <virus sp-circle="10" spread="1" mortality="15.500000">premier virus</virus>
+    <virus sp-circle="10" spread="1" mortality="15.500000">premier virus</virus>
+    <virus sp-circle="10" spread="1" mortality="15.500000">premier virus</virus>
+  </viruss>
+  <persons>
+    <person x="15" Y="20" age="3" genre="1">
+      <sante cardiac="1" diabete="1" genetic="3" poumon="0" tension="2"/>
+      <viruss>
+        <virus sp-circle="10" spread="1" mortality="15.500000">premier virus</virus>
+        <virus sp-circle="10" spread="1" mortality="15.500000">premier virus</virus>
+        <virus sp-circle="10" spread="1" mortality="15.500000">premier virus</virus>
+        <virus sp-circle="10" spread="1" mortality="15.500000">premier virus</virus>
+      </viruss>
+      <viruss-life>
+        <statVirus>1</statVirus>
+        <statVirus>3</statVirus>
+        <statVirus>7</statVirus>
+        <statVirus>13</statVirus>
+        <statVirus>21</statVirus>
+        <statVirus>31</statVirus>
+        <statVirus>43</statVirus>
+        <statVirus>57</statVirus>
+        <statVirus>73</statVirus>
+        <statVirus>91</statVirus>
+        <statVirus>111</statVirus>
+        <statVirus>133</statVirus>
+        <statVirus>157</statVirus>
+        <statVirus>183</statVirus>
+        <statVirus>211</statVirus>
+        <statVirus>241</statVirus>
+        <statVirus>273</statVirus>
+        <statVirus>307</statVirus>
+        <statVirus>343</statVirus>
+        <statVirus>381</statVirus>
+      </viruss-life>
+    </person>
+    <person x="15" Y="20" age="3" genre="1">
+      <sante cardiac="1" diabete="1" genetic="3" poumon="0" tension="2"/>
+      <viruss>
+        <virus sp-circle="10" spread="1" mortality="15.500000">premier virus</virus>
+        <virus sp-circle="10" spread="1" mortality="15.500000">premier virus</virus>
+        <virus sp-circle="10" spread="1" mortality="15.500000">premier virus</virus>
+        <virus sp-circle="10" spread="1" mortality="15.500000">premier virus</virus>
+      </viruss>
+      <viruss-life>
+        <statVirus>1</statVirus>
+        <statVirus>3</statVirus>
+        <statVirus>7</statVirus>
+        <statVirus>13</statVirus>
+        <statVirus>21</statVirus>
+        <statVirus>31</statVirus>
+        <statVirus>43</statVirus>
+        <statVirus>57</statVirus>
+        <statVirus>73</statVirus>
+        <statVirus>91</statVirus>
+        <statVirus>111</statVirus>
+        <statVirus>133</statVirus>
+        <statVirus>157</statVirus>
+        <statVirus>183</statVirus>
+        <statVirus>211</statVirus>
+        <statVirus>241</statVirus>
+        <statVirus>273</statVirus>
+        <statVirus>307</statVirus>
+        <statVirus>343</statVirus>
+        <statVirus>381</statVirus>
+      </viruss-life>
+    </person>
+    <person x="15" Y="20" age="3" genre="1">
+      <sante cardiac="1" diabete="1" genetic="3" poumon="0" tension="2"/>
+      <viruss>
+        <virus sp-circle="10" spread="1" mortality="15.500000">premier virus</virus>
+        <virus sp-circle="10" spread="1" mortality="15.500000">premier virus</virus>
+        <virus sp-circle="10" spread="1" mortality="15.500000">premier virus</virus>
+        <virus sp-circle="10" spread="1" mortality="15.500000">premier virus</virus>
+      </viruss>
+      <viruss-life>
+        <statVirus>1</statVirus>
+        <statVirus>3</statVirus>
+        <statVirus>7</statVirus>
+        <statVirus>13</statVirus>
+        <statVirus>21</statVirus>
+        <statVirus>31</statVirus>
+        <statVirus>43</statVirus>
+        <statVirus>57</statVirus>
+        <statVirus>73</statVirus>
+        <statVirus>91</statVirus>
+        <statVirus>111</statVirus>
+        <statVirus>133</statVirus>
+        <statVirus>157</statVirus>
+        <statVirus>183</statVirus>
+        <statVirus>211</statVirus>
+        <statVirus>241</statVirus>
+        <statVirus>273</statVirus>
+        <statVirus>307</statVirus>
+        <statVirus>343</statVirus>
+        <statVirus>381</statVirus>
+      </viruss-life>
+    </person>
+    <person x="15" Y="20" age="3" genre="1">
+      <sante cardiac="1" diabete="1" genetic="3" poumon="0" tension="2"/>
+      <viruss>
+        <virus sp-circle="10" spread="1" mortality="15.500000">premier virus</virus>
+        <virus sp-circle="10" spread="1" mortality="15.500000">premier virus</virus>
+        <virus sp-circle="10" spread="1" mortality="15.500000">premier virus</virus>
+        <virus sp-circle="10" spread="1" mortality="15.500000">premier virus</virus>
+      </viruss>
+      <viruss-life>
+        <statVirus>1</statVirus>
+        <statVirus>3</statVirus>
+        <statVirus>7</statVirus>
+        <statVirus>13</statVirus>
+        <statVirus>21</statVirus>
+        <statVirus>31</statVirus>
+        <statVirus>43</statVirus>
+        <statVirus>57</statVirus>
+        <statVirus>73</statVirus>
+        <statVirus>91</statVirus>
+        <statVirus>111</statVirus>
+        <statVirus>133</statVirus>
+        <statVirus>157</statVirus>
+        <statVirus>183</statVirus>
+        <statVirus>211</statVirus>
+        <statVirus>241</statVirus>
+        <statVirus>273</statVirus>
+        <statVirus>307</statVirus>
+        <statVirus>343</statVirus>
+        <statVirus>381</statVirus>
+      </viruss-life>
+    </person>
+  </persons>
+  <statistics deaths="10" total="20">
+    <statVirus infected="10">hello virus</statVirus>
+    <statVirus infected="10">hello virus</statVirus>
+    <statVirus infected="10">hello virus</statVirus>
+    <statVirus infected="10">hello virus</statVirus>
+  </statistics>
+</env>
