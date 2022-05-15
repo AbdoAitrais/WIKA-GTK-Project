@@ -12,6 +12,8 @@
 #define DATA_KEY_LIST_VIRUS "listVirus"
 #define DATA_KEY_STATS "stats"
 #define BUILDER_ID_MAIN_WINDOW "MainWindow"
+#define BUILDER_ID_GRID "EnvGrid"
+#define DEFAULT_STATUS_FILE "status.wika"
 
 
 #define DEFAULT_MAX_ROWS 70

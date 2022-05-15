@@ -24,6 +24,8 @@ void about_game(GtkWidget *btn, gpointer data) {
     gtk_widget_show_all(dialog);
     gint reponse = gtk_dialog_run(GTK_DIALOG(dialog));
     gtk_widget_destroy(dialog);
+
+    save_envIntoFile(NULL);
 }
 
 void limit_speed(gchar *msg) {

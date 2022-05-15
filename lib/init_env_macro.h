@@ -211,6 +211,58 @@ void iterate_addSingleVirusToBuilder(gpointer virus_pointer, gpointer builder_po
     inserer_virus(builder_pointer, virus_pointer);
 }
 
+void init_envFromFile(gchar *filename) {
+    GtkBuilder *builder = getBuilder();
+    GtkWidget *window = gtk_builder_get_object(GTK_BUILDER(builder), BUILDER_ID_MAIN_WINDOW);
+    EnvInfo *envInfo = macro_parseStatus(filename);
+
+    GtkWidget *grid = g_object_get_data(builder, BUILDER_ID_GRID);
+
+    /// add individus to environnement
+    macro_initIndivsList(grid, envInfo->indivs, window);
+
+    /// add viruss to interface and to gobject_data
+    g_list_foreach(envInfo->virus, iterate_addSingleVirusToBuilder, builder);
+}
+
+
+
+
+gpointer macro_copyImgToFullIndividu(gconstpointer src) {
+    const GtkWidget *img = src;
+    g_assert(GTK_IS_IMAGE(img));
+    int top, left;
+    GtkBuilder *builder = getBuilder();
+    GtkGrid *grid = g_object_get_data(G_OBJECT(builder), BUILDER_ID_GRID);
+
+    Individu *individu = g_object_get_data(G_OBJECT(img), DATA_KEY_INDIVIDU);
+
+    gtk_container_child_get(GTK_CONTAINER(grid),
+                            gtk_widget_get_parent(img), "left-attach",
+                            &left, "top-attach", &top, NULL);
+    individu->pos.x = left;
+    individu->pos.y = top;
+
+    return individu;
+}
+
+GList *macro_loadIndivsListFromEnv() {
+    GtkBuilder *builder = getBuilder();
+    GtkWidget *window = gtk_builder_get_object(GTK_BUILDER(builder), BUILDER_ID_MAIN_WINDOW);
+
+    GList *images = g_object_get_data(G_OBJECT(window), DATA_KEY_LIST_INDIVIDU);
+    GList *indivs = g_list_copy_deep(images, (GCopyFunc) macro_copyImgToFullIndividu, NULL);
+    return indivs;
+}
+
+void macro_loadAndSave_envIntoFile(gchar *filename) {
+    EnvInfo *envInfo = macro_initEnvInfo();
+    envInfo->indivs = macro_loadIndivsListFromEnv();
+    envInfo->virus = g_object_get_data(G_OBJECT(getBuilder()), DATA_KEY_LIST_VIRUS);
+    envInfo->stats = g_object_get_data(G_OBJECT(getBuilder()), DATA_KEY_STATS);
+    macro_saveStatus(filename, *envInfo);
+}
+
 void init_background(GtkWidget *ViewPort2, gpointer builder) {
     GtkWidget *grid = NULL;
     GridProps gprops = set_grid_props(TRUE, TRUE, 0, 0);
@@ -218,16 +270,15 @@ void init_background(GtkWidget *ViewPort2, gpointer builder) {
     create_backgroundBox(GTK_GRID(grid), builder);
     gtk_container_add(GTK_CONTAINER(ViewPort2), grid);
 
-    GtkWidget *window = gtk_builder_get_object(GTK_BUILDER(builder), BUILDER_ID_MAIN_WINDOW);
-    EnvInfo *envInfo = macro_parseStatus("test.wika");
+    g_object_set_data(builder, BUILDER_ID_GRID, grid);
 
-    /// add individus to environnement
-    macro_initIndivsList(grid, envInfo->indivs, window);
-
-    /// add viruss to interface and to gobject_data
-    g_list_foreach(envInfo->virus, iterate_addSingleVirusToBuilder, builder);
-
+    init_envFromFile("test.wika");
 }
+
+
+
+
+
 
 
 #endif //MAIN_C_INIT_ENV_MACRO_H
