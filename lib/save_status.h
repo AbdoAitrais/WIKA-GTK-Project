@@ -77,6 +77,17 @@ static void macro_save_single_pers_node(gpointer pers_data, gpointer personsND) 
                          BAD_CAST TAG_PERSON,
                          NULL);
 
+    sprintf(buffer, "%f", individu->hp);
+    xmlNewProp(persNd,
+               BAD_CAST ATTR_PERSON_HP,
+               BAD_CAST buffer);
+
+    sprintf(buffer, "%f", individu->damageTaken);
+    xmlNewProp(persNd,
+               BAD_CAST ATTR_PERSON_DAMAGE,
+               BAD_CAST buffer);
+
+
     sprintf(buffer, "%d", individu->pos.x);
     xmlNewProp(persNd,
                BAD_CAST ATTR_PERSON_X,
@@ -275,6 +286,8 @@ static GList *test_sample_indiv_list() {
 
     individu->pos.x = 15;
     individu->pos.y = 20;
+    individu->hp = 150.7854;
+    individu->damageTaken = -5.6;
     individu->categorie = AGE_ADULT;
     individu->gender = GENRE_MALE;
     individu->health.cardiac = CARDIAQUE_MALADE;
@@ -425,6 +438,16 @@ static Individu *macro_parseSingleIndiv(xmlNode *node, GList *viruss) {
             node,
             (const xmlChar *) ATTR_PERSON_Y);
     indiv->pos.y = g_ascii_strtoll(property, NULL, 0);
+
+    property = (gchar *) xmlGetProp(
+            node,
+            (const xmlChar *) ATTR_PERSON_HP);
+    indiv->hp = g_ascii_strtod(property, NULL);
+
+    property = (gchar *) xmlGetProp(
+            node,
+            (const xmlChar *) ATTR_PERSON_DAMAGE);
+    indiv->damageTaken = g_ascii_strtod(property, NULL);
 
     property = (gchar *) xmlGetProp(
             node,

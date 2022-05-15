@@ -8,6 +8,7 @@
 #include "UI_individu_macros.h"
 #include "contaminate_utils.h"
 #include "Statistics.h"
+#include "save_status.h"
 
 
 typedef struct {
@@ -162,6 +163,41 @@ gboolean add_individu(GtkWidget *widget, GdkEvent *event, gpointer builder) {
     return FALSE;
 }
 
+void iterate_initSingleIndiv(gpointer indiv_pointer, gpointer grid_pointer) {
+    Individu *individu = indiv_pointer;
+    GtkWidget *grid = grid_pointer;
+    g_assert(G_IS_OBJECT(grid));
+    GtkWidget *window = g_object_get_data(G_OBJECT(grid), BUILDER_ID_MAIN_WINDOW);
+
+    /// create associated image
+    GtkWidget *img = choixImage(individu);
+    g_object_set_data(G_OBJECT(img), DATA_KEY_INDIVIDU, individu);
+
+    g_assert(G_IS_OBJECT(window));
+    ///save new list
+    inserer_data_GObject(G_OBJECT(window), DATA_KEY_LIST_INDIVIDU, img);
+    g_assert(G_IS_OBJECT(img));
+
+    /// show image in the grid
+    GtkWidget *box = gtk_grid_get_child_at(GTK_GRID(grid), individu->pos.x, individu->pos.y);
+
+    g_assert(GTK_IS_EVENT_BOX(box));
+
+
+    gtk_container_add(GTK_CONTAINER(box), img);
+
+    gtk_widget_show(img);
+}
+
+void macro_initIndivsList(GtkWidget *grid, GList *indivs, GtkWidget *window) {
+    g_object_set_data(G_OBJECT(grid), BUILDER_ID_MAIN_WINDOW, window);
+
+    g_list_foreach(indivs, iterate_initSingleIndiv, grid);
+
+//    g_object_set_data(G_OBJECT(grid), BUILDER_ID_MAIN_WINDOW, NULL);
+
+}
+
 void create_backgroundBox(GtkGrid *grid, GtkBuilder *builder) {
     for (int i = 0; i < DEFAULT_MAX_ROWS; ++i) {
         for (int j = 0; j < DEFAULT_MAX_COLS; ++j) {
@@ -181,29 +217,15 @@ void init_background(GtkWidget *ViewPort2,gpointer builder)
     grid = macro_createGrid(gprops);
     create_backgroundBox(GTK_GRID(grid), builder);
     gtk_container_add(GTK_CONTAINER(ViewPort2), grid);
+
+    GtkWidget *window = gtk_builder_get_object(GTK_BUILDER(builder), BUILDER_ID_MAIN_WINDOW);
+    EnvInfo *envInfo = macro_parseStatus("test.wika");
+
+    macro_initIndivsList(grid, envInfo->indivs, window);
+
+
 }
 
-void iterate_initSingleIndiv(gpointer indiv_pointer, gpointer grid_pointer) {
-    Individu *individu = indiv_pointer;
-    GtkWidget *grid = grid_pointer;
-    GtkWidget *window = g_object_get_data(G_OBJECT(grid), BUILDER_ID_MAIN_WINDOW);
 
-    /// create associated image
-    GtkWidget *img = choixImage(individu);
-    g_object_set_data(G_OBJECT(img), DATA_KEY_INDIVIDU, individu);
-
-    ///save new list
-    inserer_data_GObject(G_OBJECT(window), DATA_KEY_LIST_INDIVIDU, img);
-
-    /// show image in the grid
-    gtk_grid_attach(GTK_GRID(grid), img, individu->pos.x, individu->pos.y, 1, 1);
-    gtk_widget_show(img);
-}
-
-void macro_initIndivsList(GtkWidget *grid, GList *indivs, GtkWidget *window) {
-    g_object_set_data(G_OBJECT(grid), BUILDER_ID_MAIN_WINDOW, window);
-
-    g_list_foreach(indivs, iterateSingleIndividu, grid);
-}
 
 #endif //MAIN_C_INIT_ENV_MACRO_H

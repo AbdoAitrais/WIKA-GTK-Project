@@ -8,7 +8,7 @@
     <virus sp-circle="10" spread="1" mortality="15.500000">premier virus</virus>
   </viruss>
   <persons>
-    <person x="15" Y="20" age="3" genre="1">
+    <person hp="150.785400" damage="-5.600000" x="5" Y="20" age="3" genre="1">
       <sante cardiac="1" diabete="1" genetic="3" poumon="0" tension="2"/>
       <viruss>
         <virus sp-circle="10" spread="1" mortality="15.500000">premier virus</virus>
@@ -39,7 +39,7 @@
         <statVirus>381</statVirus>
       </viruss-life>
     </person>
-    <person x="15" Y="20" age="3" genre="1">
+    <person hp="150.785400" damage="-5.600000" x="15" Y="20" age="3" genre="1">
       <sante cardiac="1" diabete="1" genetic="3" poumon="0" tension="2"/>
       <viruss>
         <virus sp-circle="10" spread="1" mortality="15.500000">premier virus</virus>
@@ -70,7 +70,7 @@
         <statVirus>381</statVirus>
       </viruss-life>
     </person>
-    <person x="15" Y="20" age="3" genre="1">
+    <person hp="150.785400" damage="-5.600000" x="15" Y="21" age="3" genre="1">
       <sante cardiac="1" diabete="1" genetic="3" poumon="0" tension="2"/>
       <viruss>
         <virus sp-circle="10" spread="1" mortality="15.500000">premier virus</virus>
@@ -101,7 +101,7 @@
         <statVirus>381</statVirus>
       </viruss-life>
     </person>
-    <person x="15" Y="20" age="3" genre="1">
+    <person hp="150.785400" damage="-5.600000" x="17" Y="21" age="3" genre="1">
       <sante cardiac="1" diabete="1" genetic="3" poumon="0" tension="2"/>
       <viruss>
         <virus sp-circle="10" spread="1" mortality="15.500000">premier virus</virus>

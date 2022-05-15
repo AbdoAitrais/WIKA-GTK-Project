@@ -52,6 +52,8 @@
 #define ATTR_PERSON_CARDIAC         "cardiac"
 #define ATTR_PERSON_Y               "Y"
 #define ATTR_PERSON_X               "x"
+#define ATTR_PERSON_HP              "hp"
+#define ATTR_PERSON_DAMAGE          "damage"
 
 
 #define ATTR_VIRUS_ID               "id"

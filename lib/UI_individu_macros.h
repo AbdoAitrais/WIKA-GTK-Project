@@ -25,7 +25,8 @@ void afficher_individu(Individu *indiv) {
         g_print("individu cardiac = %d\n", indiv->health.cardiac);
         g_print("individu poumons = %d\n", indiv->health.poumons);
         g_print("individu categorie = %d\n", indiv->categorie);
-        g_print("individu hp = %.2f\n", indiv->hp);
+        g_print("individu hp = %f\n", indiv->hp);
+        g_print("individu hp = %f\n", indiv->damageTaken);
         afficher_VirusList(indiv->virusList);
         int i;
         for (i = 0; i < indiv->virusesLifes.nbrElem; i++)

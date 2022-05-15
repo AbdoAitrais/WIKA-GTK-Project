@@ -26,9 +26,7 @@ LINK_DIRECTORIES(${GTK3_LIBRARY_DIRS})
 # Instructions pour le compilateur
 ADD_DEFINITIONS(${GTK3_CFLAGS_OTHER})
 
-
-# Ajoute un éxecutable à partir du main.c
-add_executable(TestProjectGtk
+set(EXECUTABLES_DEV
         "lib/constants.h"
         "lib/structures.h"
         "lib/gobject_utils.h"
@@ -44,8 +42,14 @@ add_executable(TestProjectGtk
         "lib/tool.h"
         "lib/xml_management.h"
         main.c
-        lib/library.c lib/library.h
-#        testMain.c
+        lib/library.c lib/library.h)
+
+set(EXECUTABLE_TEST testMain.c)
+
+# Ajoute un éxecutable à partir du main.c
+add_executable(TestProjectGtk
+#        ${EXECUTABLE_TEST}
+        ${EXECUTABLES_DEV}
         )
 
 # Lie à l'éxecutable la librairie GTK+
