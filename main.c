@@ -35,9 +35,7 @@ int main(int argc, char *argv [])
      GtkWidget *quit= NULL;
      GtkWidget *rest= NULL;
     GtkWidget *msgEntry = NULL;
-      maStr *info=(maStr*)malloc(sizeof(maStr));
-      info->check=1;
-      info->speed=455;
+
 
     /** Initialisation de la librairie Gtk. */
     gtk_init(&argc, &argv);
@@ -81,7 +79,7 @@ int main(int argc, char *argv [])
     g_signal_connect (GTK_TOOL_BUTTON(AboutButton), "clicked", (GCallback)about_game, NULL);
     quit = GTK_WIDGET(gtk_builder_get_object (builder, "quit"));
     g_signal_connect (GTK_TOOL_BUTTON(quit), "clicked", (GCallback)quit_game, NULL);
-    mvToolBar(playButton,pauseButton,decButton,incButton,info);
+    mvToolBar(playButton,pauseButton,decButton,incButton);
 
 
 

@@ -4,28 +4,12 @@
 #include "../macros.c"
 
 
-//struct struct used for some elements of toolbar
 
-typedef struct {
-    gint check;// if check=1 play btn is on
-    gint speed;//
-    guint id;// id of g_timeout_add
-
-} maStr;
-
-
-void pause_game(GtkWidget *btn, maStr *info) {
-    if (info->check == 0) {
-//        PLAY_MODE = FALSE;
-//        g_source_remove(info->id);
-//        info->check = 1;
-
-        //gtk_widget_set_sensitive(btn,FALSE);
-    }
+void pause_game(GtkWidget *btn, gpointer user_data) {
     PLAY_MODE = FALSE;
 }
 
-void start_game(GtkWidget *btn, maStr *info) {
+void start_game(GtkWidget *btn, gpointer user_data) {
     PLAY_MODE = TRUE;
 }
 
@@ -33,7 +17,7 @@ void about_game(GtkWidget *btn, gpointer data) {
     GtkWidget *content_area, *dialog = gtk_dialog_new_with_buttons("About", NULL, GTK_DIALOG_MODAL, GTK_STOCK_OK,
                                                                    GTK_RESPONSE_OK, NULL);
     content_area = gtk_dialog_get_content_area(GTK_DIALOG(dialog));
-    GtkWidget *image_about = gtk_image_new_from_file("About.png");
+    GtkWidget *image_about = gtk_image_new_from_file("../pic/about.png");
     gtk_widget_set_size_request(dialog, 300, 300);
     gtk_window_set_position(GTK_WINDOW(dialog), GTK_WIN_POS_CENTER);
     gtk_container_add(GTK_CONTAINER(content_area), image_about);
@@ -42,14 +26,14 @@ void about_game(GtkWidget *btn, gpointer data) {
     gtk_widget_destroy(dialog);
 }
 
-void limit_speed() {
+void limit_speed(gchar *msg) {
     GtkWidget *limit;
     gpointer data = NULL;
     limit = gtk_message_dialog_new(GTK_WINDOW(data),
                                    GTK_DIALOG_MODAL,
                                    GTK_MESSAGE_INFO,
                                    GTK_BUTTONS_CLOSE,
-                                   "limit of speed \n  please decrease Speed ");
+                                   "%s", msg);
 
     /* Affichage de la boite de message */
     gtk_dialog_run(GTK_DIALOG(limit));
@@ -59,37 +43,32 @@ void limit_speed() {
 
 }
 
-void decreaseSpeed(GtkWidget *btn, maStr *info) {
+void decreaseSpeed(GtkWidget *btn, gpointer user_data) {
 
     gtk_widget_set_sensitive(btn, TRUE);
-    if (/*info->speed*/PLAY_SPEED > 0) {
-        info->speed = (info->speed - ((gint) 100));
-
-        PLAY_SPEED -= 100;
-//        pause_game(btn, info);
-//        start_game(btn, info);
+    if (PLAY_SPEED <= 1400) {
+        PLAY_SPEED += 100;
     } else {
-        limit_speed();
-        g_print("\n limit of speed\n");
-
+        limit_speed("Minimum Speed reached");
+        g_print("\n min limit of speed %d\n", PLAY_SPEED);
     }
 }
 
-void increaseSpeed(GtkWidget *btn, maStr *info) {
-//    info->speed = (info->speed + ((gint) 100));
-//    pause_game(btn, info);
-//    start_game(btn, info);
-    PLAY_SPEED += 100;
+void increaseSpeed(GtkWidget *btn, gpointer user_data) {
+    if (PLAY_SPEED >= 200) {
+        PLAY_SPEED -= 100;
+    } else {
+        limit_speed("Maximum speed reached");
+        g_print("\n max limit of speed %d\n", PLAY_SPEED);
+    }
 }
 
 
-void mvToolBar(GtkWidget *btn1, GtkWidget *btn3, GtkWidget *btn4, GtkWidget *btn5, maStr *info) {
-
-
-    g_signal_connect (GTK_TOOL_BUTTON(btn3), "clicked", (GCallback) pause_game, info);
-    g_signal_connect (GTK_TOOL_BUTTON(btn1), "clicked", (GCallback) start_game, info);
-    g_signal_connect (GTK_TOOL_BUTTON(btn4), "clicked", (GCallback) increaseSpeed, info);
-    g_signal_connect (GTK_TOOL_BUTTON(btn5), "clicked", (GCallback) decreaseSpeed, info);
+void mvToolBar(GtkWidget *btn1, GtkWidget *btn3, GtkWidget *btn4, GtkWidget *btn5) {
+    g_signal_connect (GTK_TOOL_BUTTON(btn3), "clicked", (GCallback) pause_game, NULL);
+    g_signal_connect (GTK_TOOL_BUTTON(btn1), "clicked", (GCallback) start_game, NULL);
+    g_signal_connect (GTK_TOOL_BUTTON(btn5), "clicked", (GCallback) increaseSpeed, NULL);
+    g_signal_connect (GTK_TOOL_BUTTON(btn4), "clicked", (GCallback) decreaseSpeed, NULL);
 }
 
 void quit_game(GtkWidget *widget) {
@@ -113,7 +92,6 @@ void quit_game(GtkWidget *widget) {
             break;
     }
 
-    return;
 }
 
 void restart(GtkWidget *widget) {

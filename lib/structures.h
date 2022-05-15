@@ -67,10 +67,8 @@ typedef enum {
 } Genre;
 
 typedef enum {
-    AGE_KIDS,
-    AGE_TEENS,
-    AGE_YOUTH,
-    AGE_ADULT,
+    AGE_KIDS, AGE_TEENS,
+    AGE_YOUTH, AGE_ADULT,
     AGE_OLD
 } Age;
 
@@ -83,9 +81,7 @@ typedef struct
 }Maliste;// definition de la structure
 
 typedef struct {
-
     Genre gender;// le sexe de Individu
-
     Age categorie;//la categorie associé à le Individu selon son âge
     Coord pos;//les coordonnées où se présente le Individu
     Sante health;// l'état sanitaire associé à le Individu
@@ -100,14 +96,14 @@ typedef struct {
 /************ Statistics Structures *************/
 
 typedef struct {
-    const gchar *virusName;
-    guint infected;
+    const gchar *virusName; /// nom du virus
+    guint infected;         /// nombre des individus affectees par ce virus
 } StatVirus;
 
 typedef struct {
-    guint deaths;
-    guint totalPopulation;
-    GList *virusInfection;
+    guint deaths;           /// nombre des deces total
+    guint totalPopulation; /// nombre total des individus
+    GList *virusInfection; /// statistique par virus
 } Stats;
 
 #endif //MAIN_C_STRUCTURES_H

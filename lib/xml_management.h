@@ -13,15 +13,14 @@
 
 
 typedef struct {
-    /// contains data of type IndivInfo
+    /// les individus ajoutes
     GList *indivs;
-    /// contains data of type Virus
+    /// les Virus crees
     GList *virus;
     /// environnement dimension
     guint cols, rows;
-
+    // statistiques totale
     Stats *stats;
-
 } EnvInfo;
 
 

@@ -173,7 +173,7 @@ static void macro_contaminateSingleIndiv(gpointer builder, Individu *individu, V
     }
 }
 
-void contaminate_indivCercleSingleVrs(gpointer *virus, gpointer *img) {
+void contaminate_indivCercleSingleVrs(gpointer virus, gpointer img) {
     gint i, j;
     guint left, top;
     GtkWidget *imgBox = gtk_widget_get_parent(GTK_WIDGET(img)),
@@ -402,4 +402,7 @@ gboolean iterateIndividusList(gpointer builder) {
 
     return FALSE;
 }
+
+
+
 #endif //MAIN_C_CONTAMINATE_UTILS_H

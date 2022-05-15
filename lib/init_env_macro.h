@@ -13,11 +13,9 @@
 typedef struct {
     gint baselinerow;           /*The row to align the to the baseline
                                     when valign is GTK_ALIGN_BASELINE.Default value: 0*/
-
     gboolean columnhomogeneous; /*If TRUE, the columns are all the same width.
                                         Default value:FALSE*/
     gint columnspacing;         /*The amount of space between two consecutive columns.*/
-
     gboolean rowhomogeneous;   ///If TRUE, the rows are all the same height.
     gint rowspacing;       ///he amount of space between two consecutive rows.
 
@@ -167,9 +165,9 @@ gboolean add_individu(GtkWidget *widget, GdkEvent *event, gpointer builder) {
 void create_backgroundBox(GtkGrid *grid, GtkBuilder *builder) {
     for (int i = 0; i < DEFAULT_MAX_ROWS; ++i) {
         for (int j = 0; j < DEFAULT_MAX_COLS; ++j) {
+
             GtkWidget *box = gtk_event_box_new();
             g_signal_connect (box, "button-press-event", (GCallback) add_individu, builder);
-
             gtk_grid_attach(GTK_GRID(grid), GTK_WIDGET(box), j, i, 1, 1);
             gtk_style_context_add_class(gtk_widget_get_style_context(box), "box");
         }
@@ -183,6 +181,29 @@ void init_background(GtkWidget *ViewPort2,gpointer builder)
     grid = macro_createGrid(gprops);
     create_backgroundBox(GTK_GRID(grid), builder);
     gtk_container_add(GTK_CONTAINER(ViewPort2), grid);
+}
+
+void iterate_initSingleIndiv(gpointer indiv_pointer, gpointer grid_pointer) {
+    Individu *individu = indiv_pointer;
+    GtkWidget *grid = grid_pointer;
+    GtkWidget *window = g_object_get_data(G_OBJECT(grid), BUILDER_ID_MAIN_WINDOW);
+
+    /// create associated image
+    GtkWidget *img = choixImage(individu);
+    g_object_set_data(G_OBJECT(img), DATA_KEY_INDIVIDU, individu);
+
+    ///save new list
+    inserer_data_GObject(G_OBJECT(window), DATA_KEY_LIST_INDIVIDU, img);
+
+    /// show image in the grid
+    gtk_grid_attach(GTK_GRID(grid), img, individu->pos.x, individu->pos.y, 1, 1);
+    gtk_widget_show(img);
+}
+
+void macro_initIndivsList(GtkWidget *grid, GList *indivs, GtkWidget *window) {
+    g_object_set_data(G_OBJECT(grid), BUILDER_ID_MAIN_WINDOW, window);
+
+    g_list_foreach(indivs, iterateSingleIndividu, grid);
 }
 
 #endif //MAIN_C_INIT_ENV_MACRO_H
