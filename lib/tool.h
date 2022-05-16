@@ -2,7 +2,7 @@
 #define MAIN_C_TOOL_H
 
 #include "../macros.c"
-
+#include "init_env_macro.h"
 
 
 void pause_game(GtkWidget *btn, gpointer user_data) {
@@ -25,7 +25,7 @@ void about_game(GtkWidget *btn, gpointer data) {
     gint reponse = gtk_dialog_run(GTK_DIALOG(dialog));
     gtk_widget_destroy(dialog);
 
-    save_envIntoFile(NULL);
+    macro_loadAndSave_envIntoFile("test.wika");
 }
 
 void limit_speed(gchar *msg) {

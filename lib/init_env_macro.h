@@ -281,4 +281,6 @@ void init_background(GtkWidget *ViewPort2, gpointer builder) {
 
 
 
+
+
 #endif //MAIN_C_INIT_ENV_MACRO_H
