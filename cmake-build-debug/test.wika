@@ -1,13 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <env>
   <dimension rows="70" cols="40"/>
-  <viruss>
-    <virus sp-circle="3" spread="5" mortality="54.799999">test vfi</virus>
-    <virus sp-circle="3" spread="5" mortality="90.199997">asfsdfsd</virus>
-  </viruss>
+  <viruss/>
   <persons/>
-  <statistics deaths="10" total="27">
-    <statVirus infected="27">test vfi</statVirus>
-    <statVirus infected="9">asfsdfsd</statVirus>
-  </statistics>
+  <statistics deaths="0" total="0"/>
 </env>

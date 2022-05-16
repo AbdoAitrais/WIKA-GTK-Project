@@ -67,7 +67,7 @@ int main(int argc, char *argv[]) {
     g_signal_connect (GTK_TOOL_BUTTON(AboutButton), "clicked", (GCallback) about_game, NULL);
 
     restBtn = GTK_WIDGET(gtk_builder_get_object(builder, "restart"));
-    g_signal_connect (GTK_TOOL_BUTTON(AboutButton), "clicked", (GCallback) macro_restartEnv, NULL);
+    g_signal_connect (GTK_TOOL_BUTTON(restBtn), "clicked", (GCallback) macro_restartEnv, NULL);
 
     quit = GTK_WIDGET(gtk_builder_get_object(builder, "quit"));
     g_signal_connect (GTK_TOOL_BUTTON(quit), "clicked", (GCallback) quit_game, NULL);

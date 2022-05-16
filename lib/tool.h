@@ -27,7 +27,7 @@ void about_game(GtkWidget *btn, gpointer data) {
     gint reponse = gtk_dialog_run(GTK_DIALOG(dialog));
     gtk_widget_destroy(dialog);
 
-    macro_loadAndSave_envIntoFile("test.wika");
+//    macro_loadAndSave_envIntoFile("test.wika");
 }
 
 void limit_speed(gchar *msg) {
@@ -153,9 +153,8 @@ void macro_restartEnv() {
     switch (macro_confirmationDialog("do you wanna save before restart!")) {
         case TRUE:
             macro_saveButton();
-        case FALSE: {
+        case FALSE:
             macro_resetInterfaceEnv();
-        }
     }
 }
 
