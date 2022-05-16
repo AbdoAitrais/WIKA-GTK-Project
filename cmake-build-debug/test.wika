@@ -2,12 +2,12 @@
 <env>
   <dimension rows="70" cols="40"/>
   <viruss>
-    <virus sp-circle="10" spread="1" mortality="15.500000">premier virus</virus>
-    <virus sp-circle="10" spread="1" mortality="15.500000">premier2 virus</virus>
-    <virus sp-circle="10" spread="1" mortality="15.500000">premier3 virus</virus>
-    <virus sp-circle="10" spread="1" mortality="15.500000">premier4 virus</virus>
-    <virus sp-circle="3" spread="5" mortality="75.599998">test virus</virus>
+    <virus sp-circle="3" spread="5" mortality="54.799999">test vfi</virus>
+    <virus sp-circle="3" spread="5" mortality="90.199997">asfsdfsd</virus>
   </viruss>
   <persons/>
-  <statistics deaths="0" total="0"/>
+  <statistics deaths="10" total="27">
+    <statVirus infected="27">test vfi</statVirus>
+    <statVirus infected="9">asfsdfsd</statVirus>
+  </statistics>
 </env>

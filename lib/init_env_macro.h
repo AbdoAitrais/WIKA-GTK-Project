@@ -259,7 +259,6 @@ void init_background(GtkWidget *ViewPort2, gpointer builder) {
 
     g_object_set_data(builder, BUILDER_ID_GRID, grid);
 
-    init_envFromFile("test.wika");
 }
 
 

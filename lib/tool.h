@@ -144,7 +144,7 @@ void macro_resetInterfaceEnv() {
     GtkWidget *buttonBox = GTK_WIDGET(gtk_builder_get_object(builder, "ButtonBoxVirus"));
 
     GList *virussBtns = gtk_container_get_children(GTK_CONTAINER(buttonBox));
-    g_list_foreach(virussBtns, (GFunc) iterate_removeContainerChildren, NULL);
+    g_list_foreach(virussBtns, (GFunc) iterate_removeContainerChildren, buttonBox);
 
 }
 
