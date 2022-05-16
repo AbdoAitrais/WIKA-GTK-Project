@@ -3,10 +3,11 @@
 
 #include "../macros.c"
 #include "init_env_macro.h"
-
+void macro_restartEnv();
 
 void pause_game(GtkWidget *btn, gpointer user_data) {
     PLAY_MODE = FALSE;
+
 }
 
 void start_game(GtkWidget *btn, gpointer user_data) {
@@ -14,6 +15,7 @@ void start_game(GtkWidget *btn, gpointer user_data) {
 }
 
 void about_game(GtkWidget *btn, gpointer data) {
+    macro_restartEnv();
     GtkWidget *content_area, *dialog = gtk_dialog_new_with_buttons("About", NULL, GTK_DIALOG_MODAL, GTK_STOCK_OK,
                                                                    GTK_RESPONSE_OK, NULL);
     content_area = gtk_dialog_get_content_area(GTK_DIALOG(dialog));
@@ -73,30 +75,89 @@ void mvToolBar(GtkWidget *btn1, GtkWidget *btn3, GtkWidget *btn4, GtkWidget *btn
     g_signal_connect (GTK_TOOL_BUTTON(btn4), "clicked", (GCallback) decreaseSpeed, NULL);
 }
 
-void quit_game(GtkWidget *widget) {
-
-    gpointer data = NULL;
-    GtkWidget *ask = gtk_message_dialog_new(GTK_WINDOW(data),
-                                            GTK_DIALOG_MODAL,
-                                            GTK_MESSAGE_QUESTION,
-                                            GTK_BUTTONS_YES_NO,
-                                            " Do you really want\ndrop the game ?");
+void quit_game() {
 
     /*   answer */
-    switch (gtk_dialog_run(GTK_DIALOG(ask))) {
-        case GTK_RESPONSE_YES:
-            /* yes ->   quit application */
-            gtk_main_quit();
-            break;
-        case GTK_RESPONSE_NO:
-            /* no -> on destroy dialog */
-            gtk_widget_destroy(ask);
-            break;
+    if (macro_confirmationDialog(" Do you really want\ndrop the game ?"))
+        gtk_main_quit();
+}
+
+
+void macro_saveAsButton() {
+    GtkWidget *dialog;
+    GtkFileChooser *chooser;
+    gint res;
+
+    GtkBuilder *builder = getBuilder();
+    GtkWidget *parent_window = GTK_WIDGET(gtk_builder_get_object(builder, BUILDER_ID_MAIN_WINDOW));
+
+
+    dialog = gtk_file_chooser_dialog_new("Save File",
+                                         GTK_WINDOW(parent_window),
+                                         GTK_FILE_CHOOSER_ACTION_SAVE,
+                                         "_Cancel",
+                                         GTK_RESPONSE_CANCEL,
+                                         "_Save",
+                                         GTK_RESPONSE_ACCEPT,
+                                         NULL);
+    chooser = GTK_FILE_CHOOSER (dialog);
+
+    gtk_file_chooser_set_do_overwrite_confirmation(chooser, TRUE);
+
+
+    gtk_file_chooser_set_current_name(chooser,
+                                      DEFAULT_SAVE_FILE_NAME);
+
+
+    res = gtk_dialog_run(GTK_DIALOG (dialog));
+    if (res == GTK_RESPONSE_ACCEPT) {
+        char *filename;
+
+        filename = gtk_file_chooser_get_filename(chooser);
+        macro_loadAndSave_envIntoFile(filename);
+        g_free(filename);
     }
 
+    gtk_widget_destroy(dialog);
 }
 
-void restart(GtkWidget *widget) {
+void macro_saveButton() {
+    if (CURRENT_SAVE_FILE)
+        macro_loadAndSave_envIntoFile(CURRENT_SAVE_FILE);
+    else
+        macro_saveAsButton();
 }
+
+void iterate_removeContainerChildren(GtkWidget *child, GtkContainer *container) {
+    gtk_container_remove(container, child);
+}
+
+void macro_resetInterfaceEnv() {
+    GtkBuilder *builder = getBuilder();
+    GtkWidget *parent_window = GTK_WIDGET(gtk_builder_get_object(builder, BUILDER_ID_MAIN_WINDOW));
+    GList *indivs = g_object_get_data(G_OBJECT(parent_window),DATA_KEY_LIST_INDIVIDU);
+
+    g_list_foreach(indivs, (GFunc) gtk_widget_destroy, NULL);
+    g_list_free(indivs);
+
+    g_object_set_data(G_OBJECT(parent_window), DATA_KEY_LIST_INDIVIDU, NULL);
+    GtkWidget *buttonBox = GTK_WIDGET(gtk_builder_get_object(builder, "ButtonBoxVirus"));
+
+    GList *virussBtns = gtk_container_get_children(GTK_CONTAINER(buttonBox));
+    g_list_foreach(virussBtns, (GFunc) iterate_removeContainerChildren, NULL);
+
+}
+
+
+void macro_restartEnv() {
+    switch (macro_confirmationDialog("do you wanna save before restart!")) {
+        case TRUE:
+            macro_saveButton();
+        case FALSE: {
+            macro_resetInterfaceEnv();
+        }
+    }
+}
+
 
 #endif

@@ -90,21 +90,6 @@ GtkWidget *choixImage(Individu *indiv) {
 
 }
 
-//Individu * get_Individu_from_Interface(GtkEventBox * eventBox)
-//{
-//    GtkWidget * image = gtk_bin_get_child(GTK_BIN(eventBox));
-//    return ((Individu *) g_object_get_data(G_OBJECT(image),DATA_KEY_INDIVIDU));
-//}
-//
-//gboolean show_Individu (GtkWidget *eventBox, GdkEvent *event, gpointer builder)
-//{
-//    //afficher_individu(get_Individu_from_Interface(GTK_EVENT_BOX(eventBox)));
-//    gchar msg[100];
-//    Individu * individu = get_Individu_from_Interface(GTK_EVENT_BOX(eventBox));
-//    g_strdup_printf(msg,"individu gender = %d\nindividu genetic = %d\n",individu->gender,individu->health.genetic);
-//    macro_dialog(msg);
-//    return TRUE;
-//}
 
 
 
@@ -128,7 +113,7 @@ gboolean add_individu(GtkWidget *widget, GdkEvent *event, gpointer builder) {
         return TRUE;
     }
 
-    GtkWidget *window = GTK_WIDGET(gtk_builder_get_object(builder, "MainWindow"));
+    GtkWidget *window = GTK_WIDGET(gtk_builder_get_object(builder, BUILDER_ID_MAIN_WINDOW));
     /** added by ismail **/
     Individu *indiv = lire_Indiv(builder);
     indiv->hp = calculerHPdeIndividu(*indiv);
@@ -155,6 +140,8 @@ gboolean add_individu(GtkWidget *widget, GdkEvent *event, gpointer builder) {
 
     afficher_Stats(stat);
     show_Stats(builder, stat);
+
+
 
 
     return FALSE;
@@ -191,7 +178,7 @@ void macro_initIndivsList(GtkWidget *grid, GList *indivs, GtkWidget *window) {
 
     g_list_foreach(indivs, iterate_initSingleIndiv, grid);
 
-//    g_object_set_data(G_OBJECT(grid), BUILDER_ID_MAIN_WINDOW, NULL);
+    g_object_set_data(G_OBJECT(grid), BUILDER_ID_MAIN_WINDOW, NULL);
 
 }
 

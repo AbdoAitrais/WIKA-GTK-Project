@@ -21,4 +21,26 @@ void macro_dialog(gchar * msg)
     gtk_widget_destroy(limit);
 }
 
+
+
+gboolean macro_confirmationDialog(gchar* msg) {
+    GtkBuilder *builder = getBuilder();
+    GtkWidget *parent_window = GTK_WIDGET(gtk_builder_get_object(builder, BUILDER_ID_MAIN_WINDOW));
+    GtkWidget *ask = gtk_message_dialog_new(GTK_WINDOW(parent_window),
+                                            GTK_DIALOG_MODAL,
+                                            GTK_MESSAGE_QUESTION,
+                                            GTK_BUTTONS_YES_NO,
+                                            "%s", msg);
+
+    /*   answer */
+    switch (gtk_dialog_run(GTK_DIALOG(ask))) {
+        case GTK_RESPONSE_YES:
+            gtk_widget_destroy(ask);
+            return TRUE;
+        case GTK_RESPONSE_NO:
+            gtk_widget_destroy(ask);
+            return FALSE;
+    }
+}
+
 #endif //MAIN_C_DIALOG_MACRO_H

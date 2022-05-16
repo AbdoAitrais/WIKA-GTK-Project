@@ -10,6 +10,7 @@
 #include "show_functions.h"
 #include "Statistics.h"
 #include "tableauManip.h"
+#include "constants.h"
 
 void AgePerson(Individu P, double *val) {
     switch (P.categorie) {
@@ -248,7 +249,7 @@ void set_css(gpointer builder) {
     GtkWidget *button = NULL;
 
 
-    fenetre_principale = GTK_WIDGET(gtk_builder_get_object(builder, "MainWindow"));
+    fenetre_principale = GTK_WIDGET(gtk_builder_get_object(builder, BUILDER_ID_MAIN_WINDOW));
     menu = GTK_WIDGET(gtk_builder_get_object(builder, "MenuBar"));
 
     button = GTK_WIDGET(gtk_builder_get_object(builder, "subutton"));

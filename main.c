@@ -21,7 +21,7 @@ int main(int argc, char *argv[]) {
     GtkWidget *decButton = NULL;
     GtkWidget *incButton = NULL;
     GtkWidget *quit = NULL;
-    GtkWidget *rest = NULL;
+    GtkWidget *restBtn = NULL;
     GtkWidget *msgEntry = NULL;
 
 
@@ -50,7 +50,7 @@ int main(int argc, char *argv[]) {
     init_save_Stats(builder);
 
     /** Récupération du pointeur de la fenêtre principale */
-    fenetre_principale = GTK_WIDGET(gtk_builder_get_object(builder, "MainWindow"));
+    fenetre_principale = GTK_WIDGET(gtk_builder_get_object(builder, BUILDER_ID_MAIN_WINDOW));
 
     /** The widget that contains the grid **/
     GtkWidget *ViewPort2 = GTK_WIDGET(gtk_builder_get_object(builder, "ViewPort2"));
@@ -62,8 +62,13 @@ int main(int argc, char *argv[]) {
     pauseButton = GTK_WIDGET(gtk_builder_get_object(builder, "pause"));
     decButton = GTK_WIDGET(gtk_builder_get_object(builder, "decreaseVT"));
     incButton = GTK_WIDGET(gtk_builder_get_object(builder, "increaseVT"));
+
     AboutButton = GTK_WIDGET(gtk_builder_get_object(builder, "about"));
     g_signal_connect (GTK_TOOL_BUTTON(AboutButton), "clicked", (GCallback) about_game, NULL);
+
+    restBtn = GTK_WIDGET(gtk_builder_get_object(builder, "restart"));
+    g_signal_connect (GTK_TOOL_BUTTON(AboutButton), "clicked", (GCallback) macro_restartEnv, NULL);
+
     quit = GTK_WIDGET(gtk_builder_get_object(builder, "quit"));
     g_signal_connect (GTK_TOOL_BUTTON(quit), "clicked", (GCallback) quit_game, NULL);
     mvToolBar(playButton, pauseButton, decButton, incButton);
