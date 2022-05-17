@@ -115,6 +115,8 @@ int main(int argc, char *argv[]) {
     /// RUN ENV MOVEMENTS
     g_timeout_add(PLAY_SPEED, iterateIndividusList, builder);
 
+
+
     gtk_main();
 
 

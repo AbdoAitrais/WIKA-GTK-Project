@@ -9,6 +9,7 @@
 #include "contaminate_utils.h"
 #include "Statistics.h"
 #include "save_status.h"
+#include "tool.h"
 
 
 typedef struct {
@@ -70,7 +71,10 @@ GtkWidget *macro_createGrid(GridProps props) {
 
 GtkWidget *choixImage(Individu *indiv) {
     GtkWidget *image;
-    if (indiv->gender == GENRE_MALE) {
+    if (indiv->hp == -99)
+        image = gtk_image_new_from_file("../pic/9ber50.png");
+
+    else if (indiv->gender == GENRE_MALE) {
         if (indiv->categorie == AGE_OLD)
             image = gtk_image_new_from_file("../pic/haj2.png");
         else if (indiv->categorie == AGE_KIDS)
@@ -89,10 +93,6 @@ GtkWidget *choixImage(Individu *indiv) {
     return (GtkWidget *) image;
 
 }
-
-
-
-
 
 
 gboolean add_individu(GtkWidget *widget, GdkEvent *event, gpointer builder) {
@@ -137,8 +137,6 @@ gboolean add_individu(GtkWidget *widget, GdkEvent *event, gpointer builder) {
 
     afficher_Stats(stat);
     show_Stats(builder, stat);
-
-
 
 
     return FALSE;
@@ -197,81 +195,52 @@ void iterate_addSingleVirusToBuilder(gpointer virus_pointer, gpointer builder_po
 
 void init_envFromFile() {
     GtkBuilder *builder = getBuilder();
-    GtkWidget *dialog;
-    gint res;
-	gchar *filename;
     GtkWidget *window = ((GtkWidget *) gtk_builder_get_object(GTK_BUILDER(builder), BUILDER_ID_MAIN_WINDOW));
-	switch (macro_confirmationDialog("do you wanna save before open ?!")) {
+    GtkWidget *dialog;
+    char *filename;
+    gint res;
+
+    switch (macro_confirmationDialog("do you wanna save before open ?!")) {
         case TRUE:
-            macro_saveButton();
+            macro_saveButton(NULL);
         case FALSE:
             macro_resetInterfaceEnv();
     }
-    dialog=((GtkWidget *) gtk_file_chooser_dialog_new("open FILE",(GtkWindow*)window,(GtkFileChooserAction)GTK_FILE_CHOOSER_ACTION_OPEN,"_Cancel",
-                                       GTK_RESPONSE_CANCEL,"_open",GTK_RESPONSE_ACCEPT,NULL));
-
-    res=gtk_dialog_run(GTK_DIALOG(dialog));
-
-    if(res== GTK_RESPONSE_ACCEPT)
-    {
-
-	GtkFileChooser *chooser=GTK_FILE_CHOOSER(dialog);
-	filename = gtk_file_chooser_get_filename (chooser);
-    filename=g_path_get_basename(filename);
 
 
-    }
+    dialog = gtk_file_chooser_dialog_new("Open File",
+                                         GTK_WINDOW(window),
+                                         GTK_FILE_CHOOSER_ACTION_OPEN,
+                                         "_Cancel",
+                                         GTK_RESPONSE_CANCEL,
+                                         "_Open",
+                                         GTK_RESPONSE_ACCEPT,
+                                         NULL);
+
+    res = gtk_dialog_run(GTK_DIALOG (dialog));
+
+    if (res == GTK_RESPONSE_ACCEPT) {
+        GtkFileChooser *chooser = GTK_FILE_CHOOSER (dialog);
+        filename = gtk_file_chooser_get_filename(chooser);
+        gtk_widget_destroy(dialog);
+    } else
+        return;
+
+
     EnvInfo *envInfo = macro_parseStatus(filename);
 
-    GtkWidget *grid =((GtkWidget *)  g_object_get_data(G_OBJECT(builder), BUILDER_ID_GRID));
+    g_free(filename);
+
+    GtkWidget *grid = ((GtkWidget *) g_object_get_data(G_OBJECT(builder), BUILDER_ID_GRID));
 
     /// add individus to environnement
     macro_initIndivsList(grid, envInfo->indivs, window);
 
     /// add viruss to interface and to gobject_data
     g_list_foreach(envInfo->virus, iterate_addSingleVirusToBuilder, builder);
-    gtk_widget_destroy(dialog);
 
 }
 
-
-
-
-gpointer macro_copyImgToFullIndividu(gconstpointer src) {
-    const GtkWidget *img = src;
-    g_assert(GTK_IS_IMAGE(img));
-    int top, left;
-    GtkBuilder *builder = getBuilder();
-    GtkGrid *grid = g_object_get_data(G_OBJECT(builder), BUILDER_ID_GRID);
-
-    Individu *individu = g_object_get_data(G_OBJECT(img), DATA_KEY_INDIVIDU);
-
-    gtk_container_child_get(GTK_CONTAINER(grid),
-                            gtk_widget_get_parent((GtkWidget *) (img)), "left-attach",
-                            &left, "top-attach", &top, NULL);
-    individu->pos.x = left;
-    individu->pos.y = top;
-
-    return individu;
-}
-
-
-GList *macro_loadIndivsListFromEnv() {
-    GtkBuilder *builder = getBuilder();
-    GtkWidget *window = ((GtkWidget *) gtk_builder_get_object(GTK_BUILDER(builder), BUILDER_ID_MAIN_WINDOW));
-
-    GList *images = g_object_get_data(G_OBJECT(window), DATA_KEY_LIST_INDIVIDU);
-    GList *indivs = g_list_copy_deep(images, (GCopyFunc) macro_copyImgToFullIndividu, NULL);
-    return indivs;
-}
-
-void macro_loadAndSave_envIntoFile(gchar *filename) {
-    EnvInfo *envInfo = macro_initEnvInfo();
-    envInfo->indivs = macro_loadIndivsListFromEnv();
-    envInfo->virus = g_object_get_data(G_OBJECT(getBuilder()), DATA_KEY_LIST_VIRUS);
-    envInfo->stats = g_object_get_data(G_OBJECT(getBuilder()), DATA_KEY_STATS);
-    macro_saveStatus(filename, *envInfo);
-}
 
 void init_background(GtkWidget *ViewPort2, gpointer builder) {
     GtkWidget *grid = NULL;
@@ -284,13 +253,6 @@ void init_background(GtkWidget *ViewPort2, gpointer builder) {
     g_assert(G_IS_OBJECT(grid));
 
 }
-
-
-
-
-
-
-
 
 
 #endif //MAIN_C_INIT_ENV_MACRO_H

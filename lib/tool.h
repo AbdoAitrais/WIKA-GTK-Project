@@ -1,8 +1,44 @@
 #ifndef MAIN_C_TOOL_H
 #define MAIN_C_TOOL_H
 
-#include "../macros.c"
-#include "init_env_macro.h"
+
+
+
+gpointer macro_copyImgToFullIndividu(gconstpointer src) {
+    const GtkWidget *img = src;
+    g_assert(GTK_IS_IMAGE(img));
+    int top, left;
+    GtkBuilder *builder = getBuilder();
+    GtkGrid *grid = g_object_get_data(G_OBJECT(builder), BUILDER_ID_GRID);
+
+    Individu *individu = g_object_get_data(G_OBJECT(img), DATA_KEY_INDIVIDU);
+
+    gtk_container_child_get(GTK_CONTAINER(grid),
+                            gtk_widget_get_parent((GtkWidget *) (img)), "left-attach",
+                            &left, "top-attach", &top, NULL);
+    individu->pos.x = left;
+    individu->pos.y = top;
+
+    return individu;
+}
+
+GList *macro_loadIndivsListFromEnv() {
+    GtkBuilder *builder = getBuilder();
+    GtkWidget *window = ((GtkWidget *) gtk_builder_get_object(GTK_BUILDER(builder), BUILDER_ID_MAIN_WINDOW));
+
+    GList *images = g_object_get_data(G_OBJECT(window), DATA_KEY_LIST_INDIVIDU);
+    GList *indivs = g_list_copy_deep(images, (GCopyFunc) macro_copyImgToFullIndividu, NULL);
+    return indivs;
+}
+
+void macro_loadAndSave_envIntoFile(gchar *filename) {
+    EnvInfo *envInfo = macro_initEnvInfo();
+    envInfo->indivs = macro_loadIndivsListFromEnv();
+    envInfo->virus = g_object_get_data(G_OBJECT(getBuilder()), DATA_KEY_LIST_VIRUS);
+    envInfo->stats = g_object_get_data(G_OBJECT(getBuilder()), DATA_KEY_STATS);
+    macro_saveStatus(filename, *envInfo);
+}
+
 void macro_restartEnv();
 
 void pause_game(GtkWidget *btn, gpointer user_data) {
@@ -141,16 +177,28 @@ void iterate_removeContainerChildren(GtkWidget *child, GtkContainer *container) 
 void macro_resetInterfaceEnv() {
     GtkBuilder *builder = getBuilder();
     GtkWidget *parent_window = GTK_WIDGET(gtk_builder_get_object(builder, BUILDER_ID_MAIN_WINDOW));
+
+    ///delete all images individu
     GList *indivs = g_object_get_data(G_OBJECT(parent_window),DATA_KEY_LIST_INDIVIDU);
-
     g_list_foreach(indivs, (GFunc) gtk_widget_destroy, NULL);
+    /// delete individu list
     g_list_free(indivs);
-
     g_object_set_data(G_OBJECT(parent_window), DATA_KEY_LIST_INDIVIDU, NULL);
-    GtkWidget *buttonBox = GTK_WIDGET(gtk_builder_get_object(builder, "ButtonBoxVirus"));
 
+
+    /// delete viruss from interface
+    GtkWidget *buttonBox = GTK_WIDGET(gtk_builder_get_object(builder, "ButtonBoxVirus"));
     GList *virussBtns = gtk_container_get_children(GTK_CONTAINER(buttonBox));
     g_list_foreach(virussBtns, (GFunc) iterate_removeContainerChildren, buttonBox);
+    /// free virus list
+    g_list_free(g_object_get_data(G_OBJECT(builder),DATA_KEY_LIST_VIRUS));
+    g_object_set_data(G_OBJECT(builder),DATA_KEY_LIST_VIRUS, NULL);
+
+    /// inti statistiques
+    g_free(g_object_get_data((GObject *) builder, DATA_KEY_STATS));
+
+    g_object_set_data((GObject *) builder, DATA_KEY_STATS,  init_Stats());
+
 
 }
 

@@ -266,7 +266,7 @@ void set_css(gpointer builder) {
     loadCSS(fenetre_principale);
 
     gtk_style_context_add_class(gtk_widget_get_style_context(fenetre_principale), "class1");
-    gtk_style_context_add_class(gtk_widget_get_style_context(menu), "menu");
+//    gtk_style_context_add_class(gtk_widget_get_style_context(menu), "menu");
     gtk_style_context_add_class(gtk_widget_get_style_context(stack), "stack");
     gtk_style_context_add_class(gtk_widget_get_style_context(switcher), "switch");
     gtk_style_context_add_class(gtk_widget_get_style_context(comboBox1), "comboBox");
