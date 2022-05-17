@@ -2,19 +2,16 @@
 #include "lib/UI_individu_macros.h"
 #include "lib/init_env_macro.h"
 #include "lib/tool.h"
-
+#include "puzzleGame.c"
 
 int main(int argc, char *argv[]) {
     /** Declarations **/
     GtkWidget *fenetre_principale = NULL;
     GtkWidget *button = NULL;
-
-
     GtkBuilder *builder = NULL;
-
     GError *error = NULL;
     gchar *filename = NULL;
-    //added
+     //toolBar btn
     GtkWidget *playButton = NULL;
     GtkWidget *pauseButton = NULL;
     GtkWidget *AboutButton = NULL;
@@ -23,6 +20,11 @@ int main(int argc, char *argv[]) {
     GtkWidget *quit = NULL;
     GtkWidget *restBtn = NULL;
     GtkWidget *msgEntry = NULL;
+    GtkWidget *toggleButton=NULL;
+    GtkWidget *saveBtn = NULL;
+    GtkWidget *openBtn = NULL;
+    GtkWidget *PuzzleBtn = NULL;
+
 
 
     /** Initialisation de la librairie Gtk. */
@@ -57,7 +59,7 @@ int main(int argc, char *argv[]) {
     /** button for signal **/
     button = GTK_WIDGET(gtk_builder_get_object(builder, "subutton"));
 
-    /** toolbar btn */
+	/** toolbar btn  */
     playButton = GTK_WIDGET(gtk_builder_get_object(builder, "play"));
     pauseButton = GTK_WIDGET(gtk_builder_get_object(builder, "pause"));
     decButton = GTK_WIDGET(gtk_builder_get_object(builder, "decreaseVT"));
@@ -72,6 +74,19 @@ int main(int argc, char *argv[]) {
     quit = GTK_WIDGET(gtk_builder_get_object(builder, "quit"));
     g_signal_connect (GTK_TOOL_BUTTON(quit), "clicked", (GCallback) quit_game, NULL);
     mvToolBar(playButton, pauseButton, decButton, incButton);
+
+    toggleButton = GTK_WIDGET(gtk_builder_get_object (builder, "toggle"));
+	g_signal_connect (toggleButton, "toggled",G_CALLBACK (Add_Mode),NULL);
+
+	saveBtn = GTK_WIDGET(gtk_builder_get_object(builder, "save"));
+    g_signal_connect (GTK_TOOL_BUTTON(saveBtn), "clicked", (GCallback) macro_saveButton, NULL);
+
+	openBtn= GTK_WIDGET(gtk_builder_get_object(builder, "ouvrir"));
+	g_signal_connect (GTK_TOOL_BUTTON(openBtn), "clicked", (GCallback) init_envFromFile, NULL);
+
+	PuzzleBtn= GTK_WIDGET(gtk_builder_get_object(builder, "Puzzle"));
+    g_signal_connect (GTK_TOOL_BUTTON(PuzzleBtn), "clicked", (GCallback) openPuzzle, NULL);
+
 
 
     set_css(builder);

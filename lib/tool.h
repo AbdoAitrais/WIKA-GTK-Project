@@ -15,9 +15,9 @@ void start_game(GtkWidget *btn, gpointer user_data) {
 }
 
 void about_game(GtkWidget *btn, gpointer data) {
-    macro_restartEnv();
-    GtkWidget *content_area, *dialog = gtk_dialog_new_with_buttons("About", NULL, GTK_DIALOG_MODAL, GTK_STOCK_OK,
-                                                                   GTK_RESPONSE_OK, NULL);
+
+    GtkWidget *content_area, *dialog = ((GtkWidget *) gtk_dialog_new_with_buttons("About", NULL, GTK_DIALOG_MODAL,  "gtk-ok",
+                                                                   GTK_RESPONSE_OK, NULL));
     content_area = gtk_dialog_get_content_area(GTK_DIALOG(dialog));
     GtkWidget *image_about = gtk_image_new_from_file("../pic/about.png");
     gtk_widget_set_size_request(dialog, 300, 300);
@@ -121,6 +121,12 @@ void macro_saveAsButton() {
     gtk_widget_destroy(dialog);
 }
 
+static void Add_Mode (GtkToggleButton *source, gpointer user_data) {
+    if ( ADD_INDIVIDU_MODE)
+        ADD_INDIVIDU_MODE= FALSE;
+    else ADD_INDIVIDU_MODE =TRUE;
+
+}
 void macro_saveButton() {
     if (CURRENT_SAVE_FILE)
         macro_loadAndSave_envIntoFile(CURRENT_SAVE_FILE);
@@ -160,3 +166,4 @@ void macro_restartEnv() {
 
 
 #endif
+

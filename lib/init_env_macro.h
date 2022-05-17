@@ -95,9 +95,6 @@ GtkWidget *choixImage(Individu *indiv) {
 
 
 
-
-
-
 gboolean add_individu(GtkWidget *widget, GdkEvent *event, gpointer builder) {
     if (!ADD_INDIVIDU_MODE)
         return FALSE;
@@ -198,18 +195,43 @@ void iterate_addSingleVirusToBuilder(gpointer virus_pointer, gpointer builder_po
     inserer_virus(builder_pointer, virus_pointer);
 }
 
-void init_envFromFile(gchar *filename) {
+void init_envFromFile() {
     GtkBuilder *builder = getBuilder();
-    GtkWidget *window = gtk_builder_get_object(GTK_BUILDER(builder), BUILDER_ID_MAIN_WINDOW);
+    GtkWidget *dialog;
+    gint res;
+	gchar *filename;
+    GtkWidget *window = ((GtkWidget *) gtk_builder_get_object(GTK_BUILDER(builder), BUILDER_ID_MAIN_WINDOW));
+	switch (macro_confirmationDialog("do you wanna save before open ?!")) {
+        case TRUE:
+            macro_saveButton();
+        case FALSE:
+            macro_resetInterfaceEnv();
+    }
+    dialog=((GtkWidget *) gtk_file_chooser_dialog_new("open FILE",(GtkWindow*)window,(GtkFileChooserAction)GTK_FILE_CHOOSER_ACTION_OPEN,"_Cancel",
+                                       GTK_RESPONSE_CANCEL,"_open",GTK_RESPONSE_ACCEPT,NULL));
+
+    res=gtk_dialog_run(GTK_DIALOG(dialog));
+
+    if(res== GTK_RESPONSE_ACCEPT)
+    {
+
+	GtkFileChooser *chooser=GTK_FILE_CHOOSER(dialog);
+	filename = gtk_file_chooser_get_filename (chooser);
+    filename=g_path_get_basename(filename);
+
+
+    }
     EnvInfo *envInfo = macro_parseStatus(filename);
 
-    GtkWidget *grid = g_object_get_data(builder, BUILDER_ID_GRID);
+    GtkWidget *grid =((GtkWidget *)  g_object_get_data(G_OBJECT(builder), BUILDER_ID_GRID));
 
     /// add individus to environnement
     macro_initIndivsList(grid, envInfo->indivs, window);
 
     /// add viruss to interface and to gobject_data
     g_list_foreach(envInfo->virus, iterate_addSingleVirusToBuilder, builder);
+    gtk_widget_destroy(dialog);
+
 }
 
 
@@ -225,7 +247,7 @@ gpointer macro_copyImgToFullIndividu(gconstpointer src) {
     Individu *individu = g_object_get_data(G_OBJECT(img), DATA_KEY_INDIVIDU);
 
     gtk_container_child_get(GTK_CONTAINER(grid),
-                            gtk_widget_get_parent(img), "left-attach",
+                            gtk_widget_get_parent((GtkWidget *) (img)), "left-attach",
                             &left, "top-attach", &top, NULL);
     individu->pos.x = left;
     individu->pos.y = top;
@@ -233,9 +255,10 @@ gpointer macro_copyImgToFullIndividu(gconstpointer src) {
     return individu;
 }
 
+
 GList *macro_loadIndivsListFromEnv() {
     GtkBuilder *builder = getBuilder();
-    GtkWidget *window = gtk_builder_get_object(GTK_BUILDER(builder), BUILDER_ID_MAIN_WINDOW);
+    GtkWidget *window = ((GtkWidget *) gtk_builder_get_object(GTK_BUILDER(builder), BUILDER_ID_MAIN_WINDOW));
 
     GList *images = g_object_get_data(G_OBJECT(window), DATA_KEY_LIST_INDIVIDU);
     GList *indivs = g_list_copy_deep(images, (GCopyFunc) macro_copyImgToFullIndividu, NULL);
@@ -258,6 +281,7 @@ void init_background(GtkWidget *ViewPort2, gpointer builder) {
     gtk_container_add(GTK_CONTAINER(ViewPort2), grid);
 
     g_object_set_data(builder, BUILDER_ID_GRID, grid);
+    g_assert(G_IS_OBJECT(grid));
 
 }
 
@@ -270,3 +294,4 @@ void init_background(GtkWidget *ViewPort2, gpointer builder) {
 
 
 #endif //MAIN_C_INIT_ENV_MACRO_H
+

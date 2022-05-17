@@ -1,5 +1,5 @@
 //
-// Created by W0L1D on 4/8/2022.
+
 //
 
 #ifndef MAIN_C_CONSTANTS_H
@@ -21,6 +21,7 @@
 #define DEFAULT_MAX_ARRAY 100
 
 #define DEFAULT_SAVE_FILE_NAME      "status.wika"
+
 
 
 #define TAG_ROOT                    "env"
@@ -65,7 +66,7 @@
 
 
 gboolean PLAY_MODE = TRUE;
-gboolean ADD_INDIVIDU_MODE = TRUE;
+gboolean ADD_INDIVIDU_MODE = FALSE;
 guint PLAY_SPEED = 600;
 
 gchar *CURRENT_SAVE_FILE = NULL;

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<env>
+  <dimension rows="70" cols="40"/>
+  <viruss/>
+  <persons>
+    <person hp="3,600000" damage="0,000000" x="6" Y="10" age="2" genre="1">
+      <sante cardiac="0" diabete="0" genetic="0" poumon="0" tension="0"/>
+      <viruss/>
+      <viruss-life/>
+    </person>
+    <person hp="3,600000" damage="0,000000" x="11" Y="4" age="2" genre="1">
+      <sante cardiac="0" diabete="0" genetic="0" poumon="0" tension="0"/>
+      <viruss/>
+      <viruss-life/>
+    </person>
+    <person hp="3,600000" damage="0,000000" x="16" Y="3" age="2" genre="1">
+      <sante cardiac="0" diabete="0" genetic="0" poumon="0" tension="0"/>
+      <viruss/>
+      <viruss-life/>
+    </person>
+    <person hp="3,600000" damage="0,000000" x="15" Y="11" age="2" genre="1">
+      <sante cardiac="0" diabete="0" genetic="0" poumon="0" tension="0"/>
+      <viruss/>
+      <viruss-life/>
+    </person>
+    <person hp="3,600000" damage="0,000000" x="11" Y="5" age="2" genre="1">
+      <sante cardiac="0" diabete="0" genetic="0" poumon="0" tension="0"/>
+      <viruss/>
+      <viruss-life/>
+    </person>
+    <person hp="3,600000" damage="0,000000" x="7" Y="6" age="2" genre="1">
+      <sante cardiac="0" diabete="0" genetic="0" poumon="0" tension="0"/>
+      <viruss/>
+      <viruss-life/>
+    </person>
+  </persons>
+  <statistics deaths="0" total="6"/>
+</env>
